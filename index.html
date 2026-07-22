@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Science Lab – منصة علمية متخصصة بأحدث التقارير والأبحاث والأخبار العلمية في مختلف المجالات." />
+  <title>Science Lab | المنصة العلمية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary:      #0df2c8;
+      --primary-dark: #09b899;
+      --secondary:    #6c63ff;
+      --accent:       #ff6b35;
+      --bg-dark:      #050d1a;
+      --bg-card:      #0a1628;
+      --bg-glass:     rgba(10, 22, 40, 0.85);
+      --border-glow:  rgba(13, 242, 200, 0.35);
+      --text-main:    #e8f4f8;
+      --text-muted:   #7a9bb5;
+      --text-dim:     #4a6580;
+      --radius:       14px;
+      --radius-lg:    22px;
+      --shadow-glow:  0 0 30px rgba(13, 242, 200, 0.18);
+      --transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', 'Segoe UI', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===================== ANIMATED BG ===================== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(13,242,200,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(108,99,255,0.07) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===================== STARS ===================== */
+    #stars-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* ===================== OVERLAY ===================== */
+    .overlay-layer {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===================== SCROLLBAR ===================== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 99px; }
+
+    /* ===================== COOKIE BANNER ===================== */
+    #welcome-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(14px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    #welcome-modal.show { display: flex; }
+    .welcome-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 52px 48px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(13,242,200,0.15), 0 40px 80px rgba(0,0,0,0.5);
+      animation: popIn .45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85) translateY(30px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .welcome-icon {
+      font-size: 52px;
+      margin-bottom: 16px;
+      display: block;
+      filter: drop-shadow(0 0 14px var(--primary));
+    }
+    .welcome-box h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .welcome-box p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .welcome-box p strong { color: var(--text-main); }
+    .btn-welcome {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #000;
+      border: none;
+      padding: 14px 44px;
+      border-radius: 99px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 6px 24px rgba(13,242,200,0.35);
+    }
+    .btn-welcome:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(13,242,200,0.5); }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      z-index: 1000;
+      background: rgba(5, 13, 26, 0.72);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(13,242,200,0.12);
+      transition: var(--transition);
+    }
+    nav.scrolled { background: rgba(5, 13, 26, 0.95); box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 0 16px rgba(13,242,200,0.4);
+    }
+    .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: 1.5px;
+    }
+    .logo-text span { color: var(--primary); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+      background: rgba(13,242,200,0.08);
+    }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-outline {
+      border: 1.5px solid var(--border-glow);
+      background: transparent;
+      color: var(--primary);
+      padding: 8px 20px;
+      border-radius: 99px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-outline:hover { background: rgba(13,242,200,0.1); border-color: var(--primary); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #05c4a2);
+      color: #050d1a;
+      padding: 9px 22px;
+      border-radius: 99px;
+      border: none;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 16px rgba(13,242,200,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(13,242,200,0.45); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text-main); border-radius: 2px; transition: var(--transition); }
+
+    /* ===================== HERO ===================== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 24px 60px;
+      position: relative;
+    }
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(13,242,200,0.1);
+      border: 1px solid rgba(13,242,200,0.25);
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    .hero-badge::before { content: ''; width: 7px; height: 7px; background: var(--primary); border-radius: 50%; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 22px;
+      color: var(--text-main);
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 36px;
+      max-width: 500px;
+    }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-lg {
+      padding: 14px 32px;
+      border-radius: 99px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+    .btn-lg.primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #050d1a;
+      box-shadow: 0 6px 28px rgba(13,242,200,0.35);
+    }
+    .btn-lg.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(13,242,200,0.5); }
+    .btn-lg.ghost {
+      background: transparent;
+      border: 1.5px solid var(--border-glow);
+      color: var(--text-main);
+    }
+    .btn-lg.ghost:hover { border-color: var(--primary); color: var(--primary); }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--text-dim); margin-top: 4px; }
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .hero-orb {
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(13,242,200,0.18), rgba(108,99,255,0.1) 50%, transparent 75%);
+      border: 1.5px solid rgba(13,242,200,0.2);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: orbFloat 6s ease-in-out infinite;
+    }
+    @keyframes orbFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+    .orb-inner {
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(13,242,200,0.22), rgba(5,13,26,0.8));
+      border: 1px solid rgba(13,242,200,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      filter: drop-shadow(0 0 24px var(--primary));
+    }
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px dashed rgba(13,242,200,0.18);
+    }
+    .orbit-ring:nth-child(1) { width: 380px; height: 380px; animation: spin 20s linear infinite; }
+    .orbit-ring:nth-child(2) { width: 430px; height: 430px; animation: spin 30s linear infinite reverse; }
+    .orbit-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 12px var(--primary);
+      top: -4px; left: 50%;
+      transform: translateX(-50%);
+    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* ===================== SECTIONS COMMON ===================== */
+    section { padding: 90px 24px; }
+    .container { max-width: 1280px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .section-tag::before, .section-tag::after {
+      content: '';
+      width: 30px; height: 1.5px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text-main);
+    }
+    .section-title span { color: var(--primary); }
+    .section-desc { color: var(--text-muted); font-size: 1rem; max-width: 580px; margin: 0 auto; line-height: 1.8; }
+
+    /* ===================== GRID CARDS ===================== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(13,242,200,0.04), transparent);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(13,242,200,0.3);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(13,242,200,0.1);
+    }
+    .card:hover::before { opacity: 1; }
+    .card-img {
+      width: 100%; height: 200px;
+      object-fit: cover;
+      display: block;
+      position: relative;
+    }
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 70px;
+      background: linear-gradient(transparent, var(--bg-card));
+    }
+    .card-category {
+      position: absolute;
+      top: 14px; right: 14px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .cat-physics   { background: rgba(13,242,200,0.18); color: var(--primary); border: 1px solid rgba(13,242,200,0.3); }
+    .cat-biology   { background: rgba(46,213,115,0.18); color: #2ed573; border: 1px solid rgba(46,213,115,0.3); }
+    .cat-chemistry { background: rgba(255,107,53,0.18); color: var(--accent); border: 1px solid rgba(255,107,53,0.3); }
+    .cat-astronomy { background: rgba(108,99,255,0.18); color: var(--secondary); border: 1px solid rgba(108,99,255,0.3); }
+    .cat-ai        { background: rgba(255,220,0,0.18); color: #ffd700; border: 1px solid rgba(255,220,0,0.3); }
+    .cat-tech      { background: rgba(255,71,87,0.18); color: #ff4757; border: 1px solid rgba(255,71,87,0.3); }
+    .card-body { padding: 22px; }
+    .card-author {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .author-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(13,242,200,0.25);
+    }
+    .author-info .name { font-size: 0.82rem; font-weight: 600; color: var(--text-main); }
+    .author-info .date {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      display: flex; align-items: center; gap: 4px;
+      margin-top: 2px;
+    }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 10px; line-height: 1.5; }
+    .card-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 18px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .card-meta { display: flex; gap: 14px; }
+    .meta-item { font-size: 0.78rem; color: var(--text-dim); display: flex; align-items: center; gap: 5px; }
+    .meta-item i { color: var(--text-dim); font-size: 0.72rem; }
+    .btn-read {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--primary);
+      background: rgba(13,242,200,0.08);
+      border: 1px solid rgba(13,242,200,0.2);
+      padding: 6px 14px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-read:hover { background: rgba(13,242,200,0.18); border-color: var(--primary); }
+
+    /* ===================== FILTER TABS ===================== */
+    .filter-tabs {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .filter-tab {
+      padding: 8px 20px;
+      border-radius: 99px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-tab.active, .filter-tab:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(13,242,200,0.08);
+    }
+
+    /* ===================== NEWS SECTION ===================== */
+    #news { background: rgba(10, 22, 40, 0.4); }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+    .news-card {
+      display: flex;
+      gap: 18px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 18px;
+      transition: var(--transition);
+      align-items: flex-start;
+    }
+    .news-card:hover {
+      border-color: rgba(13,242,200,0.25);
+      transform: translateX(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+    .news-img {
+      width: 100px; height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .news-content .category { font-size: 0.72rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .news-content h4 { font-size: 0.92rem; font-weight: 700; color: var(--text-main); line-height: 1.5; margin-bottom: 6px; }
+    .news-content p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .news-meta { display: flex; gap: 12px; font-size: 0.74rem; color: var(--text-dim); }
+    .news-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* ===================== CONTRIBUTE ===================== */
+    #contribute { position: relative; overflow: hidden; }
+    #contribute::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(108,99,255,0.06), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .contribute-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .contribute-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+    .contribute-info h3 span { color: var(--primary); }
+    .contribute-info p { color: var(--text-muted); line-height: 1.85; margin-bottom: 28px; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+    .feature-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      color: var(--text-muted); font-size: 0.95rem;
+    }
+    .feature-list li i { color: var(--primary); margin-top: 3px; flex-shrink: 0; }
+
+    /* ===================== FORMS ===================== */
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+    .form-title { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+    .form-group label span { color: var(--accent); }
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.92rem;
+      transition: var(--transition);
+      outline: none;
+    }
+    .form-control:focus { border-color: var(--primary); background: rgba(13,242,200,0.04); box-shadow: 0 0 0 3px rgba(13,242,200,0.08); }
+    .form-control::placeholder { color: var(--text-dim); }
+    textarea.form-control { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #050d1a;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(13,242,200,0.35); }
+    .form-note { font-size: 0.78rem; color: var(--text-dim); text-align: center; margin-top: 12px; }
+    .form-note a { color: var(--primary); }
+
+    /* ===================== REQUEST REPORT ===================== */
+    #request-report { background: rgba(10, 22, 40, 0.4); }
+    .request-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .request-info { padding-top: 10px; }
+    .request-info .icon-big {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 16px var(--primary));
+      display: block;
+    }
+    .request-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+    .request-info p { color: var(--text-muted); line-height: 1.85; margin-bottom: 24px; }
+    .info-cards { display: flex; flex-direction: column; gap: 14px; }
+    .info-card {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .info-card i { font-size: 1.2rem; color: var(--primary); margin-top: 2px; flex-shrink: 0; }
+    .info-card h5 { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+    .info-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+    /* ===================== LOGIN MODAL ===================== */
+    #login-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 13, 26, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 9998;
+      align-items: center;
+      justify-content: center;
+    }
+    #login-modal.show { display: flex; }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 48px 44px;
+      max-width: 440px;
+      width: 90%;
+      position: relative;
+      animation: popIn .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+    }
+    .modal-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px; left: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: rgba(255,71,87,0.15); color: #ff4757; }
+    .modal-logo { text-align: center; margin-bottom: 28px; }
+    .modal-logo i { font-size: 2.5rem; color: var(--primary); filter: drop-shadow(0 0 12px var(--primary)); }
+    .modal-logo h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--text-main);
+      margin-top: 10px;
+    }
+    .modal-logo p { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+    .tabs-login {
+      display: flex;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .tab-btn.active { background: var(--bg-dark); color: var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 18px 0;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+    .social-login { display: flex; gap: 10px; }
+    .social-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .social-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text-main); }
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--bg-card);
+      border: 1px solid rgba(13,242,200,0.3);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      z-index: 99999;
+      min-width: 280px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { font-size: 1.2rem; }
+    .toast.success i { color: #2ed573; }
+    .toast.error i { color: #ff4757; }
+    .toast p { font-size: 0.88rem; color: var(--text-main); }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: #030a15;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 60px 24px 30px;
+    }
+    .footer-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 50px;
+    }
+    .footer-brand p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.8; margin: 14px 0 24px; max-width: 280px; }
+    .footer-social { display: flex; gap: 10px; }
+    .social-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .social-icon:hover { border-color: var(--primary); color: var(--primary); background: rgba(13,242,200,0.08); }
+    .footer-col h5 { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 20px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 0.88rem; transition: var(--transition); }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 14px;
+    }
+    .footer-bottom p { color: var(--text-dim); font-size: 0.82rem; }
+    .footer-bottom span { color: var(--primary); }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { color: var(--text-dim); font-size: 0.82rem; text-decoration: none; transition: var(--transition); }
+    .footer-bottom-links a:hover { color: var(--primary); }
+
+    /* ===================== BACK TO TOP ===================== */
+    #back-top {
+      position: fixed;
+      bottom: 28px; left: 28px;
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0; pointer-events: none;
+      z-index: 999;
+      font-size: 1rem;
+    }
+    #back-top.visible { opacity: 1; pointer-events: all; }
+    #back-top:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(13,242,200,0.2); }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-visual { display: none; }
+      .hero p, .hero-cta { margin-left: auto; margin-right: auto; }
+      .hero-cta { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .contribute-grid { grid-template-columns: 1fr; }
+      .request-inner { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute;
+        top: 68px; left: 0; right: 0;
+        background: rgba(5, 13, 26, 0.98);
+        padding: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .modal-box { padding: 36px 28px; }
+    }
+
+    /* ===================== FADE IN ANIMATION ===================== */
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===================== SECTION BG EXTRAS ===================== */
+    #reports { position: relative; overflow: hidden; }
+    #reports::after {
+      content: '';
+      position: absolute;
+      bottom: -200px; left: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(13,242,200,0.04), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* Placeholder img fallback */
+    img { background: #0d1e35; }
+  </style>
+</head>
+<body>
+
+<!-- Stars Canvas -->
+<canvas id="stars-canvas"></canvas>
+
+<!-- ===================== WELCOME MODAL ===================== -->
+<div id="welcome-modal" role="dialog" aria-modal="true" aria-label="رسالة ترحيبية">
+  <div class="welcome-box">
+    <span class="welcome-icon">🔬</span>
+    <h2>مرحباً بك في Science Lab</h2>
+    <p>
+      أهلاً بك في <strong>المنصة العلمية الأكثر شمولاً</strong> في العالم العربي.<br/>
+      هنا تجد أحدث التقارير، الأبحاث، والأخبار العلمية في الفيزياء، البيولوجيا، الكيمياء، الفلك وأكثر.
+      <br/><br/>استكشف. تعلم. ساهم. 🚀
+    </p>
+    <button class="btn-welcome" onclick="closeWelcome()">
+      <i class="fa fa-rocket"></i>&nbsp; ابدأ الاستكشاف
+    </button>
+  </div>
+</div>
+
+<!-- ===================== LOGIN MODAL ===================== -->
+<div id="login-modal" role="dialog" aria-modal="true" aria-label="تسجيل الدخول">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeLogin()" aria-label="إغلاق"><i class="fa fa-times"></i></button>
+    <div class="modal-logo">
+      <i class="fa fa-flask"></i>
+      <h3>Science Lab</h3>
+      <p>ادخل إلى حسابك العلمي</p>
+    </div>
+    <div class="tabs-login">
+      <button class="tab-btn active" onclick="switchTab('login')">تسجيل الدخول</button>
+      <button class="tab-btn" onclick="switchTab('register')">إنشاء حساب</button>
+    </div>
+
+    <!-- Login Tab -->
+    <div class="tab-panel active" id="tab-login">
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>البريد الإلكتروني <span>*</span></label>
+          <input type="email" class="form-control" placeholder="example@scilab.com" required />
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور <span>*</span></label>
+          <input type="password" class="form-control" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="form-submit">
+          <i class="fa fa-sign-in-alt"></i> دخول
+        </button>
+      </form>
+      <div class="divider">أو</div>
+      <div class="social-login">
+        <button class="social-btn" onclick="socialLogin('Google')"><i class="fab fa-google"></i> Google</button>
+        <button class="social-btn" onclick="socialLogin('GitHub')"><i class="fab fa-github"></i> GitHub</button>
+      </div>
+    </div>
+
+    <!-- Register Tab -->
+    <div class="tab-panel" id="tab-register">
+      <form onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>الاسم الكامل <span>*</span></label>
+          <input type="text" class="form-control" placeholder="اسمك بالكامل" required />
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني <span>*</span></label>
+          <input type="email" class="form-control" placeholder="example@scilab.com" required />
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور <span>*</span></label>
+          <input type="password" class="form-control" placeholder="8 أحرف على الأقل" required />
+        </div>
+        <div class="form-group">
+          <label>التخصص العلمي</label>
+          <select class="form-control">
+            <option value="">اختر تخصصك</option>
+            <option>فيزياء</option><option>كيمياء</option><option>بيولوجيا</option>
+            <option>علوم الفضاء</option><option>علوم الحاسوب</option><option>هندسة</option><option>أخرى</option>
+          </select>
+        </div>
+        <button type="submit" class="form-submit">
+          <i class="fa fa-user-plus"></i> إنشاء الحساب
+        </button>
+      </form>
+    </div>
+    <p class="form-note">بالدخول تقبل <a href="#">سياسة الخصوصية</a> و<a href="#">شروط الاستخدام</a></p>
+  </div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast">
+  <i class="fa fa-check-circle"></i>
+  <p id="toast-msg">تم بنجاح</p>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="logo">
+      <div class="logo-icon">🔬</div>
+      <div class="logo-text">Science<span>Lab</span></div>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#hero" class="active">الرئيسية</a></li>
+      <li><a href="#reports">التقارير</a></li>
+      <li><a href="#news">الأخبار</a></li>
+      <li><a href="#contribute">المساهمة</a></li>
+      <li><a href="#request-report">طلب تقرير</a></li>
+      <li><a href="#about">من نحن</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-outline" onclick="openLogin()">تسجيل الدخول</button>
+      <button class="btn-primary" onclick="document.getElementById('request-report').scrollIntoView({behavior:'smooth'})">طلب تقرير</button>
+      <div class="hamburger" onclick="toggleMenu()" aria-label="القائمة">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero" class="overlay-layer">
+  <div class="hero-inner container">
+    <div class="hero-content">
+      <div class="hero-badge">🌌 أحدث الأبحاث والاكتشافات العلمية</div>
+      <h1>اكتشف عالم<br/><span>العلوم بلا حدود</span></h1>
+      <p>
+        منصة Science Lab — وجهتك العلمية الشاملة للتقارير البحثية المحكّمة، الأخبار العلمية الحديثة، والمساهمات الأكاديمية في الفيزياء، الكيمياء، البيولوجيا، علوم الفضاء والذكاء الاصطناعي.
+      </p>
+      <div class="hero-cta">
+        <button class="btn-lg primary" onclick="document.getElementById('reports').scrollIntoView({behavior:'smooth'})">
+          <i class="fa fa-book-open"></i>&ensp;استكشف التقارير
+        </button>
+        <button class="btn-lg ghost" onclick="document.getElementById('news').scrollIntoView({behavior:'smooth'})">
+          <i class="fa fa-newspaper"></i>&ensp;آخر الأخبار
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-num" id="c-reports">0</span><div class="stat-label">تقرير علمي</div></div>
+        <div class="stat-item"><span class="stat-num" id="c-researchers">0</span><div class="stat-label">باحث مسجّل</div></div>
+        <div class="stat-item"><span class="stat-num" id="c-fields">0</span><div class="stat-label">تخصص علمي</div></div>
+        <div class="stat-item"><span class="stat-num" id="c-countries">0</span><div class="stat-label">دولة مشاركة</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="hero-orb">
+        <div class="orb-inner">🧬</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REPORTS ===================== -->
+<section id="reports">
+  <div class="container overlay-layer">
+    <div class="section-header fade-in">
+      <div class="section-tag">التقارير البحثية</div>
+      <h2 class="section-title">أحدث <span>التقارير العلمية</span></h2>
+      <p class="section-desc">تقارير بحثية محكّمة ومراجعة من قِبل فريق من كبار الأكاديميين والعلماء في شتى التخصصات</p>
+    </div>
+    <div class="filter-tabs fade-in">
+      <button class="filter-tab active" onclick="filterReports('all', this)">الكل</button>
+      <button class="filter-tab" onclick="filterReports('physics', this)">فيزياء</button>
+      <button class="filter-tab" onclick="filterReports('biology', this)">بيولوجيا</button>
+      <button class="filter-tab" onclick="filterReports('chemistry', this)">كيمياء</button>
+      <button class="filter-tab" onclick="filterReports('astronomy', this)">فلك</button>
+      <button class="filter-tab" onclick="filterReports('ai', this)">ذكاء اصطناعي</button>
+    </div>
+    <div class="cards-grid fade-in" id="reports-grid"></div>
+  </div>
+</section>
+
+<!-- ===================== NEWS ===================== -->
+<section id="news">
+  <div class="container overlay-layer">
+    <div class="section-header fade-in">
+      <div class="section-tag">آخر الأخبار</div>
+      <h2 class="section-title">أخبار <span>العلوم الحديثة</span></h2>
+      <p class="section-desc">واكب أحدث الاكتشافات والأحداث العلمية حول العالم في مختلف المجالات</p>
+    </div>
+    <div class="news-grid fade-in" id="news-grid"></div>
+  </div>
+</section>
+
+<!-- ===================== CONTRIBUTE ===================== -->
+<section id="contribute">
+  <div class="container overlay-layer">
+    <div class="contribute-grid">
+      <div class="contribute-info fade-in">
+        <div class="section-tag">المساهمة</div>
+        <h3>شارك معنا في <span>بناء المعرفة</span></h3>
+        <p>
+          Science Lab منصة مفتوحة لكل باحث وعالم وطالب يريد نشر أبحاثه أو مشاركة اكتشافاته. 
+          نحن نوفر لك المنصة، الجمهور، والمصداقية الأكاديمية.
+        </p>
+        <ul class="feature-list">
+          <li><i class="fa fa-check-circle"></i>نشر التقارير البحثية المحكّمة بمراجعة من فريق متخصص خلال 72 ساعة</li>
+          <li><i class="fa fa-check-circle"></i>مشاركة الأخبار والاكتشافات العلمية الجديدة في مختلف التخصصات</li>
+          <li><i class="fa fa-check-circle"></i>كتابة مقالات علمية مبسّطة وموجّهة للجمهور العام والمتخصصين</li>
+          <li><i class="fa fa-check-circle"></i>الوصول إلى قاعدة قراء واسعة تمتد لأكثر من 47 دولة عربية وعالمية</li>
+          <li><i class="fa fa-check-circle"></i>شهادة مساهمة رسمية معتمدة من Science Lab يمكن استخدامها أكاديمياً</li>
+        </ul>
+        <button class="btn-lg primary" onclick="openLogin()">
+          <i class="fa fa-pen-nib"></i>&ensp;ابدأ المساهمة الآن
+        </button>
+      </div>
+      <div class="fade-in">
+        <div class="form-card">
+          <div class="form-title"><i class="fa fa-paper-plane" style="color:var(--primary)"></i>&nbsp; أرسل مساهمتك</div>
+          <form onsubmit="handleContribute(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>الاسم الكامل <span>*</span></label>
+                <input type="text" class="form-control" placeholder="د. محمد العلي" required />
+              </div>
+              <div class="form-group">
+                <label>البريد الإلكتروني <span>*</span></label>
+                <input type="email" class="form-control" placeholder="dr@university.edu" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>عنوان المساهمة <span>*</span></label>
+              <input type="text" class="form-control" placeholder="عنوان بحثك أو مقالتك" required />
+            </div>
+            <div class="form-group">
+              <label>التخصص العلمي <span>*</span></label>
+              <select class="form-control" required>
+                <option value="">اختر التخصص</option>
+                <option>فيزياء</option><option>كيمياء</option><option>بيولوجيا</option>
+                <option>علوم الفضاء والفلك</option><option>ذكاء اصطناعي</option>
+                <option>علوم الأرض والبيئة</option><option>طب وعلوم الصحة</option><option>هندسة</option><option>أخرى</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>ملخص المساهمة <span>*</span></label>
+              <textarea class="form-control" placeholder="اكتب ملخصاً مختصراً لمساهمتك..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label>رابط الملف أو البحث (اختياري)</label>
+              <input type="url" class="form-control" placeholder="https://drive.google.com/..." />
+            </div>
+            <button type="submit" class="form-submit">
+              <i class="fa fa-paper-plane"></i> إرسال المساهمة
+            </button>
+          </form>
+          <p class="form-note">سيتم مراجعة مساهمتك خلال 72 ساعة والرد على بريدك الإلكتروني</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REQUEST REPORT ===================== -->
+<section id="request-report">
+  <div class="container overlay-layer">
+    <div class="section-header fade-in">
+      <div class="section-tag">طلب تقرير</div>
+      <h2 class="section-title">اطلب <span>تقريرك العلمي</span></h2>
+      <p class="section-desc">هل تحتاج إلى تقرير علمي متخصص في موضوع معين؟ فريقنا من الباحثين جاهز لإعداد ما تحتاجه</p>
+    </div>
+    <div class="request-inner fade-in">
+      <div class="request-info">
+        <span class="icon-big">📋</span>
+        <h3>كيف تعمل الخدمة؟</h3>
+        <p>
+          أرسل طلبك مع تفاصيل الموضوع العلمي الذي تريد تقريراً عنه، وسيتولى فريقنا من الباحثين المتخصصين إعداد تقرير شامل ومفصّل يُرسَل مباشرةً إلى بريدك الإلكتروني.
+        </p>
+        <div class="info-cards">
+          <div class="info-card">
+            <i class="fa fa-clock"></i>
+            <div>
+              <h5>وقت التسليم</h5>
+              <p>التقارير القصيرة خلال 24-48 ساعة، والشاملة خلال 5-7 أيام عمل</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <i class="fa fa-award"></i>
+            <div>
+              <h5>جودة البحث</h5>
+              <p>يُعدّ التقرير من قِبل باحثين أكاديميين متخصصين مع ذكر المراجع والمصادر</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <i class="fa fa-envelope"></i>
+            <div>
+              <h5>الإرسال للبريد</h5>
+              <p>يصلك التقرير بصيغة PDF احترافية على بريدك الإلكتروني المُدخل في النموذج</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <i class="fa fa-shield-alt"></i>
+            <div>
+              <h5>السرية والخصوصية</h5>
+              <p>بياناتك ومعلوماتك محفوظة ومؤمّنة ولا تُشارَك مع أي جهة خارجية</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-card fade-in">
+        <div class="form-title"><i class="fa fa-flask" style="color:var(--primary)"></i>&nbsp; نموذج طلب التقرير</div>
+        <form onsubmit="handleReportRequest(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>الاسم الكامل <span>*</span></label>
+              <input type="text" class="form-control" placeholder="اسمك" required />
+            </div>
+            <div class="form-group">
+              <label>البريد الإلكتروني <span>*</span></label>
+              <input type="email" class="form-control" placeholder="email@example.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>موضوع التقرير <span>*</span></label>
+            <input type="text" class="form-control" placeholder="مثال: تأثير المناخ على التنوع البيولوجي" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>التخصص العلمي <span>*</span></label>
+              <select class="form-control" required>
+                <option value="">اختر</option>
+                <option>فيزياء</option><option>كيمياء</option><option>بيولوجيا</option>
+                <option>فلك وفضاء</option><option>ذكاء اصطناعي</option>
+                <option>علوم بيئية</option><option>طب</option><option>هندسة</option><option>أخرى</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>حجم التقرير <span>*</span></label>
+              <select class="form-control" required>
+                <option value="">اختر</option>
+                <option>ملخص (2-4 صفحات)</option>
+                <option>متوسط (5-10 صفحات)</option>
+                <option>شامل (10-20 صفحة)</option>
+                <option>دراسة معمّقة (+20 صفحة)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>تفاصيل إضافية عن ما تريد في التقرير</label>
+            <textarea class="form-control" placeholder="أذكر أي تفاصيل أو متطلبات خاصة بالتقرير..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>الاستخدام المقصود للتقرير</label>
+            <select class="form-control">
+              <option value="">اختر (اختياري)</option>
+              <option>بحث أكاديمي</option><option>مشروع تخرج</option><option>عمل مؤسسي</option>
+              <option>تعليم ذاتي</option><option>نشر علمي</option><option>أخرى</option>
+            </select>
+          </div>
+          <button type="submit" class="form-submit">
+            <i class="fa fa-paper-plane"></i>&nbsp; إرسال الطلب
+          </button>
+        </form>
+        <p class="form-note">
+          سيُرسَل التقرير إلى بريدك الإلكتروني — للاستفسارات: <a href="mailto:reports@sciencelab.org">reports@sciencelab.org</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about" style="background:rgba(10,22,40,0.4);">
+  <div class="container overlay-layer">
+    <div class="section-header fade-in">
+      <div class="section-tag">من نحن</div>
+      <h2 class="section-title">قصة <span>Science Lab</span></h2>
+      <p class="section-desc">منصة أكاديمية علمية تأسست بهدف نشر المعرفة العلمية الموثوقة والربط بين الباحثين والقراء حول العالم</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px;" class="fade-in">
+      <div class="info-card" style="flex-direction:column;text-align:center;padding:32px 24px;">
+        <i class="fa fa-users" style="font-size:2.2rem;margin-bottom:12px;"></i>
+        <h5 style="font-size:1.1rem;margin-bottom:8px;">فريقنا</h5>
+        <p>أكثر من 120 باحث وعالم من 30 دولة يعملون معاً لتقديم محتوى علمي محكّم عالي الجودة</p>
+      </div>
+      <div class="info-card" style="flex-direction:column;text-align:center;padding:32px 24px;">
+        <i class="fa fa-globe" style="font-size:2.2rem;margin-bottom:12px;"></i>
+        <h5 style="font-size:1.1rem;margin-bottom:8px;">انتشارنا</h5>
+        <p>نصل إلى أكثر من 500,000 قارئ شهرياً في 47 دولة حول العالم العربي وخارجه</p>
+      </div>
+      <div class="info-card" style="flex-direction:column;text-align:center;padding:32px 24px;">
+        <i class="fa fa-certificate" style="font-size:2.2rem;margin-bottom:12px;"></i>
+        <h5 style="font-size:1.1rem;margin-bottom:8px;">اعتمادنا</h5>
+        <p>معتمدون من قِبل عدة جامعات ومعاهد علمية عربية ودولية كمصدر للمحتوى العلمي الموثوق</p>
+      </div>
+      <div class="info-card" style="flex-direction:column;text-align:center;padding:32px 24px;">
+        <i class="fa fa-bullseye" style="font-size:2.2rem;margin-bottom:12px;"></i>
+        <h5 style="font-size:1.1rem;margin-bottom:8px;">رؤيتنا</h5>
+        <p>جعل العلم في متناول الجميع، وتمكين كل شخص من الوصول إلى المعرفة العلمية الموثوقة</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#hero" class="logo" style="margin-bottom:0">
+        <div class="logo-icon">🔬</div>
+        <div class="logo-text">Science<span>Lab</span></div>
+      </a>
+      <p>منصة علمية متكاملة تجمع التقارير البحثية المحكّمة، أحدث الأخبار العلمية، ومجتمع الباحثين والمهتمين في شتى التخصصات العلمية.</p>
+      <div class="footer-social">
+        <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>التقارير</h5>
+      <ul class="footer-links">
+        <li><a href="#">تقارير الفيزياء</a></li>
+        <li><a href="#">تقارير البيولوجيا</a></li>
+        <li><a href="#">تقارير الكيمياء</a></li>
+        <li><a href="#">تقارير الفضاء</a></li>
+        <li><a href="#">تقارير الذكاء الاصطناعي</a></li>
+        <li><a href="#">أكثر التقارير قراءة</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>الأقسام</h5>
+      <ul class="footer-links">
+        <li><a href="#news">آخر الأخبار</a></li>
+        <li><a href="#contribute">المساهمة</a></li>
+        <li><a href="#request-report">طلب تقرير</a></li>
+        <li><a href="#about">من نحن</a></li>
+        <li><a href="#">المجلة العلمية</a></li>
+        <li><a href="#">ندوات مباشرة</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>تواصل معنا</h5>
+      <ul class="footer-links">
+        <li><a href="mailto:info@sciencelab.org"><i class="fa fa-envelope" style="margin-left:6px;"></i>info@sciencelab.org</a></li>
+        <li><a href="mailto:reports@sciencelab.org"><i class="fa fa-file-alt" style="margin-left:6px;"></i>reports@sciencelab.org</a></li>
+        <li><a href="mailto:contribute@sciencelab.org"><i class="fa fa-pen" style="margin-left:6px;"></i>contribute@sciencelab.org</a></li>
+        <li><a href="#"><i class="fa fa-question-circle" style="margin-left:6px;"></i>الدعم والمساعدة</a></li>
+        <li><a href="#"><i class="fa fa-shield-alt" style="margin-left:6px;"></i>سياسة الخصوصية</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> Science Lab — جميع الحقوق محفوظة | صُنع بـ <span>❤</span> لأجل العلم</p>
+    <div class="footer-bottom-links">
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">شروط الاستخدام</a>
+      <a href="#">خريطة الموقع</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to Top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="العودة للأعلى">
+  <i class="fa fa-arrow-up"></i>
+</button>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script>
+  // ========= DATA =========
+  const REPORTS = [
+    { id:1, cat:'physics', catLabel:'فيزياء', catClass:'cat-physics', title:'الموجات الثقالية واكتشاف الثقوب السوداء المدمجة', author:'د. أحمد المنصوري', authorAvatar:'https://i.pravatar.cc/48?img=11', date:'2025-06-15', img:'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&q=80', desc:'يستعرض هذا التقرير آخر الاكتشافات في مجال الموجات الثقالية ورصد حدثين من اندماج الثقوب السوداء باستخدام مرصد LIGO وتداعياتها على فهمنا للكون.', views:4820, reads:1231 },
+    { id:2, cat:'biology', catLabel:'بيولوجيا', catClass:'cat-biology', title:'التعديل الجيني بتقنية CRISPR-Cas9 وعلاج أمراض الدم الوراثية', author:'د. سارة الزهراني', authorAvatar:'https://i.pravatar.cc/48?img=5', date:'2025-06-08', img:'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80', desc:'دراسة شاملة لأحدث التجارب السريرية التي تستخدم تقنية كريسبر في علاج الثلاسيميا وفقر الدم المنجلي، مع تحليل للنتائج الأولية الواعدة.', views:3640, reads:980 },
+    { id:3, cat:'chemistry', catLabel:'كيمياء', catClass:'cat-chemistry', title:'بطاريات الصوديوم-أيون: ثورة في تخزين الطاقة المتجددة', author:'أ. خالد الرشيدي', authorAvatar:'https://i.pravatar.cc/48?img=15', date:'2025-05-22', img:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80', desc:'تقرير متخصص يناقش التطورات الأخيرة في بطاريات أيون الصوديوم كبديل واعد وأرخص لبطاريات الليثيوم، ومدى تطبيقها في شبكات الطاقة المتجددة.', views:2910, reads:754 },
+    { id:4, cat:'astronomy', catLabel:'فلك', catClass:'cat-astronomy', title:'الكواكب الخارجية في المنطقة الصالحة للحياة: مراجعة 2025', author:'د. نورة العتيبي', authorAvatar:'https://i.pravatar.cc/48?img=9', date:'2025-05-10', img:'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=600&q=80', desc:'مراجعة علمية لأكثر من 300 كوكب خارجي رُصد خلال العقد الماضي في المنطقة الصالحة للحياة، مع تقييم احتمالية وجود ماء سائل وشروط الحياة.', views:5120, reads:1456 },
+    { id:5, cat:'ai', catLabel:'ذكاء اصطناعي', catClass:'cat-ai', title:'نماذج اللغة الكبيرة في خدمة الأبحاث العلمية: تحليل وتقييم', author:'م. عمر الحربي', authorAvatar:'https://i.pravatar.cc/48?img=20', date:'2025-04-30', img:'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=80', desc:'كيف يُعيد الذكاء الاصطناعي التوليدي تشكيل مناهج البحث العلمي، من اكتشاف الأدوية إلى محاكاة الأنظمة المناخية، مع دراسة للمخاطر والفرص.', views:6300, reads:1890 },
+    { id:6, cat:'biology', catLabel:'بيولوجيا', catClass:'cat-biology', title:'الميكروبيوم البشري ودوره في صحة الجهاز العصبي المركزي', author:'د. ليلى الشمري', authorAvatar:'https://i.pravatar.cc/48?img=3', date:'2025-04-18', img:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80', desc:'تقرير علمي حديث يبحث في العلاقة المعقدة بين ميكروبيوم الأمعاء والدماغ، وما توصل إليه الباحثون من صلات بمرضَي الزهايمر والاكتئاب.', views:3200, reads:880 },
+  ];
+
+  const NEWS = [
+    { id:1, cat:'فيزياء', title:'فيزيائيون يرصدون جسيماً جديداً قد يُفسر المادة المظلمة', author:'محرر العلوم', date:'2025-07-10', img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=200&q=80', desc:'أعلن باحثو مختبر CERN عن رصد إشارات أولية لجسيم غير معروف قد يكون بذرة لفهم المادة المظلمة التي تشكّل 27% من الكون.', views:8200 },
+    { id:2, cat:'طب', title:'لقاح mRNA جديد يُظهر نتائج مبهرة ضد سرطان الجلد', author:'د. أمل يوسف', date:'2025-07-08', img:'https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=200&q=80', desc:'كشفت شركة Moderna عن نتائج المرحلة الثالثة للقاحها التجريبي ضد الميلانوما، بنسبة فعالية تصل إلى 78% في منع تكرار الإصابة.', views:12400 },
+    { id:3, cat:'فضاء', title:'ناسا تؤكد: مركبة فوياجر 1 ترسل بيانات جديدة من خارج المجموعة الشمسية', author:'وكالة ناسا', date:'2025-07-05', img:'https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=200&q=80', desc:'بعد إصلاح تقني معقد، تمكنت ناسا من استعادة الاتصال الكامل بفوياجر 1 التي تبعد 24 مليار كيلومتر، وهي ترسل بيانات قيّمة عن الفضاء بين النجمي.', views:19500 },
+    { id:4, cat:'ذكاء اصطناعي', title:'DeepMind تطلق نموذج AlphaFold 3 لتوقع بنى بروتينات أكثر تعقيداً', author:'محرر التقنية', date:'2025-07-01', img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80', desc:'الإصدار الجديد من AlphaFold قادر الآن على توقع بنى مجمعات البروتين-DNA وتفاعلات الجزيئات الصغيرة، مما يفتح آفاقاً لتصميم أدوية أكثر دقة.', views:7800 },
+    { id:5, cat:'بيئة', title:'الشعاب المرجانية: تقرير يكشف انخفاضاً بـ 22% في السنة الأخيرة بسبب ارتفاع الحرارة', author:'د. هند المطيري', date:'2025-06-28', img:'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=200&q=80', desc:'تقرير دولي جديد يحذر من انهيار النظام البيئي للشعاب المرجانية في المحيط الهندي والمحيط الهادئ جراء ارتفاع درجات حرارة المياه.', views:5600 },
+    { id:6, cat:'كيمياء', title:'اكتشاف مادة تنتج الكهرباء من الهواء المحيط بتقنية مبتكرة', author:'جامعة ماساتشوستس', date:'2025-06-25', img:'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=200&q=80', desc:'علماء يطورون مادة قادرة على توليد تيار كهربائي مستمر من رطوبة الهواء، وهو اكتشاف يمكن أن يُحدث ثورة في الطاقة النظيفة.', views:9100 },
+  ];
+
+  // ========= HELPERS =========
+  function formatDate(d) {
+    const opts = { year:'numeric', month:'long', day:'numeric' };
+    return new Date(d).toLocaleDateString('ar-SA', opts);
+  }
+
+  // ========= COOKIES =========
+  function setCookie(name, value, days) {
+    const e = new Date(); e.setTime(e.getTime() + days*24*60*60*1000);
+    document.cookie = name + '=' + value + ';expires=' + e.toUTCString() + ';path=/';
+  }
+  function getCookie(name) {
+    const n = name + '=', ca = document.cookie.split(';');
+    for (let c of ca) { c = c.trim(); if (c.startsWith(n)) return c.substring(n.length); }
+    return '';
+  }
+  function closeWelcome() {
+    setCookie('sl_visited', '1', 365);
+    document.getElementById('welcome-modal').classList.remove('show');
+  }
+
+  // ========= STARS =========
+  function initStars() {
+    const canvas = document.getElementById('stars-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, stars = [];
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < 160; i++) stars.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.4+0.2, a: Math.random(), s: Math.random()*0.006+0.001 });
+    }
+    function draw() {
+      ctx.clearRect(0,0,W,H);
+      stars.forEach(s => {
+        s.a += s.s; if (s.a > 1 || s.a < 0) s.s *= -1;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(200,230,255,${s.a})`; ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', () => { resize(); createStars(); });
+    resize(); createStars(); draw();
+  }
+
+  // ========= RENDER REPORTS =========
+  function renderReports(filter='all') {
+    const grid = document.getElementById('reports-grid');
+    const data = filter === 'all' ? REPORTS : REPORTS.filter(r => r.cat === filter);
+    grid.innerHTML = data.map(r => `
+      <article class="card" data-cat="${r.cat}">
+        <div class="card-img-wrap">
+          <img class="card-img" src="${r.img}" alt="${r.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=600&q=80'"/>
+          <span class="card-category ${r.catClass}">${r.catLabel}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-author">
+            <img src="${r.authorAvatar}" alt="${r.author}" class="author-avatar" loading="lazy"/>
+            <div class="author-info">
+              <div class="name">${r.author}</div>
+              <div class="date"><i class="fa fa-calendar-alt"></i>${formatDate(r.date)}</div>
+            </div>
+          </div>
+          <h3 class="card-title">${r.title}</h3>
+          <p class="card-desc">${r.desc}</p>
+          <div class="card-footer">
+            <div class="card-meta">
+              <span class="meta-item"><i class="fa fa-eye"></i>${r.views.toLocaleString('ar-EG')}</span>
+              <span class="meta-item"><i class="fa fa-book-reader"></i>${r.reads.toLocaleString('ar-EG')}</span>
+            </div>
+            <a href="#" class="btn-read" onclick="showToast('success','سيُضاف قريباً: قراءة كاملة للتقارير');return false;">
+              قراءة <i class="fa fa-arrow-left"></i>
+            </a>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function filterReports(cat, btn) {
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderReports(cat);
+  }
+
+  // ========= RENDER NEWS =========
+  function renderNews() {
+    document.getElementById('news-grid').innerHTML = NEWS.map(n => `
+      <article class="news-card">
+        <img src="${n.img}" class="news-img" alt="${n.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80'"/>
+        <div class="news-content">
+          <div class="category">${n.cat}</div>
+          <h4>${n.title}</h4>
+          <p>${n.desc}</p>
+          <div class="news-meta">
+            <span><i class="fa fa-user"></i>${n.author}</span>
+            <span><i class="fa fa-calendar"></i>${formatDate(n.date)}</span>
+            <span><i class="fa fa-eye"></i>${n.views.toLocaleString('ar-EG')}</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  // ========= COUNTERS =========
+  function animateCounter(el, target, suffix='') {
+    let cur = 0, step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = cur.toLocaleString('ar-EG') + suffix;
+      if (cur >= target) clearInterval(timer);
+    }, 28);
+  }
+
+  // ========= TOAST =========
+  let toastTimer;
+  function showToast(type, msg) {
+    const t = document.getElementById('toast');
+    const icon = t.querySelector('i');
+    document.getElementById('toast-msg').textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    icon.className = type === 'success' ? 'fa fa-check-circle' : 'fa fa-times-circle';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ========= LOGIN MODAL =========
+  function openLogin() { document.getElementById('login-modal').classList.add('show'); }
+  function closeLogin() { document.getElementById('login-modal').classList.remove('show'); }
+  function switchTab(t) {
+    document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (t==='login'&&i===0)||(t==='register'&&i===1)));
+    document.getElementById('tab-login').classList.toggle('active', t==='login');
+    document.getElementById('tab-register').classList.toggle('active', t==='register');
+  }
+
+  // ========= FORM HANDLERS =========
+  function handleLogin(e) { e.preventDefault(); closeLogin(); showToast('success', 'تم تسجيل الدخول بنجاح! مرحباً بعودتك 👋'); }
+  function handleRegister(e) { e.preventDefault(); closeLogin(); showToast('success', 'تم إنشاء حسابك بنجاح! تحقق من بريدك الإلكتروني 📧'); }
+  function handleContribute(e) { e.preventDefault(); showToast('success', 'شكراً! تم استلام مساهمتك وسيتم التواصل معك خلال 72 ساعة'); e.target.reset(); }
+  function handleReportRequest(e) {
+    e.preventDefault();
+    showToast('success', 'تم استلام طلب التقرير! سيصلك على بريدك الإلكتروني 📋');
+    e.target.reset();
+  }
+  function socialLogin(p) { closeLogin(); showToast('success', 'جارٍ التحويل إلى ' + p + '...'); }
+
+  // ========= NAV =========
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+
+  // ========= SCROLL EFFECTS =========
+  function onScroll() {
+    const y = window.scrollY;
+    // Nav shadow
+    document.getElementById('navbar').classList.toggle('scrolled', y > 60);
+    // Back to top
+    document.getElementById('back-top').classList.toggle('visible', y > 400);
+    // Active nav link
+    const sections = ['hero','reports','news','contribute','request-report','about'];
+    let active = 'hero';
+    sections.forEach(id => { const el = document.getElementById(id); if(el && el.offsetTop - 100 <= y) active = id; });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+    });
+    // Fade in
+    document.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add('visible');
+    });
+  }
+
+  // ========= INIT =========
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initStars();
+    renderReports();
+    renderNews();
+
+    // Welcome cookie
+    if (!getCookie('sl_visited')) {
+      document.getElementById('welcome-modal').classList.add('show');
+    }
+
+    // Counters (when hero visible)
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        animateCounter(document.getElementById('c-reports'), 1247, '+');
+        animateCounter(document.getElementById('c-researchers'), 8300, '+');
+        animateCounter(document.getElementById('c-fields'), 24, '');
+        animateCounter(document.getElementById('c-countries'), 47, '+');
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(document.getElementById('hero'));
+
+    // Close modals on backdrop click
+    document.getElementById('welcome-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeWelcome(); });
+    document.getElementById('login-modal').addEventListener('click', e => { if(e.target===e.currentTarget) closeLogin(); });
+
+    // Keyboard ESC
+    document.addEventListener('keydown', e => { if(e.key==='Escape') { closeLogin(); } });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  });
+</script>
+</body>
+</html>
