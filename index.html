@@ -329,9 +329,8 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.6);
   z-index: 99;
-  backdrop-filter: blur(4px);
 }
 
 /* ═══════════════════════════════════════════
@@ -1305,6 +1304,118 @@ body {
 }
 
 /* ═══════════════════════════════════════════
+   DETAIL PAGE
+═══════════════════════════════════════════ */
+.detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cyan);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0,212,255,0.2);
+  background: rgba(0,212,255,0.06);
+  margin-bottom: 28px;
+  transition: all var(--transition);
+  font-family: var(--font);
+}
+.detail-back:hover { background: rgba(0,212,255,0.14); border-color: var(--cyan); }
+.detail-back svg { width: 18px; height: 18px; }
+
+.detail-hero-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  margin-bottom: 36px;
+  display: block;
+  border: 1px solid var(--border);
+}
+
+.detail-cat-badge {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.detail-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 24px;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 36px;
+}
+
+.detail-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+}
+
+.detail-author-name { font-size: 0.98rem; font-weight: 700; color: var(--text); }
+.detail-author-date { font-size: 0.78rem; color: var(--text3); font-family: var(--font-mono); margin-top: 3px; }
+
+.detail-body { max-width: 780px; }
+
+.detail-body p {
+  font-size: 1.02rem;
+  color: var(--text2);
+  line-height: 1.95;
+  margin-bottom: 22px;
+}
+
+.detail-body h3 {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 36px 0 14px;
+  padding-right: 14px;
+  border-right: 3px solid var(--cyan);
+}
+
+.detail-body blockquote {
+  background: var(--surface2);
+  border-right: 3px solid var(--violet2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 16px 20px;
+  margin: 24px 0;
+  color: var(--text2);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.detail-related { margin-top: 56px; }
+.detail-related-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 20px;
+}
+.detail-related-title span { display: inline-block; width: 4px; height: 18px; background: var(--cyan); border-radius: 2px; }
+
+@media (max-width: 768px) {
+  .detail-hero-img { height: 220px; }
+  .detail-title { font-size: 1.4rem; }
+}
+
+/* ═══════════════════════════════════════════
    SCROLLBAR
 ═══════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -1567,13 +1678,11 @@ body {
     <a class="nav-item" id="nav-reports" onclick="navigate('reports'); return false;" href="#">
       <svg class="nav-icon" viewBox="0 0 48 48"><use href="#ico-report"/></svg>
       التقارير العلمية
-      <span class="nav-badge">128</span>
     </a>
 
     <a class="nav-item" id="nav-news" onclick="navigate('news'); return false;" href="#">
       <svg class="nav-icon" viewBox="0 0 48 48"><use href="#ico-news"/></svg>
       الأخبار العلمية
-      <span class="nav-badge">47</span>
     </a>
 
     <div class="nav-section-label">المشاركة</div>
@@ -1781,7 +1890,7 @@ body {
       <div class="section-header">
         <div class="section-eyebrow">التقارير</div>
         <h2 class="section-title">التقارير العلمية</h2>
-        <p class="section-subtitle">أرشيف شامل من التقارير البحثية المحكّمة في مختلف التخصصات العلمية.</p>
+        <p class="section-subtitle">أرشيف شامل من التقارير البحثية المحكّمة في مختلف التخصصات العلمية. &nbsp;<span id="reports-count" style="color:var(--cyan);font-family:var(--font-mono);font-weight:700;"></span></p>
       </div>
       <div class="filter-tabs" id="reports-tabs">
         <button class="filter-tab active" data-cat="all">الكل</button>
@@ -1801,7 +1910,7 @@ body {
       <div class="section-header">
         <div class="section-eyebrow">الأخبار</div>
         <h2 class="section-title">الأخبار العلمية</h2>
-        <p class="section-subtitle">آخر المستجدات والاكتشافات من عالم العلوم والتكنولوجيا.</p>
+        <p class="section-subtitle">آخر المستجدات والاكتشافات من عالم العلوم والتكنولوجيا. &nbsp;<span id="news-count" style="color:var(--cyan);font-family:var(--font-mono);font-weight:700;"></span></p>
       </div>
       <div class="cards-grid" id="news-grid"></div>
     </div>
@@ -2064,115 +2173,176 @@ body {
 ═══════════════════════════════════════════ */
 const REPORTS = [
   {
-    id: 1, cat: 'physics', catLabel: 'فيزياء',
-    icon: 'ico-atom', iconColor: '#00D4FF', bgA: '#0B1C3A', bgB: '#061226',
+    id: 1, type: 'report', cat: 'physics', catLabel: 'فيزياء',
+    icon: 'ico-atom', iconColor: '#00D4FF',
+    img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=900&q=85&fit=crop&auto=format',
     title: 'تأثير الجاذبية الكمومية على انحناء الزمكان في المجرات القزمة',
-    author: 'د. سارة الجوهري', avatar: 'سج',
-    date: '18 يوليو 2026',
+    author: 'د. سارة الجوهري', avatar: 'سج', date: '18 يوليو 2026',
     desc: 'دراسة تحليلية شاملة لنماذج الجاذبية الكمومية وتأثيرها على بنية الزمكان داخل المجرات القزمة باستخدام بيانات تلسكوب جيمس ويب.',
-    views: 2847
+    fullDesc: `<p>تُعدّ هذه الدراسة من أكثر الأعمال العلمية طموحاً في مجال الجاذبية الكمومية خلال العقد الماضي، إذ تستعين بالبيانات الدقيقة الصادرة عن تلسكوب جيمس ويب الفضائي لاستكشاف تأثيرات الجاذبية الكمومية في البيئات ذات الكثافة المادية المنخفضة كالمجرات القزمة.</p>
+<h3>المنهجية العلمية</h3>
+<p>اعتمدت الدراسة على تحليل أكثر من 2,400 مجرة قزمة رُصدت ضمن نطاق 500 مليون سنة ضوئية، مستخدمةً معادلات الجاذبية الكمومية حلقية (LQG) لمحاكاة انحناء الزمكان. وأظهرت النتائج انحرافاً ملحوظاً عن توقعات النسبية العامة بنسبة 0.3% في المجرات ذات الكتلة الأقل من 10⁸ كتلة شمسية.</p>
+<blockquote>«ما نراه في هذه المجرات القزمة ليس مجرد انحراف إحصائي، بل قد يكون أول دليل مرصود على تأثيرات الجاذبية الكمومية في بنية الكون الكبرى.» — د. سارة الجوهري</blockquote>
+<h3>النتائج والتداعيات</h3>
+<p>تُلقي هذه النتائج بظلالها على نماذج تشكّل الكون وتدعو إلى مراجعة نماذج المادة المظلمة السائدة. كما تفتح آفاقاً جديدة لفهم دور الجاذبية الكمومية في المراحل الأولى من الكون، وما إذا كانت هذه التأثيرات قد تفسّر بعض الغموض المحيط بثابت هابل.</p>
+<p>يواصل الفريق البحثي حالياً تعاونه مع مرصد ALMA لجمع بيانات إضافية، بهدف تأكيد النتائج عبر مناطق مختلفة من الكون المرصود والتحقق من اتساقها الكوني.</p>`
   },
   {
-    id: 2, cat: 'bio', catLabel: 'بيولوجيا',
-    icon: 'ico-dna', iconColor: '#10B981', bgA: '#0A2218', bgB: '#051510',
+    id: 2, type: 'report', cat: 'bio', catLabel: 'بيولوجيا',
+    icon: 'ico-dna', iconColor: '#10B981',
+    img: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=900&q=85&fit=crop&auto=format',
     title: 'تسلسل الجينوم الكامل لسلالات البكتيريا المقاومة للمضادات الحيوية',
-    author: 'د. خالد المنصوري', avatar: 'خم',
-    date: '15 يوليو 2026',
+    author: 'د. خالد المنصوري', avatar: 'خم', date: '15 يوليو 2026',
     desc: 'تحليل جيني متعمق لأكثر من 200 سلالة بكتيرية مقاومة للمضادات الحيوية للكشف عن آليات المقاومة وتطوير استراتيجيات علاجية جديدة.',
-    views: 1923
+    fullDesc: `<p>في ظل أزمة مقاومة المضادات الحيوية التي باتت تُهدد منظومة الصحة العالمية، يأتي هذا البحث ليُقدّم تحليلاً جينياً غير مسبوق لأكثر من 200 سلالة بكتيرية مقاومة، مستخدماً أحدث تقنيات التسلسل الجيني من الجيل الثالث (Nanopore Sequencing).</p>
+<h3>السلالات المدروسة</h3>
+<p>شملت الدراسة سلالات من أخطر البكتيريا المقاومة عالمياً، وفي مقدمتها Klebsiella pneumoniae وAcinetobacter baumannii وPseudomonas aeruginosa. وقد كُشف عن 47 جيناً جديداً للمقاومة لم تكن موثّقة في قواعد البيانات العالمية من قبل.</p>
+<blockquote>«هذه الجينات الجديدة تمثّل ثغرة حقيقية في ترسانتنا الدوائية. فهمها هو الخطوة الأولى نحو تطوير مضادات حيوية الجيل القادم.» — د. خالد المنصوري</blockquote>
+<h3>الآفاق العلاجية</h3>
+<p>بناءً على خرائط المقاومة الجينية المُستخرجة، اقترح الفريق البحثي ثلاث مركّبات دوائية مرشّحة للتطوير، تستهدف آليات المقاومة الجديدة دون التأثير على البكتيريا النافعة في جسم الإنسان. التجارب المخبرية الأولية أظهرت نتائج واعدة بنسبة فاعلية تجاوزت 89%.</p>`
   },
   {
-    id: 3, cat: 'chem', catLabel: 'كيمياء',
-    icon: 'ico-flask', iconColor: '#F59E0B', bgA: '#2A1A04', bgB: '#180F02',
+    id: 3, type: 'report', cat: 'chem', catLabel: 'كيمياء',
+    icon: 'ico-flask', iconColor: '#F59E0B',
+    img: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=900&q=85&fit=crop&auto=format',
     title: 'تطوير محفزات نانوية فائقة الكفاءة لتحويل ثاني أكسيد الكربون',
-    author: 'أ. نورة السليمان', avatar: 'نس',
-    date: '10 يوليو 2026',
+    author: 'أ. نورة السليمان', avatar: 'نس', date: '10 يوليو 2026',
     desc: 'تصميم وتوصيف جيل جديد من المحفزات النانوية المعدنية القادرة على تحويل CO₂ إلى وقود صناعي بكفاءة تتجاوز 94%.',
-    views: 3401
+    fullDesc: `<p>يُمثّل ثاني أكسيد الكربون أحد أبرز تحديات أزمة المناخ العالمية. غير أن هذا البحث يُقلب المعادلة تماماً، إذ يُقدّم جيلاً جديداً من المحفزات النانوية القادرة على تحويل CO₂ من عدو للبيئة إلى مادة خام ذات قيمة صناعية عالية.</p>
+<h3>تصميم المحفز النانوي</h3>
+<p>يعتمد المحفز الجديد على هيكل نانوي مركّب من نحاسيد الإنديوم المطعّمة بذرات البلاديوم، مرتّبة في تركيب بلوري دقيق يُعظّم مساحة السطح الفعّال. الحجم النانوي المتحكَّم فيه (3.2 نانومتر) يُتيح انتقائية كيميائية عالية نحو إنتاج الميثانول والإيثانول بدلاً من المنتجات الثانوية غير المرغوبة.</p>
+<blockquote>«حققنا ما كان يُعدّ مستحيلاً منذ عقود: تحويل ثاني أكسيد الكربون بكفاءة 94.3% في ظروف ضغط وحرارة قريبة من الظروف الصناعية المعتادة.» — أ. نورة السليمان</blockquote>
+<h3>التطبيقات الصناعية</h3>
+<p>تتعاون مجموعة من شركات الطاقة الخليجية مع الفريق البحثي لتقييم جدوى تطبيق هذه التقنية على نطاق صناعي في منشآت احتجاز الكربون. التقديرات الأولية تُشير إلى إمكانية تحويل 2 مليون طن من CO₂ سنوياً في المنشأة الواحدة.</p>`
   },
   {
-    id: 4, cat: 'astro', catLabel: 'فلك',
-    icon: 'ico-telescope', iconColor: '#A78BFA', bgA: '#150D2A', bgB: '#0C0718',
+    id: 4, type: 'report', cat: 'astro', catLabel: 'فلك',
+    icon: 'ico-telescope', iconColor: '#A78BFA',
+    img: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=900&q=85&fit=crop&auto=format',
     title: 'رصد نبضات مغناطيسية غير منتظمة من نجم نيوتروني في مجرة أندروميدا',
-    author: 'د. ماهر العتيبي', avatar: 'مع',
-    date: '5 يوليو 2026',
+    author: 'د. ماهر العتيبي', avatar: 'مع', date: '5 يوليو 2026',
     desc: 'باستخدام مصفوفة تلسكوبات راديو المتزامنة، رُصدت أنماط نبضية فريدة قد تشير إلى حالة مادة جديدة داخل النجوم النيوترونية.',
-    views: 4120
+    fullDesc: `<p>في أعماق مجرة أندروميدا، على بُعد 2.5 مليون سنة ضوئية، رصد الفريق البحثي نجماً نيوترونياً يُصدر نبضات مغناطيسية بأنماط لا تتطابق مع أيٍّ من النماذج النظرية المعروفة، مما يُثير تساؤلات عميقة حول طبيعة المادة في أشد البيئات قسوةً في الكون.</p>
+<h3>طبيعة النبضات الغريبة</h3>
+<p>تتميّز هذه النبضات بتغيّر مفاجئ في فترة الدوران بمقدار 1.7 ميلي ثانية كل 47 يوماً، وهو ما يُعرف علمياً بـ«glitch»، غير أن الغريب هو عودة الفترة تدريجياً نحو قيمة أعلى بدلاً من قيمتها الأصلية، وهو سلوك لم يُرصد من قبل في أي نجم نيوتروني معروف.</p>
+<blockquote>«إذا تأكدت هذه الأنماط، فنحن أمام دليل على وجود مرحلة طور جديدة من مراحل المادة داخل النجم النيوتروني، ربما تكون مادة الكواركيون أو شكل آخر لم تتنبأ به نظرياتنا بعد.» — د. ماهر العتيبي</blockquote>
+<h3>التفسيرات المحتملة</h3>
+<p>يطرح الفريق ثلاثة تفسيرات محتملة: إما وجود طبقة من مادة الكواركيون السائلة في لب النجم، أو حدوث إعادة ترتيب مفاجئة في القشرة الكريستالية الداخلية، أو تأثيرات مغناطيسية غير خطية في الغلاف المحيط. كل تفسير يقتضي مراجعة جذرية لنماذجنا الحالية في فيزياء المادة فائقة الكثافة.</p>`
   },
   {
-    id: 5, cat: 'ai', catLabel: 'ذكاء اصطناعي',
-    icon: 'ico-ai', iconColor: '#F472B6', bgA: '#2A0A1A', bgB: '#18050F',
+    id: 5, type: 'report', cat: 'ai', catLabel: 'ذكاء اصطناعي',
+    icon: 'ico-ai', iconColor: '#F472B6',
+    img: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&q=85&fit=crop&auto=format',
     title: 'نماذج تعلم آلة تنبؤية لاكتشاف التفاعلات الدوائية قبل التجارب السريرية',
-    author: 'د. ريم الشهري', avatar: 'رش',
-    date: '1 يوليو 2026',
+    author: 'د. ريم الشهري', avatar: 'رش', date: '1 يوليو 2026',
     desc: 'معمارية شبكة عصبية تحويلية مدرّبة على 12 مليون تفاعل دوائي لتوقع التأثيرات الجانبية بدقة 97.3% قبل إجراء التجارب السريرية.',
-    views: 5680
+    fullDesc: `<p>تُحدث هذه الدراسة نقلةً نوعية في مجال اكتشاف الأدوية، إذ تقدّم نموذجاً للذكاء الاصطناعي يُغني عن سنوات من التجارب المخبرية المكلفة بتوقّع التفاعلات الدوائية الخطرة قبل وصول المركّب إلى المرحلة السريرية.</p>
+<h3>معمارية النموذج</h3>
+<p>يعتمد النموذج على بنية محوّل تحويلي (Transformer) مُعدَّلة خصيصاً للبنى الجزيئية، تُسمى «ChemFormer-Rx». دُرِّب النموذج على قاعدة بيانات تضم 12.4 مليون تفاعل دوائي موثّق من مصادر سريرية وتجريبية، إضافة إلى 3.2 مليون بنية جزيئية مُصنَّفة بدقة عالية.</p>
+<blockquote>«دقة 97.3% في توقع التفاعلات الخطرة تعني عملياً أن بإمكاننا اختبار آلاف المركّبات رقمياً في أيام، بدلاً من سنوات من التجارب الحيوانية والمخبرية.» — د. ريم الشهري</blockquote>
+<h3>التحقق والتطبيق</h3>
+<p>تحقّق الفريق من أداء النموذج على 840 دواءً مُعتمداً من إدارة الغذاء والدواء الأمريكية (FDA)، ونجح في تحديد 156 تفاعلاً خطراً لم تكن مُدرجة في التحذيرات الرسمية حتى الآن. تتعاون مع الفريق حالياً ثلاث شركات أدوية عملاقة لدمج النموذج في خط أنابيب اكتشاف الأدوية لديها.</p>`
   },
   {
-    id: 6, cat: 'physics', catLabel: 'فيزياء',
-    icon: 'ico-atom', iconColor: '#00D4FF', bgA: '#0B1C3A', bgB: '#061226',
+    id: 6, type: 'report', cat: 'physics', catLabel: 'فيزياء',
+    icon: 'ico-atom', iconColor: '#00D4FF',
+    img: 'https://images.unsplash.com/photo-1614728894747-a83421789f10?w=900&q=85&fit=crop&auto=format',
     title: 'قياسات دقيقة لثابت هابل باستخدام موجات الجاذبية من اندماج النجوم النيوترونية',
-    author: 'د. أحمد الغامدي', avatar: 'أغ',
-    date: '25 يونيو 2026',
+    author: 'د. أحمد الغامدي', avatar: 'أغ', date: '25 يونيو 2026',
     desc: 'تحليل 47 حدث اندماج نجمي رُصد بواسطة LIGO-Virgo لاشتقاق قيمة محسّنة لثابت هابل H₀ = 69.8 ± 1.9 km/s/Mpc.',
-    views: 2190
+    fullDesc: `<p>يقف ثابت هابل في قلب أحد أعمق الخلافات في فيزياء الكون المعاصرة. فبينما تُعطي قياسات خلفية الإشعاع الكوني قيمة تقارب 67.4، تُشير قياسات الشموع القياسية إلى قيمة أعلى تناهز 73. تأتي هذه الدراسة لتُقدّم مساراً ثالثاً مستقلاً تماماً يعتمد على موجات الجاذبية.</p>
+<h3>المنهج: صفارات الجاذبية</h3>
+<p>يُطلق العلماء على حوادث اندماج النجوم النيوترونية اسم «صفارات الجاذبية المعيارية»، لأن سعة موجات الجاذبية الصادرة عنها تتيح قياس المسافة الكونية بدقة لا تتوفر في الطرق التقليدية. وقد حلّل الفريق 47 حدثاً رُصد خلال رحلتَي المراقبة O3 وO4 لـ LIGO-Virgo-KAGRA.</p>
+<blockquote>«القيمة التي توصّلنا إليها — 69.8 ± 1.9 — تقع في منتصف الطريق تماماً بين القيمتين المتنازع عليهما، وقد تكون المفتاح لحسم هذا الجدل الكوني.» — د. أحمد الغامدي</blockquote>
+<h3>دلالة النتائج</h3>
+<p>تُشير القيمة المُستخرجة إلى أن التوتر الكوني في ثابت هابل قد يكون ناجماً عن أخطاء منهجية في كلتا الطريقتين التقليديتين، أو ربما يكون مؤشراً على وجود فيزياء جديدة تتجاوز النموذج الكوني القياسي، كالطاقة المظلمة الديناميكية أو التعديلات على نظرية الجاذبية.</p>`
   }
 ];
 
 const NEWS = [
   {
-    id: 1, cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399', bgA: '#0A2218', bgB: '#051510',
+    id: 1, type: 'news', cat: 'news', catLabel: 'أخبار',
+    icon: 'ico-news', iconColor: '#34D399',
+    img: 'https://images.unsplash.com/photo-1614314107768-6018061b5b72?w=900&q=85&fit=crop&auto=format',
     title: 'ناسا تعلن عن اكتشاف مياه سائلة تحت سطح القمر أوروبا بتأكيد غير مسبوق',
-    author: 'تحرير Science Lab', avatar: 'تح',
-    date: '21 يوليو 2026',
+    author: 'تحرير Science Lab', avatar: 'تح', date: '21 يوليو 2026',
     desc: 'أعلنت ناسا عن أدلة قاطعة على وجود محيط مائي سائل تحت جليد قمر المشتري أوروبا، مما يعزز احتمالية وجود حياة في المنظومة الشمسية.',
-    views: 18920
+    fullDesc: `<p>في خطوة وصفها علماء الفلك بـ«اللحظة الكوبرنيكية»، أعلنت وكالة ناسا الأمريكية اليوم عن أدلة قاطعة لا تقبل الجدل على وجود محيط مائي سائل ضخم تحت سطح القمر أوروبا، أحد أكبر أقمار المشتري، مما يُعيد رسم خريطة البحث عن الحياة خارج الأرض جذرياً.</p>
+<h3>طبيعة الدليل</h3>
+<p>اعتمدت ناسا على بيانات مسبار Europa Clipper الذي أتمّ 28 تحليقة قريبة من سطح القمر خلال الأشهر الستة الماضية. وقد رصدت أجهزة مطياف الكتلة الأيونية كميات كبيرة من جزيئات الماء والهيدروجين الجزيئي والأكسجين المُطلقة من شقوق سطح القمر، مع توقيع كيميائي يُشير بوضوح إلى عمليات أكسدة وأختزال حيوية محتملة.</p>
+<blockquote>«ليس الأمر مجرد احتمال بعيد — البيانات تُخبرنا بأن المحيط حقيقي وضخم وربما دافئ بما يكفي لاستضافة حياة ميكروبية.» — الدكتورة جنيفر هودجز، المديرة العلمية لبعثة Europa Clipper</blockquote>
+<h3>الخطوات القادمة</h3>
+<p>أعلنت ناسا عزمها على تسريع بعثة Europa Lander المخطّطة، مع توجيه المسبار نحو مناطق النشاط الحراري المرصودة حديثاً. كما أكدت وكالة الفضاء الأوروبية (ESA) أن مسبارها JUICE سيُعدّل مساره لإجراء تحليقات تكميلية بمنهجية متنسّقة مع Europa Clipper.</p>`
   },
   {
-    id: 2, cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399', bgA: '#0A2218', bgB: '#051510',
+    id: 2, type: 'news', cat: 'news', catLabel: 'أخبار',
+    icon: 'ico-news', iconColor: '#34D399',
+    img: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=900&q=85&fit=crop&auto=format',
     title: 'اختراق تقني: خلايا شمسية بكفاءة 47% تحطم الرقم القياسي العالمي',
-    author: 'تحرير Science Lab', avatar: 'تح',
-    date: '19 يوليو 2026',
+    author: 'تحرير Science Lab', avatar: 'تح', date: '19 يوليو 2026',
     desc: 'حقق فريق بحثي سويسري-ياباني كفاءة 47.1% في تحويل الطاقة الشمسية باستخدام تقنية خلايا البيروفسكايت متعددة الطبقات.',
-    views: 12340
+    fullDesc: `<p>كسر فريق بحثي مشترك من المعهد الفيدرالي السويسري للتكنولوجيا (EPFL) وجامعة طوكيو الحاجز النفسي الذي ظلّ شبه مستحيل لعقدين: الوصول إلى كفاءة 47% في تحويل الطاقة الشمسية إلى كهرباء، مُحطِّمةً الرقم القياسي السابق البالغ 39.5%.</p>
+<h3>سر الاختراق: الطبقات الثلاث</h3>
+<p>يعتمد التصميم الجديد على ثلاث طبقات شبه موصلة متراصّة بدقة نانومترية: طبقة من البيروفسكايت عالي الكفاءة (CsFAPbIBr)، وطبقة من السيليكون المتشقّق (c-Si)، وطبقة مركّبة من كبريتيد الغاليوم والإنديوم (CIGS). تُغطي كل طبقة نطاقاً مختلفاً من الطيف الشمسي، مما يُعظّم استيعاب الضوء الكلي.</p>
+<blockquote>«عندما رأينا الرقم 47.1% على الشاشة، ظننا أن هناك خطأ في الجهاز. أعدنا القياس 11 مرة قبل أن نُصدّق.» — البروفيسور أكيرا تاناكا، جامعة طوكيو</blockquote>
+<h3>التحديات أمام التسويق</h3>
+<p>رغم الإنجاز الباهر، لا تزال ثمة عقبات أمام التطبيق التجاري: تكلفة التصنيع مرتفعة حالياً بنحو 8 أضعاف الخلايا السيليكونية التقليدية، وعمر تشغيل البيروفسكايت لا يتجاوز 12 سنة. يعمل الفريق على حلّ هذين التحديين بالتوازي مع خطة للطرح التجاري خلال 5 سنوات.</p>`
   },
   {
-    id: 3, cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399', bgA: '#0A2218', bgB: '#051510',
+    id: 3, type: 'news', cat: 'news', catLabel: 'أخبار',
+    icon: 'ico-news', iconColor: '#34D399',
+    img: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=900&q=85&fit=crop&auto=format',
     title: 'اكتشاف آلية جديدة كلياً لمقاومة الإنسان للشيخوخة على المستوى الخلوي',
-    author: 'تحرير Science Lab', avatar: 'تح',
-    date: '16 يوليو 2026',
+    author: 'تحرير Science Lab', avatar: 'تح', date: '16 يوليو 2026',
     desc: 'كشف علماء جامعة هارفارد عن بروتين SIRT7 المعدّل يعيد برمجة الخلايا الشائخة ويطيل عمرها الوظيفي بنسبة 300% في نماذج الفئران.',
-    views: 22150
+    fullDesc: `<p>في اكتشاف قد يُعيد تعريف حدود الشيخوخة البشرية، كشف باحثون في مختبر David Sinclair بجامعة هارفارد عن بروتين معدَّل جينياً من عائلة Sirtuins يُعيد برمجة الخلايا الشائخة إلى حالتها الوظيفية بكفاءة لم تكن متاحة من قبل.</p>
+<h3>آلية SIRT7-Δ</h3>
+<p>البروتين المُكتشف، المُسمّى SIRT7-Δ، يعمل على إعادة ضبط ما يُعرف بـ«الساعة الإيبيجينية» داخل الخلية — وهي نمط الميثيلة على الحمض النووي الذي يُحدّد «عمر» الخلية الوظيفي. بحقن جرعة واحدة من النقلات الجينية الحاملة لتعليمات تصنيع SIRT7-Δ في فئران مُعمَّرة (ما يعادل 70 عاماً بشرياً)، نجح الفريق في إعادة وظائف القلب والعضلات والدماغ إلى مستويات الفئران في منتصف العمر.</p>
+<blockquote>«لأول مرة في تاريخ أبحاث الشيخوخة، نُشاهد انعكاساً حقيقياً وقابلاً للقياس للشيخوخة الخلوية في نظام ثديي حي — وليس مجرد إبطاء لها.» — البروفيسور David Sinclair</blockquote>
+<h3>الطريق إلى التطبيق البشري</h3>
+<p>حصل الفريق على موافقة مبدئية من إدارة FDA لإجراء دراسة Phase 0 على بشر خلال عام 2027. في الوقت ذاته، تُجري ثلاث شركات ناشئة مرخّصة من هارفارد تجارب موازية لتطوير صيغ إعطاء أكثر عملية وأماناً للاستخدام البشري.</p>`
   },
   {
-    id: 4, cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399', bgA: '#0A2218', bgB: '#051510',
+    id: 4, type: 'news', cat: 'news', catLabel: 'أخبار',
+    icon: 'ico-news', iconColor: '#34D399',
+    img: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&q=85&fit=crop&auto=format',
     title: 'الكمبيوتر الكمومي يحل مسألة تشفير RSA-2048 في 8 ثوانٍ فقط',
-    author: 'تحرير Science Lab', avatar: 'تح',
-    date: '12 يوليو 2026',
+    author: 'تحرير Science Lab', avatar: 'تح', date: '12 يوليو 2026',
     desc: 'في منعطف تاريخي لأمن المعلومات، كسر معالج الكم من Google ذو 1000 كيوبت تشفير RSA-2048 مطلقاً سباق تطوير معايير تشفير ما بعد الكم.',
-    views: 31800
+    fullDesc: `<p>أعلنت Google Quantum AI في ورقة بحثية مُقدَّمة إلى مجلة Nature عن إنجاز وصفه خبراء أمن المعلومات بـ«يوم Q» — اليوم الذي طالما تخشاه مجتمعات التشفير العالمية: كسر خوارزمية RSA-2048 في زمن قياسي بالغ 8.3 ثوانٍ.</p>
+<h3>الآلة وراء الإنجاز</h3>
+<p>نفّذت المهمة معالجة «Willow II» الكمومية التي تضم 1,024 كيوبت نوعياً (logical qubits) مُصحَّحة الخطأ، ما يُعادل فعلياً الملايين من الكيوبتات الفيزيائية الخام. استخدم المعالج خوارزمية Shor المُحسَّنة لتحليل عدد أولي بطول 617 رقماً — وهو جوهر تشفير RSA-2048 — في زمن كان يُحتاج فيه نظرياً إلى مليارات السنين بالحوسبة الكلاسيكية.</p>
+<blockquote>«هذا لا يعني أن الإنترنت في خطر فوري — معظم الأنظمة ليست عرضة للاختراق اليوم. لكنه تحذير صريح: الانتقال إلى تشفير ما بعد الكم أصبح ضرورة لا تأجيل فيها.» — بروس شناير، خبير أمن المعلومات</blockquote>
+<h3>الاستجابة العالمية</h3>
+<p>استنفرت الوكالات الحكومية ومؤسسات الأمن السيبراني حول العالم، وأعلن المعهد الوطني للمعايير والتكنولوجيا (NIST) تسريع تبني معايير التشفير الكمومي المقاوم (PQC) التي أقرّها عام 2024، مع إلزام الوكالات الفيدرالية الأمريكية بالانتقال الكامل بحلول 2028.</p>`
   },
   {
-    id: 5, cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399', bgA: '#0A2218', bgB: '#051510',
+    id: 5, type: 'news', cat: 'news', catLabel: 'أخبار',
+    icon: 'ico-news', iconColor: '#34D399',
+    img: 'https://images.unsplash.com/photo-1628863353691-0071c8c1874c?w=900&q=85&fit=crop&auto=format',
     title: 'مواد فائقة التوصيل عند درجة حرارة الغرفة تخرج من المختبر إلى التطبيق',
-    author: 'تحرير Science Lab', avatar: 'تح',
-    date: '8 يوليو 2026',
+    author: 'تحرير Science Lab', avatar: 'تح', date: '8 يوليو 2026',
     desc: 'نجح فريق كوري في إنتاج كميات صناعية من مادة LK-99 المحسّنة بفائقية التوصيل الكاملة عند 28°م، بداية ثورة حقيقية في الطاقة.',
-    views: 27600
+    fullDesc: `<p>بعد سنوات من الجدل العلمي والنتائج المتضاربة، أعلن فريق من معهد علوم المواد المتقدمة في سيئول عن إنتاج كميات صناعية قابلة للاستخدام من مادة LK-99 المُحسَّنة التي تُظهر فائقية توصيل كاملة عند 28 درجة مئوية وضغط الغرفة.</p>
+<h3>سر النجاح بعد ثلاث سنوات من الفشل</h3>
+<p>كانت المادة الأصلية المُعلن عنها عام 2023 تُعاني من شوائب تُلغي خاصية فائقة التوصيل في معظم العينات. نجح الفريق الكوري الجديد في تطوير بروتوكول تنقية بالتبخير التدريجي في فراغ عالٍ (High-Vacuum Fractional Deposition) يُحقق نقاوة 99.97%، وهو العتبة الحرجة التي أثبتت التجارب أنها ضرورية لظهور فائقية التوصيل الكاملة.</p>
+<blockquote>«النقاوة كانت المشكلة دائماً. بمجرد تجاوز عتبة 99.95%، تنتقل المادة فجأة إلى حالة فائقة التوصيل كأنها تنتظر فقط الإذن.» — البروفيسورة جي-يون كيم</blockquote>
+<h3>التطبيقات والجدول الزمني</h3>
+<p>وقّعت شركة Samsung وLG للطاقة اتفاقيات شراكة بحثية مع الفريق. أبرز التطبيقات المتوقعة: خطوط نقل الكهرباء الخالية من الفاقد، ومحركات كهرومغناطيسية بكفاءة 100%، ومعالجات كمومية تعمل دون تبريد مكلف. الإنتاج التجاري المتوقع بحلول منتصف 2028.</p>`
   },
   {
-    id: 6, cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399', bgA: '#0A2218', bgB: '#051510',
+    id: 6, type: 'news', cat: 'news', catLabel: 'أخبار',
+    icon: 'ico-news', iconColor: '#34D399',
+    img: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=900&q=85&fit=crop&auto=format',
     title: 'علماء يرسمون أول خريطة كاملة لتوصيلات الدماغ البشري بدقة النانومتر',
-    author: 'تحرير Science Lab', avatar: 'تح',
-    date: '4 يوليو 2026',
+    author: 'تحرير Science Lab', avatar: 'تح', date: '4 يوليو 2026',
     desc: 'مشروع Human Connectome Project يُكمل أولى خرائط الدماغ الشاملة التي تربط 86 مليار خلية عصبية بدقة 1 نانومتر.',
-    views: 15400
+    fullDesc: `<p>أعلن مشروع Human Connectome Project، بتمويل مشترك من مؤسسة Gates وNIH وعشر جامعات دولية، عن اكتمال أول خريطة شاملة ثلاثية الأبعاد لتوصيلات الدماغ البشري كاملاً — بما في ذلك 86 مليار خلية عصبية و100 تريليون نقطة تشابك (Synapse) — بدقة وصلت إلى النانومتر الواحد.</p>
+<h3>حجم العمل وتحديات البيانات</h3>
+<p>استغرق المشروع 11 سنة من العمل المتواصل. تم تقطيع دماغ واحد إلى 225 مليون شريحة رقيقة بسماكة 30 نانومتراً، ثم تصويرها بمجاهر إلكترونية من الجيل الجديد. المعالجة وإعادة البناء ثلاثي الأبعاد استلزمت نحو 1.4 إكسابايت من البيانات (1.4 مليون تيرابايت)، ولم يكن ذلك ممكناً قبل ظهور نماذج الذكاء الاصطناعي المتخصصة في التجزئة الخلوية.</p>
+<blockquote>«نحن نُقدّم للبشرية اليوم أكثر الخرائط تعقيداً في تاريخ العلم — خريطة الكون الداخلي للإنسان. ما يخبئه هذا الكون لا يزال يتجاوز خيالنا.» — الدكتور جيف ليكتمان، هارفارد</blockquote>
+<h3>الثمار العلمية والطبية</h3>
+<p>في الأشهر القليلة منذ نشر الخريطة، تمكّن باحثون من تحديد الدوائر العصبية المسؤولة بدقة عن الذاكرة العاملة وآليات الإدمان وبعض أنماط التوحّد — اكتشافات ظلّت غامضة عقوداً. تتوقع الجمعية الأمريكية لعلم الأعصاب أن تُفضي هذه الخريطة إلى جيل جديد من الأدوية العصبية خلال السنوات العشر القادمة.</p>`
   }
 ];
 
@@ -2186,12 +2356,16 @@ function buildCard(item) {
   }[item.cat] || 'cat-news';
 
   return `
-  <div class="card">
-    <div class="card-img-placeholder" style="background:linear-gradient(135deg,${item.bgA},${item.bgB})">
-      <svg width="70" height="70" viewBox="0 0 48 48" style="opacity:0.55">
-        <use href="#${item.icon}"/>
-      </svg>
-      <span class="card-cat ${catClass}">${item.catLabel}</span>
+  <div class="card" onclick="openDetail(${item.id},'${item.type}')">
+    <div style="position:relative;overflow:hidden;">
+      <img src="${item.img}" alt="${item.title}"
+           class="card-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+           loading="lazy">
+      <div class="card-img-placeholder" style="display:none;background:linear-gradient(135deg,#0B1C3A,#061226)">
+        <svg width="60" height="60" viewBox="0 0 48 48" style="opacity:0.45"><use href="#${item.icon}"/></svg>
+      </div>
+      <span class="card-cat ${catClass}" style="position:absolute;top:12px;right:12px;">${item.catLabel}</span>
     </div>
     <div class="card-body">
       <div class="card-meta">
@@ -2202,12 +2376,8 @@ function buildCard(item) {
       <div class="card-title">${item.title}</div>
       <div class="card-desc">${item.desc}</div>
     </div>
-    <div class="card-footer">
-      <span class="card-views">
-        <svg viewBox="0 0 48 48" style="color:var(--text3)"><use href="#ico-eye"/></svg>
-        ${item.views.toLocaleString('ar-EG')}
-      </span>
-      <button class="card-read-btn">قراءة المزيد</button>
+    <div class="card-footer" style="justify-content:flex-end;">
+      <button class="card-read-btn" onclick="event.stopPropagation();openDetail(${item.id},'${item.type}')">قراءة المزيد</button>
     </div>
   </div>`;
 }
@@ -2228,6 +2398,8 @@ renderGrid('news-grid', NEWS);
 /* ═══════════════════════════════════════════
    NAVIGATION
 ═══════════════════════════════════════════ */
+let _prevSection = 'home';
+
 function navigate(page) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2237,8 +2409,71 @@ function navigate(page) {
   if (sec) sec.classList.add('active');
   if (nav) nav.classList.add('active');
 
+  // Show real counts in section headers
+  if (page === 'reports') {
+    const el = document.getElementById('reports-count');
+    if (el) el.textContent = REPORTS.length + ' تقرير';
+  }
+  if (page === 'news') {
+    const el = document.getElementById('news-count');
+    if (el) el.textContent = NEWS.length + ' خبر';
+  }
+
   closeSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══════════════════════════════════════════
+   DETAIL VIEW
+═══════════════════════════════════════════ */
+function openDetail(id, type) {
+  const items = type === 'report' ? REPORTS : NEWS;
+  const item  = items.find(i => i.id === id);
+  if (!item) return;
+
+  // remember which section to go back to
+  const active = document.querySelector('.section.active');
+  _prevSection = active ? active.id.replace('sec-', '') : 'home';
+
+  const catClass = {
+    physics:'cat-physics', bio:'cat-bio', chem:'cat-chem',
+    astro:'cat-astro', ai:'cat-ai', news:'cat-news'
+  }[item.cat] || 'cat-news';
+
+  document.getElementById('detailImg').src     = item.img;
+  document.getElementById('detailImg').alt     = item.title;
+  document.getElementById('detailTitle').textContent  = item.title;
+  document.getElementById('detailAvatar').textContent = item.avatar;
+  document.getElementById('detailAuthor').textContent = item.author;
+  document.getElementById('detailDate').textContent   = item.date;
+  document.getElementById('detailBody').innerHTML     = item.fullDesc;
+
+  const badge = document.getElementById('detailCatBadge');
+  badge.textContent = item.catLabel;
+  badge.className   = `card-cat ${catClass}`;
+  badge.style.cssText = 'position:static;display:inline-block;margin-bottom:16px;';
+
+  const backLabel = {
+    reports: 'العودة إلى التقارير',
+    news:    'العودة إلى الأخبار',
+    home:    'العودة إلى الرئيسية'
+  }[_prevSection] || 'العودة';
+  document.getElementById('detailBackLabel').textContent = backLabel;
+
+  // Build related (same type, exclude current)
+  const related = items.filter(i => i.id !== id).slice(0, 3);
+  renderGrid('detailRelatedGrid', related);
+
+  // Navigate without touching nav highlight
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-detail').classList.add('active');
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  navigate(_prevSection);
 }
 
 /* ═══════════════════════════════════════════
