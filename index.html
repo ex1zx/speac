@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Science Lab </title>
+<title>The Science Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -11,35 +11,35 @@
    VARIABLES & RESET
 ═══════════════════════════════════════════ */
 :root {
-  --bg:          #04091A;
-  --bg2:         #070D24;
-  --bg3:         #0B1230;
-  --surface:     rgba(14, 22, 50, 0.85);
-  --surface2:    rgba(20, 32, 70, 0.60);
-  --border:      rgba(94, 140, 255, 0.12);
-  --border2:     rgba(94, 140, 255, 0.22);
-  --cyan:        #00D4FF;
-  --cyan2:       #00A8CC;
-  --violet:      #7C3AED;
-  --violet2:     #A78BFA;
-  --gold:        #F59E0B;
-  --green:       #10B981;
-  --red:         #EF4444;
-  --text:        #E2E8F0;
-  --text2:       #94A3B8;
-  --text3:       #64748B;
+  --bg:          #FFFFFF;
+  --bg2:         #F8F9FA;
+  --bg3:         #F0F2F5;
+  --surface:     #FFFFFF;
+  --surface2:    #F8F9FA;
+  --border:      #E5E7EB;
+  --border2:     #D1D5DB;
+  --red:         #CC1212;
+  --red2:        #A80E0E;
+  --red3:        #E53535;
+  --red-light:   rgba(204, 18, 18, 0.07);
+  --red-light2:  rgba(204, 18, 18, 0.14);
+  --gold:        #D97706;
+  --green:       #059669;
+  --blue:        #2563EB;
+  --text:        #111827;
+  --text2:       #4B5563;
+  --text3:       #9CA3AF;
   --sidebar-w:   280px;
   --topbar-h:    60px;
   --radius:      14px;
   --radius-sm:   8px;
   --radius-lg:   20px;
-  --shadow:      0 8px 32px rgba(0,0,0,0.5);
-  --shadow-lg:   0 20px 60px rgba(0,0,0,0.7);
-  --transition:  0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow:      0 1px 3px rgba(0,0,0,0.06), 0 2px 10px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.10);
+  --transition:  0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --font:        'Cairo', sans-serif;
   --font-mono:   'Space Mono', monospace;
-  --glow-cyan:   0 0 20px rgba(0,212,255,0.3);
-  --glow-violet: 0 0 20px rgba(124,58,237,0.3);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,13 +56,22 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   CANVAS STARFIELD
+   LOADING BAR
 ═══════════════════════════════════════════ */
-#starfield {
+#page-loader-bar {
   position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+  top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red2), var(--red), var(--red3));
+  z-index: 99999;
+  width: 0;
+  animation: loadbar 1.4s cubic-bezier(0.1, 0.6, 0.4, 1) forwards;
+}
+@keyframes loadbar {
+  0%   { width: 0%;   opacity: 1; }
+  75%  { width: 95%;  opacity: 1; }
+  90%  { width: 100%; opacity: 1; }
+  100% { width: 100%; opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════
@@ -72,7 +81,6 @@ body {
   display: flex;
   min-height: 100vh;
   position: relative;
-  z-index: 1;
 }
 
 /* ═══════════════════════════════════════════
@@ -81,10 +89,8 @@ body {
 .sidebar {
   width: var(--sidebar-w);
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(7,13,36,0.97) 0%, rgba(11,18,48,0.97) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-left: 1px solid var(--border2);
+  background: var(--surface);
+  border-left: 1px solid var(--border);
   position: fixed;
   top: 0;
   right: 0;
@@ -94,22 +100,12 @@ body {
   transition: transform var(--transition);
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-.sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 2px;
-  height: 100%;
-  background: linear-gradient(180deg, transparent, var(--cyan), var(--violet), transparent);
-  opacity: 0.4;
+  box-shadow: -2px 0 16px rgba(0,0,0,0.04);
 }
 
 /* Logo */
 .sidebar-logo {
-  padding: 28px 24px 20px;
+  padding: 24px 20px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -118,8 +114,8 @@ body {
 }
 
 .logo-icon {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 50px;
   flex-shrink: 0;
 }
 
@@ -129,38 +125,38 @@ body {
 }
 
 .logo-name {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 800;
-  color: #fff;
-  letter-spacing: 0.5px;
+  color: var(--text);
+  letter-spacing: 0.3px;
   line-height: 1;
 }
 
 .logo-tagline {
-  font-size: 0.68rem;
-  color: var(--cyan);
+  font-size: 0.64rem;
+  color: var(--red);
   font-family: var(--font-mono);
-  margin-top: 3px;
-  letter-spacing: 1px;
+  margin-top: 4px;
+  letter-spacing: 0.8px;
 }
 
 /* Nav */
 .nav-section-label {
-  font-size: 0.65rem;
+  font-size: 0.64rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--text3);
-  padding: 20px 24px 8px;
+  padding: 18px 20px 7px;
   font-family: var(--font-mono);
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 20px 11px 24px;
-  margin: 2px 12px;
+  gap: 11px;
+  padding: 10px 18px 10px 20px;
+  margin: 2px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition);
@@ -173,36 +169,35 @@ body {
 }
 
 .nav-item:hover {
-  background: rgba(0,212,255,0.06);
-  color: var(--text);
-  border-color: var(--border);
+  background: var(--red-light);
+  color: var(--red);
+  border-color: rgba(204,18,18,0.12);
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(124,58,237,0.08));
-  color: var(--cyan);
-  border-color: rgba(0,212,255,0.2);
-  box-shadow: 0 2px 12px rgba(0,212,255,0.1);
+  background: var(--red-light);
+  color: var(--red);
+  border-color: rgba(204,18,18,0.18);
+  font-weight: 700;
 }
 
 .nav-item.active::before {
   content: '';
   position: absolute;
-  right: -13px;
+  right: -11px;
   top: 50%;
   transform: translateY(-50%);
   width: 3px;
-  height: 60%;
-  background: var(--cyan);
+  height: 55%;
+  background: var(--red);
   border-radius: 2px;
-  box-shadow: var(--glow-cyan);
 }
 
 .nav-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  opacity: 0.7;
+  opacity: 0.55;
   transition: opacity var(--transition);
 }
 
@@ -211,9 +206,9 @@ body {
 
 .nav-badge {
   margin-right: auto;
-  background: var(--cyan);
-  color: var(--bg);
-  font-size: 0.65rem;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.62rem;
   font-weight: 800;
   padding: 2px 7px;
   border-radius: 20px;
@@ -223,37 +218,34 @@ body {
 /* Sidebar Footer */
 .sidebar-footer {
   margin-top: auto;
-  padding: 20px 24px;
+  padding: 18px 20px;
   border-top: 1px solid var(--border);
 }
 
-.sidebar-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.sidebar-stat {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px;
+.sidebar-mission {
   text-align: center;
 }
 
-.sidebar-stat-num {
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--cyan);
+.sidebar-mission-logo {
+  width: 34px;
+  height: 37px;
+  margin: 0 auto 10px;
   display: block;
 }
 
-.sidebar-stat-lbl {
-  font-size: 0.65rem;
+.sidebar-mission-text {
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 7px;
+}
+
+.sidebar-mission-sub {
+  font-size: 0.67rem;
   color: var(--text3);
-  margin-top: 2px;
-  display: block;
+  letter-spacing: 0.3px;
+  direction: ltr;
+  text-align: center;
 }
 
 /* ═══════════════════════════════════════════
@@ -265,6 +257,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--bg);
 }
 
 /* Top Bar (mobile) */
@@ -274,12 +267,12 @@ body {
   justify-content: space-between;
   height: var(--topbar-h);
   padding: 0 16px;
-  background: rgba(7,13,36,0.95);
-  backdrop-filter: blur(20px);
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 90;
+  box-shadow: var(--shadow);
 }
 
 .topbar-logo {
@@ -289,47 +282,47 @@ body {
   text-decoration: none;
 }
 
-.topbar-logo svg { width: 34px; height: 34px; }
+.topbar-logo svg { width: 32px; height: 35px; }
 
 .topbar-name {
   font-size: 1rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text);
 }
 
 .hamburger {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   padding: 6px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: var(--surface2);
+  background: var(--bg2);
   transition: all var(--transition);
 }
 
 .hamburger span {
   display: block;
   height: 2px;
-  background: var(--text);
+  background: var(--text2);
   border-radius: 2px;
   transition: all var(--transition);
 }
 
-.hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* Sidebar overlay (mobile) */
 .sidebar-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.35);
   z-index: 99;
 }
 
@@ -339,14 +332,14 @@ body {
 .section {
   display: none;
   padding: 40px 48px 60px;
-  animation: fadeSlideIn 0.4s var(--transition) both;
+  animation: fadeSlideIn 0.35s ease both;
   min-height: calc(100vh - var(--topbar-h));
 }
 
 .section.active { display: block; }
 
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -359,8 +352,8 @@ body {
 
 .section-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--cyan);
+  font-size: 0.7rem;
+  color: var(--red);
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 8px;
@@ -373,14 +366,15 @@ body {
   content: '';
   flex: 1;
   height: 1px;
-  max-width: 60px;
-  background: linear-gradient(to left, transparent, var(--cyan));
+  max-width: 50px;
+  background: linear-gradient(to left, transparent, var(--red));
+  opacity: 0.4;
 }
 
 .section-title {
   font-size: 2rem;
   font-weight: 900;
-  color: #fff;
+  color: var(--text);
   line-height: 1.2;
 }
 
@@ -395,11 +389,11 @@ body {
    HOME — HERO
 ═══════════════════════════════════════════ */
 .hero {
-  background: linear-gradient(135deg, rgba(0,212,255,0.05) 0%, rgba(124,58,237,0.05) 100%);
-  border: 1px solid var(--border2);
+  background: linear-gradient(135deg, rgba(204,18,18,0.03) 0%, rgba(204,18,18,0.01) 100%);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 52px 48px;
-  margin-bottom: 48px;
+  padding: 48px 44px;
+  margin-bottom: 44px;
   position: relative;
   overflow: hidden;
 }
@@ -407,28 +401,14 @@ body {
 .hero::before {
   content: '';
   position: absolute;
-  top: -80px;
-  left: -80px;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -80px;
-  right: -80px;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(0,212,255,0.10) 0%, transparent 70%);
-  pointer-events: none;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red2), var(--red), var(--red3), transparent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .hero-inner {
   position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -441,44 +421,41 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(0,212,255,0.1);
-  border: 1px solid rgba(0,212,255,0.3);
+  background: var(--red-light);
+  border: 1px solid rgba(204,18,18,0.2);
   border-radius: 30px;
   padding: 5px 14px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  color: var(--cyan);
+  color: var(--red);
   margin-bottom: 18px;
   font-family: var(--font-mono);
   letter-spacing: 0.5px;
 }
 
 .hero-badge-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--cyan);
+  width: 6px;
+  height: 6px;
+  background: var(--red);
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.7); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
 .hero-title {
-  font-size: 2.8rem;
+  font-size: 2.7rem;
   font-weight: 900;
-  color: #fff;
+  color: var(--text);
   line-height: 1.15;
   margin-bottom: 16px;
 }
 
 .hero-title span {
-  background: linear-gradient(135deg, var(--cyan), var(--violet2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--red);
 }
 
 .hero-desc {
@@ -498,8 +475,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--cyan2), var(--cyan));
-  color: var(--bg);
+  background: var(--red);
+  color: #fff;
   font-family: var(--font);
   font-size: 0.9rem;
   font-weight: 700;
@@ -512,8 +489,9 @@ body {
 }
 
 .btn-primary:hover {
+  background: var(--red2);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,212,255,0.35);
+  box-shadow: 0 6px 20px rgba(204,18,18,0.28);
 }
 
 .btn-outline {
@@ -521,7 +499,7 @@ body {
   align-items: center;
   gap: 8px;
   background: transparent;
-  color: var(--text);
+  color: var(--text2);
   font-family: var(--font);
   font-size: 0.9rem;
   font-weight: 600;
@@ -534,60 +512,64 @@ body {
 }
 
 .btn-outline:hover {
-  background: var(--surface2);
-  border-color: var(--cyan);
-  color: var(--cyan);
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-light);
 }
 
 .hero-visual {
   flex-shrink: 0;
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-visual svg {
   width: 100%;
   height: 100%;
-  animation: rotateSlow 20s linear infinite;
+  filter: drop-shadow(0 4px 24px rgba(204,18,18,0.18));
 }
 
-@keyframes rotateSlow {
-  to { transform: rotate(360deg); }
+/* ═══════════════════════════════════════════
+   DISCIPLINES STRIP (replaces hero stats)
+═══════════════════════════════════════════ */
+.disciplines-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
 }
 
-/* Hero Stats */
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
+.discipline-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg2);
   border: 1px solid var(--border);
-  margin-top: 40px;
-}
-
-.hero-stat {
-  background: var(--surface);
-  padding: 20px 16px;
-  text-align: center;
-}
-
-.hero-stat-num {
-  font-family: var(--font-mono);
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--cyan);
-  display: block;
-  line-height: 1;
-}
-
-.hero-stat-lbl {
-  font-size: 0.78rem;
+  border-radius: 30px;
+  padding: 7px 16px 7px 12px;
+  font-size: 0.86rem;
+  font-weight: 600;
   color: var(--text2);
-  margin-top: 6px;
-  display: block;
+  transition: all var(--transition);
+  cursor: default;
+}
+
+.discipline-tag:hover {
+  border-color: rgba(204,18,18,0.3);
+  color: var(--red);
+  background: var(--red-light);
+}
+
+.disc-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════
@@ -604,18 +586,18 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
 }
 
-.row-title svg { width: 22px; height: 22px; }
+.row-title svg { width: 20px; height: 20px; }
 
 .row-title span {
   display: inline-block;
   width: 4px;
   height: 18px;
-  background: var(--cyan);
+  background: var(--red);
   border-radius: 2px;
 }
 
@@ -625,16 +607,17 @@ body {
   gap: 6px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--cyan);
+  color: var(--red);
   cursor: pointer;
   padding: 6px 12px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(0,212,255,0.2);
+  border: 1px solid rgba(204,18,18,0.2);
   transition: all var(--transition);
 }
 
 .row-link:hover {
-  background: rgba(0,212,255,0.08);
+  background: var(--red-light);
+  border-color: rgba(204,18,18,0.35);
 }
 
 .row-link svg { width: 14px; height: 14px; }
@@ -657,13 +640,13 @@ body {
   transition: all var(--transition);
   cursor: pointer;
   position: relative;
-  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
 }
 
 .card:hover {
-  border-color: rgba(0,212,255,0.3);
+  border-color: rgba(204,18,18,0.25);
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,255,0.1);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(204,18,18,0.08);
 }
 
 .card-img {
@@ -671,7 +654,7 @@ body {
   height: 170px;
   object-fit: cover;
   display: block;
-  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+  background: var(--bg3);
   position: relative;
 }
 
@@ -683,12 +666,7 @@ body {
   justify-content: center;
   position: relative;
   overflow: hidden;
-}
-
-.card-img-placeholder::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+  background: var(--bg3);
 }
 
 .card-cat {
@@ -696,21 +674,22 @@ body {
   top: 12px;
   right: 12px;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 1px;
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 20px;
-  background: rgba(7,13,36,0.9);
+  background: rgba(255,255,255,0.92);
   border: 1px solid;
+  backdrop-filter: blur(4px);
 }
 
-.cat-physics  { color: #00D4FF; border-color: rgba(0,212,255,0.3); }
-.cat-bio      { color: #10B981; border-color: rgba(16,185,129,0.3); }
-.cat-chem     { color: #F59E0B; border-color: rgba(245,158,11,0.3); }
-.cat-astro    { color: #A78BFA; border-color: rgba(167,139,250,0.3); }
-.cat-ai       { color: #F472B6; border-color: rgba(244,114,182,0.3); }
-.cat-news     { color: #34D399; border-color: rgba(52,211,153,0.3); }
+.cat-physics  { color: #0369A1; border-color: rgba(3,105,161,0.3); }
+.cat-bio      { color: #059669; border-color: rgba(5,150,105,0.3); }
+.cat-chem     { color: #D97706; border-color: rgba(217,119,6,0.3); }
+.cat-astro    { color: #7C3AED; border-color: rgba(124,58,237,0.3); }
+.cat-ai       { color: #DB2777; border-color: rgba(219,39,119,0.3); }
+.cat-news     { color: #059669; border-color: rgba(5,150,105,0.3); }
 
 .card-body { padding: 16px; }
 
@@ -725,11 +704,11 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  background: linear-gradient(135deg, var(--red2), var(--red3));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
@@ -743,15 +722,15 @@ body {
 
 .card-date {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text3);
   margin-right: auto;
 }
 
 .card-title {
-  font-size: 0.95rem;
+  font-size: 0.94rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   line-height: 1.4;
   margin-bottom: 8px;
   display: -webkit-box;
@@ -791,9 +770,9 @@ body {
 .card-read-btn {
   font-size: 0.76rem;
   font-weight: 600;
-  color: var(--cyan);
-  background: rgba(0,212,255,0.08);
-  border: 1px solid rgba(0,212,255,0.2);
+  color: var(--red);
+  background: var(--red-light);
+  border: 1px solid rgba(204,18,18,0.2);
   border-radius: var(--radius-sm);
   padding: 5px 12px;
   cursor: pointer;
@@ -802,7 +781,8 @@ body {
 }
 
 .card-read-btn:hover {
-  background: rgba(0,212,255,0.15);
+  background: var(--red-light2);
+  border-color: rgba(204,18,18,0.4);
 }
 
 /* ═══════════════════════════════════════════
@@ -812,11 +792,11 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  margin-bottom: 48px;
+  margin-bottom: 44px;
 }
 
 .feature-card {
-  background: var(--surface2);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px 20px;
@@ -828,11 +808,9 @@ body {
 .feature-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
   opacity: 0;
   transition: opacity var(--transition);
 }
@@ -840,21 +818,22 @@ body {
 .feature-card:hover::before { opacity: 1; }
 
 .feature-card:hover {
-  border-color: var(--border2);
+  border-color: rgba(204,18,18,0.2);
   background: var(--surface);
   transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 .feature-icon {
-  width: 52px;
-  height: 52px;
-  margin-bottom: 16px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
 }
 
 .feature-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 8px;
 }
 
@@ -888,14 +867,15 @@ body {
 }
 
 .filter-tab:hover {
-  border-color: var(--border2);
-  color: var(--text);
+  border-color: rgba(204,18,18,0.3);
+  color: var(--red);
 }
 
 .filter-tab.active {
-  background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.1));
-  border-color: var(--cyan);
-  color: var(--cyan);
+  background: var(--red-light);
+  border-color: rgba(204,18,18,0.35);
+  color: var(--red);
+  font-weight: 700;
 }
 
 /* ═══════════════════════════════════════════
@@ -909,14 +889,14 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 36px 36px;
-  backdrop-filter: blur(12px);
+  padding: 36px;
+  box-shadow: var(--shadow);
 }
 
 .form-title {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 6px;
 }
 
@@ -943,7 +923,7 @@ body {
 .form-select,
 .form-textarea {
   width: 100%;
-  background: var(--bg3);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 11px 14px;
@@ -961,11 +941,12 @@ body {
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(204,18,18,0.1);
+  background: var(--surface);
 }
 
-.form-select option { background: var(--bg3); }
+.form-select option { background: var(--surface); color: var(--text); }
 
 .form-textarea { min-height: 120px; }
 
@@ -973,8 +954,8 @@ body {
 
 .form-submit {
   width: 100%;
-  background: linear-gradient(135deg, var(--cyan2), var(--cyan));
-  color: var(--bg);
+  background: var(--red);
+  color: #fff;
   font-family: var(--font);
   font-size: 0.95rem;
   font-weight: 700;
@@ -991,8 +972,9 @@ body {
 }
 
 .form-submit:hover {
+  background: var(--red2);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,212,255,0.3);
+  box-shadow: 0 6px 20px rgba(204,18,18,0.25);
 }
 
 .form-submit svg { width: 18px; height: 18px; }
@@ -1028,8 +1010,9 @@ body {
 
 .auth-tab.active {
   background: var(--surface);
-  color: var(--cyan);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  color: var(--red);
+  box-shadow: var(--shadow);
+  font-weight: 700;
 }
 
 .auth-social {
@@ -1047,7 +1030,7 @@ body {
   padding: 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: var(--surface2);
+  background: var(--bg2);
   color: var(--text);
   font-family: var(--font);
   font-size: 0.84rem;
@@ -1059,6 +1042,7 @@ body {
 .auth-social-btn:hover {
   border-color: var(--border2);
   background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
 .auth-social-btn svg { width: 18px; height: 18px; }
@@ -1105,12 +1089,11 @@ body {
   font-size: 0.88rem;
   color: var(--text);
   box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(20px);
   pointer-events: auto;
   min-width: 280px;
   max-width: 360px;
   animation: toastIn 0.3s ease both;
-  border-right: 3px solid var(--cyan);
+  border-right: 3px solid var(--red);
 }
 
 .toast.toast-success { border-right-color: var(--green); }
@@ -1130,20 +1113,20 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.5);
   z-index: 1000;
   place-items: center;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
 }
 
 .modal-overlay.show { display: grid; }
 
 .modal {
-  background: linear-gradient(135deg, rgba(11,18,48,0.98), rgba(7,13,36,0.98));
-  border: 1px solid var(--border2);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 48px;
-  max-width: 520px;
+  padding: 44px;
+  max-width: 500px;
   width: 90%;
   text-align: center;
   position: relative;
@@ -1151,21 +1134,30 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red2), var(--red), var(--red3));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
 @keyframes modalIn {
-  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  from { opacity: 0; transform: scale(0.88) translateY(20px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .modal-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 72px;
+  height: 78px;
+  margin: 0 auto 22px;
 }
 
 .modal-title {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 12px;
 }
 
@@ -1173,7 +1165,7 @@ body {
   font-size: 0.92rem;
   color: var(--text2);
   line-height: 1.8;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .modal-highlights {
@@ -1188,19 +1180,19 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--surface2);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   font-size: 0.82rem;
-  color: var(--text);
+  color: var(--text2);
 }
 
-.modal-highlight svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--cyan); }
+.modal-highlight svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--red); }
 
 .modal-close-btn {
-  background: linear-gradient(135deg, var(--cyan2), var(--cyan));
-  color: var(--bg);
+  background: var(--red);
+  color: #fff;
   font-family: var(--font);
   font-size: 0.95rem;
   font-weight: 700;
@@ -1212,8 +1204,9 @@ body {
 }
 
 .modal-close-btn:hover {
+  background: var(--red2);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,212,255,0.35);
+  box-shadow: 0 6px 20px rgba(204,18,18,0.28);
 }
 
 /* ═══════════════════════════════════════════
@@ -1221,7 +1214,6 @@ body {
 ═══════════════════════════════════════════ */
 @media (max-width: 1100px) {
   .features-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-stats    { grid-template-columns: repeat(2, 1fr); }
   .cards-grid    { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -1262,24 +1254,16 @@ body {
   }
 
   .hero-visual {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     align-self: center;
   }
 
   .hero-title { font-size: 1.8rem; }
 
-  .hero-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .cards-grid { grid-template-columns: 1fr; }
 
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
+  .features-grid { grid-template-columns: 1fr; }
 
   .form-row { grid-template-columns: 1fr; }
 
@@ -1296,11 +1280,12 @@ body {
   .hero-actions { flex-direction: column; }
   .hero-actions .btn-primary,
   .hero-actions .btn-outline { justify-content: center; }
+
+  .disciplines-strip { gap: 8px; }
 }
 
 @media (max-width: 480px) {
-  .hero-stats { grid-template-columns: 1fr 1fr; }
-  .hero-stat-num { font-size: 1.2rem; }
+  .discipline-tag { font-size: 0.8rem; padding: 6px 12px 6px 10px; }
 }
 
 /* ═══════════════════════════════════════════
@@ -1310,27 +1295,27 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--cyan);
+  color: var(--red);
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
   padding: 8px 18px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(0,212,255,0.2);
-  background: rgba(0,212,255,0.06);
+  border: 1px solid rgba(204,18,18,0.2);
+  background: var(--red-light);
   margin-bottom: 28px;
   transition: all var(--transition);
   font-family: var(--font);
 }
-.detail-back:hover { background: rgba(0,212,255,0.14); border-color: var(--cyan); }
+.detail-back:hover { background: var(--red-light2); border-color: rgba(204,18,18,0.4); }
 .detail-back svg { width: 18px; height: 18px; }
 
 .detail-hero-img {
   width: 100%;
-  height: 380px;
+  height: 360px;
   object-fit: cover;
   border-radius: var(--radius-lg);
-  margin-bottom: 36px;
+  margin-bottom: 32px;
   display: block;
   border: 1px solid var(--border);
 }
@@ -1344,9 +1329,9 @@ body {
 }
 
 .detail-title {
-  font-size: 2rem;
+  font-size: 1.95rem;
   font-weight: 900;
-  color: #fff;
+  color: var(--text);
   line-height: 1.3;
   margin-bottom: 24px;
 }
@@ -1362,16 +1347,16 @@ body {
 }
 
 .detail-avatar {
-  width: 52px; height: 52px;
+  width: 50px; height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  background: linear-gradient(135deg, var(--red2), var(--red3));
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; font-weight: 800; color: #fff;
+  font-size: 1.05rem; font-weight: 800; color: #fff;
   flex-shrink: 0;
 }
 
-.detail-author-name { font-size: 0.98rem; font-weight: 700; color: var(--text); }
-.detail-author-date { font-size: 0.78rem; color: var(--text3); font-family: var(--font-mono); margin-top: 3px; }
+.detail-author-name { font-size: 0.96rem; font-weight: 700; color: var(--text); }
+.detail-author-date { font-size: 0.76rem; color: var(--text3); font-family: var(--font-mono); margin-top: 3px; }
 
 .detail-body { max-width: 780px; }
 
@@ -1383,17 +1368,17 @@ body {
 }
 
 .detail-body h3 {
-  font-size: 1.18rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text);
   margin: 36px 0 14px;
   padding-right: 14px;
-  border-right: 3px solid var(--cyan);
+  border-right: 3px solid var(--red);
 }
 
 .detail-body blockquote {
-  background: var(--surface2);
-  border-right: 3px solid var(--violet2);
+  background: var(--bg2);
+  border-right: 3px solid var(--red);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   padding: 16px 20px;
   margin: 24px 0;
@@ -1406,9 +1391,9 @@ body {
 .detail-related { margin-top: 56px; }
 .detail-related-title {
   display: flex; align-items: center; gap: 10px;
-  font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 20px;
+  font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 20px;
 }
-.detail-related-title span { display: inline-block; width: 4px; height: 18px; background: var(--cyan); border-radius: 2px; }
+.detail-related-title span { display: inline-block; width: 4px; height: 18px; background: var(--red); border-radius: 2px; }
 
 @media (max-width: 768px) {
   .detail-hero-img { height: 220px; }
@@ -1418,16 +1403,16 @@ body {
 /* ═══════════════════════════════════════════
    SCROLLBAR
 ═══════════════════════════════════════════ */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(94,140,255,0.25); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,212,255,0.4); }
+::-webkit-scrollbar-thumb { background: rgba(204,18,18,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(204,18,18,0.3); }
 </style>
 </head>
 <body>
 
-<!-- CANVAS BACKGROUND -->
-<canvas id="starfield"></canvas>
+<!-- LOADING BAR -->
+<div id="page-loader-bar"></div>
 
 <!-- ═══════════ SVG ICON SYSTEM ═══════════ -->
 <svg style="display:none" aria-hidden="true">
@@ -1435,159 +1420,154 @@ body {
 
     <!-- ATOM -->
     <symbol id="ico-atom" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="4" fill="#00D4FF"/>
-      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="2 2" transform="rotate(0 24 24)"/>
-      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="2 2" transform="rotate(60 24 24)"/>
-      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="2 2" transform="rotate(120 24 24)"/>
-      <circle cx="44" cy="24" r="2.5" fill="#00D4FF"/>
-      <circle cx="14" cy="38.4" r="2.5" fill="#7C3AED"/>
-      <circle cx="14" cy="9.6" r="2.5" fill="#A78BFA"/>
+      <circle cx="24" cy="24" r="4" fill="#CC1212"/>
+      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#CC1212" stroke-width="1.5" stroke-dasharray="2 2" transform="rotate(0 24 24)"/>
+      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#A80E0E" stroke-width="1.5" stroke-dasharray="2 2" transform="rotate(60 24 24)"/>
+      <ellipse cx="24" cy="24" rx="20" ry="8" stroke="#E53535" stroke-width="1.5" stroke-dasharray="2 2" transform="rotate(120 24 24)"/>
+      <circle cx="44" cy="24" r="2.5" fill="#CC1212"/>
+      <circle cx="14" cy="38.4" r="2.5" fill="#A80E0E"/>
+      <circle cx="14" cy="9.6" r="2.5" fill="#E53535"/>
     </symbol>
 
     <!-- DNA -->
     <symbol id="ico-dna" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 4 C20 10 28 14 32 20 C36 26 28 30 24 36 C20 42 24 46 24 46" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <path d="M32 4 C28 10 20 14 16 20 C12 26 20 30 24 36 C28 42 24 46 24 46" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <line x1="17.5" y1="11" x2="30.5" y2="11" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="14"   y1="18" x2="34"   y2="18" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="14"   y1="25" x2="34"   y2="25" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="16"   y1="32" x2="32"   y2="32" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="18.5" y1="39" x2="29.5" y2="39" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M16 4 C20 10 28 14 32 20 C36 26 28 30 24 36 C20 42 24 46 24 46" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M32 4 C28 10 20 14 16 20 C12 26 20 30 24 36 C28 42 24 46 24 46" stroke="#0369A1" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <line x1="17.5" y1="11" x2="30.5" y2="11" stroke="#6B7280" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="14"   y1="18" x2="34"   y2="18" stroke="#6B7280" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="14"   y1="25" x2="34"   y2="25" stroke="#6B7280" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="16"   y1="32" x2="32"   y2="32" stroke="#6B7280" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="18.5" y1="39" x2="29.5" y2="39" stroke="#6B7280" stroke-width="1.2" stroke-linecap="round"/>
     </symbol>
 
     <!-- FLASK -->
     <symbol id="ico-flask" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M18 4 L18 20 L8 38 C6.5 41 8.5 44 12 44 L36 44 C39.5 44 41.5 41 40 38 L30 20 L30 4" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <line x1="15" y1="4" x2="33" y2="4" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
-      <path d="M11 36 Q17 30 23 34 Q29 38 36 32" stroke="#FCD34D" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-      <circle cx="15" cy="34" r="2" fill="#FCD34D" opacity="0.8"/>
-      <circle cx="28" cy="39" r="2.5" fill="#F59E0B" opacity="0.6"/>
-      <circle cx="22" cy="32" r="1.5" fill="#FCD34D" opacity="0.9"/>
+      <path d="M18 4 L18 20 L8 38 C6.5 41 8.5 44 12 44 L36 44 C39.5 44 41.5 41 40 38 L30 20 L30 4" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="15" y1="4" x2="33" y2="4" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
+      <path d="M11 36 Q17 30 23 34 Q29 38 36 32" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <circle cx="15" cy="34" r="2" fill="#F59E0B" opacity="0.8"/>
+      <circle cx="28" cy="39" r="2.5" fill="#D97706" opacity="0.6"/>
     </symbol>
 
     <!-- TELESCOPE -->
     <symbol id="ico-telescope" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="18" width="28" height="10" rx="3" stroke="#A78BFA" stroke-width="1.8" transform="rotate(-20 6 18)"/>
-      <rect x="26" y="15" width="16" height="12" rx="2" stroke="#7C3AED" stroke-width="1.8" transform="rotate(-20 26 15)"/>
-      <line x1="20" y1="30" x2="24" y2="44" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"/>
-      <line x1="24" y1="44" x2="14" y2="44" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"/>
-      <line x1="24" y1="44" x2="34" y2="44" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="40" cy="6" r="2" fill="#FCD34D" opacity="0.9"/>
-      <circle cx="44" cy="12" r="1.2" fill="#FCD34D" opacity="0.6"/>
-      <circle cx="36" cy="4" r="1" fill="#FCD34D" opacity="0.7"/>
-      <circle cx="43" cy="5" r="1.5" fill="#A78BFA" opacity="0.8"/>
+      <rect x="6" y="18" width="28" height="10" rx="3" stroke="#7C3AED" stroke-width="1.8" transform="rotate(-20 6 18)"/>
+      <rect x="26" y="15" width="16" height="12" rx="2" stroke="#6D28D9" stroke-width="1.8" transform="rotate(-20 26 15)"/>
+      <line x1="20" y1="30" x2="24" y2="44" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+      <line x1="24" y1="44" x2="14" y2="44" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+      <line x1="24" y1="44" x2="34" y2="44" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="40" cy="6" r="2" fill="#D97706" opacity="0.9"/>
+      <circle cx="44" cy="12" r="1.2" fill="#D97706" opacity="0.6"/>
+      <circle cx="36" cy="4" r="1" fill="#D97706" opacity="0.7"/>
     </symbol>
 
     <!-- BRAIN / AI -->
     <symbol id="ico-ai" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 8 C16 8 10 14 10 22 C10 27 12.5 31 17 33 L17 40 L31 40 L31 33 C35.5 31 38 27 38 22 C38 14 32 8 24 8Z" stroke="#F472B6" stroke-width="1.8" fill="none"/>
-      <line x1="17" y1="40" x2="31" y2="40" stroke="#F472B6" stroke-width="1.8" stroke-linecap="round"/>
-      <circle cx="18" cy="18" r="2" fill="#F472B6" opacity="0.8"/>
-      <circle cx="24" cy="15" r="2" fill="#F472B6" opacity="0.8"/>
-      <circle cx="30" cy="18" r="2" fill="#F472B6" opacity="0.8"/>
-      <circle cx="18" cy="25" r="2" fill="#F472B6" opacity="0.5"/>
-      <circle cx="24" cy="28" r="2" fill="#F472B6" opacity="0.5"/>
-      <circle cx="30" cy="25" r="2" fill="#F472B6" opacity="0.5"/>
-      <line x1="18" y1="18" x2="24" y2="15" stroke="#F472B6" stroke-width="0.8"/>
-      <line x1="24" y1="15" x2="30" y2="18" stroke="#F472B6" stroke-width="0.8"/>
-      <line x1="18" y1="18" x2="18" y2="25" stroke="#F472B6" stroke-width="0.8"/>
-      <line x1="30" y1="18" x2="30" y2="25" stroke="#F472B6" stroke-width="0.8"/>
-      <line x1="18" y1="25" x2="24" y2="28" stroke="#F472B6" stroke-width="0.8"/>
-      <line x1="24" y1="28" x2="30" y2="25" stroke="#F472B6" stroke-width="0.8"/>
+      <path d="M24 8 C16 8 10 14 10 22 C10 27 12.5 31 17 33 L17 40 L31 40 L31 33 C35.5 31 38 27 38 22 C38 14 32 8 24 8Z" stroke="#DB2777" stroke-width="1.8" fill="none"/>
+      <line x1="17" y1="40" x2="31" y2="40" stroke="#DB2777" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="18" cy="18" r="2" fill="#DB2777" opacity="0.8"/>
+      <circle cx="24" cy="15" r="2" fill="#DB2777" opacity="0.8"/>
+      <circle cx="30" cy="18" r="2" fill="#DB2777" opacity="0.8"/>
+      <circle cx="18" cy="25" r="2" fill="#DB2777" opacity="0.5"/>
+      <circle cx="24" cy="28" r="2" fill="#DB2777" opacity="0.5"/>
+      <circle cx="30" cy="25" r="2" fill="#DB2777" opacity="0.5"/>
+      <line x1="18" y1="18" x2="24" y2="15" stroke="#DB2777" stroke-width="0.8"/>
+      <line x1="24" y1="15" x2="30" y2="18" stroke="#DB2777" stroke-width="0.8"/>
+      <line x1="18" y1="18" x2="18" y2="25" stroke="#DB2777" stroke-width="0.8"/>
+      <line x1="30" y1="18" x2="30" y2="25" stroke="#DB2777" stroke-width="0.8"/>
+      <line x1="18" y1="25" x2="24" y2="28" stroke="#DB2777" stroke-width="0.8"/>
+      <line x1="24" y1="28" x2="30" y2="25" stroke="#DB2777" stroke-width="0.8"/>
     </symbol>
 
     <!-- MICROSCOPE -->
     <symbol id="ico-microscope" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="4" width="8" height="18" rx="2" stroke="#10B981" stroke-width="1.8"/>
-      <rect x="16" y="8" width="16" height="6" rx="2" stroke="#10B981" stroke-width="1.5"/>
-      <line x1="24" y1="22" x2="24" y2="30" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="24" cy="32" r="4" stroke="#10B981" stroke-width="1.8"/>
-      <path d="M10 44 L38 44" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
-      <path d="M16 44 L14 38 L20 36 L24 44" stroke="#10B981" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M32 44 L34 38 L28 36 L24 44" stroke="#10B981" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="20" y="4" width="8" height="18" rx="2" stroke="#059669" stroke-width="1.8"/>
+      <rect x="16" y="8" width="16" height="6" rx="2" stroke="#059669" stroke-width="1.5"/>
+      <line x1="24" y1="22" x2="24" y2="30" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="24" cy="32" r="4" stroke="#059669" stroke-width="1.8"/>
+      <path d="M10 44 L38 44" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+      <path d="M16 44 L14 38 L20 36 L24 44" stroke="#059669" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M32 44 L34 38 L28 36 L24 44" stroke="#059669" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
 
     <!-- REPORT / DOCUMENT -->
     <symbol id="ico-report" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="4" width="32" height="40" rx="4" stroke="#00D4FF" stroke-width="1.8"/>
-      <line x1="15" y1="14" x2="33" y2="14" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="15" y1="20" x2="33" y2="20" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="15" y1="26" x2="25" y2="26" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/>
-      <rect x="24" y="32" width="12" height="8" rx="1.5" fill="rgba(0,212,255,0.15)" stroke="#00D4FF" stroke-width="1.2"/>
-      <polyline points="26,38 28,34 31,36 33,32" stroke="#00D4FF" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="8" y="4" width="32" height="40" rx="4" stroke="#CC1212" stroke-width="1.8"/>
+      <line x1="15" y1="14" x2="33" y2="14" stroke="#CC1212" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="15" y1="20" x2="33" y2="20" stroke="#CC1212" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="15" y1="26" x2="25" y2="26" stroke="#CC1212" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="24" y="32" width="12" height="8" rx="1.5" fill="rgba(204,18,18,0.12)" stroke="#CC1212" stroke-width="1.2"/>
+      <polyline points="26,38 28,34 31,36 33,32" stroke="#CC1212" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
 
     <!-- NEWS -->
     <symbol id="ico-news" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="10" width="36" height="28" rx="3" stroke="#34D399" stroke-width="1.8"/>
-      <rect x="8" y="14" width="14" height="10" rx="2" fill="rgba(52,211,153,0.15)" stroke="#34D399" stroke-width="1.2"/>
-      <line x1="25" y1="15" x2="37" y2="15" stroke="#34D399" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="25" y1="19" x2="37" y2="19" stroke="#34D399" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="25" y1="23" x2="37" y2="23" stroke="#34D399" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="8"  y1="28" x2="37" y2="28" stroke="#34D399" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-      <line x1="8"  y1="32" x2="30" y2="32" stroke="#34D399" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-      <rect x="38" y="6" width="6" height="36" rx="2" fill="#34D399" opacity="0.15" stroke="#34D399" stroke-width="1.2"/>
+      <rect x="4" y="10" width="36" height="28" rx="3" stroke="#059669" stroke-width="1.8"/>
+      <rect x="8" y="14" width="14" height="10" rx="2" fill="rgba(5,150,105,0.12)" stroke="#059669" stroke-width="1.2"/>
+      <line x1="25" y1="15" x2="37" y2="15" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="25" y1="19" x2="37" y2="19" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="25" y1="23" x2="37" y2="23" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="8"  y1="28" x2="37" y2="28" stroke="#059669" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+      <line x1="8"  y1="32" x2="30" y2="32" stroke="#059669" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+      <rect x="38" y="6" width="6" height="36" rx="2" fill="#059669" opacity="0.12" stroke="#059669" stroke-width="1.2"/>
     </symbol>
 
     <!-- CONTRIBUTE / PENCIL -->
     <symbol id="ico-contribute" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 6 L42 16 L18 40 L8 40 L8 30 Z" stroke="#00D4FF" stroke-width="1.8" stroke-linejoin="round" fill="rgba(0,212,255,0.08)"/>
-      <line x1="28" y1="10" x2="38" y2="20" stroke="#00D4FF" stroke-width="1.5"/>
-      <path d="M8 40 L12 34" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="37" cy="38" r="6" stroke="#7C3AED" stroke-width="1.5" fill="rgba(124,58,237,0.1)"/>
+      <path d="M32 6 L42 16 L18 40 L8 40 L8 30 Z" stroke="#CC1212" stroke-width="1.8" stroke-linejoin="round" fill="rgba(204,18,18,0.07)"/>
+      <line x1="28" y1="10" x2="38" y2="20" stroke="#CC1212" stroke-width="1.5"/>
+      <path d="M8 40 L12 34" stroke="#CC1212" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="37" cy="38" r="6" stroke="#7C3AED" stroke-width="1.5" fill="rgba(124,58,237,0.08)"/>
       <line x1="37" y1="34" x2="37" y2="42" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round"/>
       <line x1="33" y1="38" x2="41" y2="38" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round"/>
     </symbol>
 
     <!-- REQUEST / ENVELOPE-STAR -->
     <symbol id="ico-request" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="12" width="32" height="24" rx="3" stroke="#F59E0B" stroke-width="1.8"/>
-      <polyline points="4,15 20,27 36,15" stroke="#F59E0B" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <polygon points="39,6 40.5,10 44.5,10 41.5,12.5 42.5,16.5 39,14 35.5,16.5 36.5,12.5 33.5,10 37.5,10" fill="#F59E0B" opacity="0.9"/>
+      <rect x="4" y="12" width="32" height="24" rx="3" stroke="#D97706" stroke-width="1.8"/>
+      <polyline points="4,15 20,27 36,15" stroke="#D97706" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <polygon points="39,6 40.5,10 44.5,10 41.5,12.5 42.5,16.5 39,14 35.5,16.5 36.5,12.5 33.5,10 37.5,10" fill="#D97706" opacity="0.9"/>
     </symbol>
 
     <!-- LOGIN / USER-KEY -->
     <symbol id="ico-login" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="22" cy="14" r="8" stroke="#A78BFA" stroke-width="1.8"/>
-      <path d="M6 40 C6 31 10 26 22 26" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-      <circle cx="37" cy="34" r="7" stroke="#A78BFA" stroke-width="1.5" fill="rgba(167,139,250,0.1)"/>
-      <circle cx="37" cy="34" r="2.5" fill="#A78BFA"/>
-      <line x1="42" y1="29" x2="46" y2="25" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="44" y1="31" x2="47" y2="28" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="22" cy="14" r="8" stroke="#7C3AED" stroke-width="1.8"/>
+      <path d="M6 40 C6 31 10 26 22 26" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <circle cx="37" cy="34" r="7" stroke="#7C3AED" stroke-width="1.5" fill="rgba(124,58,237,0.08)"/>
+      <circle cx="37" cy="34" r="2.5" fill="#7C3AED"/>
+      <line x1="42" y1="29" x2="46" y2="25" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="44" y1="31" x2="47" y2="28" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round"/>
     </symbol>
 
     <!-- HOME -->
     <symbol id="ico-home" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 22 L24 6 L42 22" stroke="#00D4FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="10" y="22" width="28" height="20" rx="2" stroke="#00D4FF" stroke-width="1.8"/>
-      <rect x="19" y="30" width="10" height="12" rx="1.5" stroke="#00D4FF" stroke-width="1.4"/>
-      <circle cx="38" cy="10" r="6" fill="rgba(0,212,255,0.12)" stroke="#00D4FF" stroke-width="1.2"/>
-      <line x1="38" y1="7" x2="38" y2="13" stroke="#00D4FF" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="35" y1="10" x2="41" y2="10" stroke="#00D4FF" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M6 22 L24 6 L42 22" stroke="#CC1212" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="10" y="22" width="28" height="20" rx="2" stroke="#CC1212" stroke-width="1.8"/>
+      <rect x="19" y="30" width="10" height="12" rx="1.5" stroke="#CC1212" stroke-width="1.4"/>
     </symbol>
 
     <!-- SHIELD / VERIFIED -->
     <symbol id="ico-shield" viewBox="0 0 48 48" fill="none">
-      <path d="M24 4 L40 10 L40 26 C40 35 33 42 24 44 C15 42 8 35 8 26 L8 10 Z" stroke="#10B981" stroke-width="1.8" fill="rgba(16,185,129,0.08)"/>
-      <polyline points="16,24 22,30 33,18" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 4 L40 10 L40 26 C40 35 33 42 24 44 C15 42 8 35 8 26 L8 10 Z" stroke="#059669" stroke-width="1.8" fill="rgba(5,150,105,0.07)"/>
+      <polyline points="16,24 22,30 33,18" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
 
     <!-- GLOBE -->
     <symbol id="ico-globe" viewBox="0 0 48 48" fill="none">
-      <circle cx="24" cy="24" r="18" stroke="#00D4FF" stroke-width="1.8"/>
-      <ellipse cx="24" cy="24" rx="8" ry="18" stroke="#00D4FF" stroke-width="1.3" opacity="0.6"/>
-      <line x1="6" y1="24" x2="42" y2="24" stroke="#00D4FF" stroke-width="1.3" opacity="0.6"/>
-      <line x1="9" y1="16" x2="39" y2="16" stroke="#00D4FF" stroke-width="1" opacity="0.4"/>
-      <line x1="9" y1="32" x2="39" y2="32" stroke="#00D4FF" stroke-width="1" opacity="0.4"/>
+      <circle cx="24" cy="24" r="18" stroke="#0369A1" stroke-width="1.8"/>
+      <ellipse cx="24" cy="24" rx="8" ry="18" stroke="#0369A1" stroke-width="1.3" opacity="0.6"/>
+      <line x1="6" y1="24" x2="42" y2="24" stroke="#0369A1" stroke-width="1.3" opacity="0.6"/>
+      <line x1="9" y1="16" x2="39" y2="16" stroke="#0369A1" stroke-width="1" opacity="0.4"/>
+      <line x1="9" y1="32" x2="39" y2="32" stroke="#0369A1" stroke-width="1" opacity="0.4"/>
     </symbol>
 
     <!-- CHART -->
     <symbol id="ico-chart" viewBox="0 0 48 48" fill="none">
-      <polyline points="6,38 16,24 24,30 36,12 44,18" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <circle cx="16" cy="24" r="2.5" fill="#00D4FF"/>
-      <circle cx="24" cy="30" r="2.5" fill="#7C3AED"/>
-      <circle cx="36" cy="12" r="2.5" fill="#00D4FF"/>
-      <line x1="6" y1="42" x2="44" y2="42" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      <polyline points="6,38 16,24 24,30 36,12 44,18" stroke="#CC1212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="16" cy="24" r="2.5" fill="#CC1212"/>
+      <circle cx="24" cy="30" r="2.5" fill="#A80E0E"/>
+      <circle cx="36" cy="12" r="2.5" fill="#CC1212"/>
+      <line x1="6" y1="42" x2="44" y2="42" stroke="#CC1212" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
     </symbol>
 
     <!-- EYE -->
@@ -1608,18 +1588,23 @@ body {
 <!-- ═══════════ WELCOME MODAL ═══════════ -->
 <div class="modal-overlay" id="welcomeModal">
   <div class="modal">
-    <svg class="modal-icon" id="io-atom-modal" viewBox="0 0 80 80" fill="none">
-      <circle cx="40" cy="40" r="7" fill="#00D4FF"/>
-      <ellipse cx="40" cy="40" rx="34" ry="14" stroke="#00D4FF" stroke-width="2" stroke-dasharray="3 3"/>
-      <ellipse cx="40" cy="40" rx="34" ry="14" stroke="#7C3AED" stroke-width="2" stroke-dasharray="3 3" transform="rotate(60 40 40)"/>
-      <ellipse cx="40" cy="40" rx="34" ry="14" stroke="#A78BFA" stroke-width="2" stroke-dasharray="3 3" transform="rotate(120 40 40)"/>
-      <circle cx="74" cy="40" r="4" fill="#00D4FF"/>
-      <circle cx="23" cy="65" r="4" fill="#7C3AED"/>
-      <circle cx="23" cy="15" r="4" fill="#A78BFA"/>
-      <circle cx="57" cy="65" r="4" fill="#00D4FF" opacity="0.5"/>
-      <circle cx="57" cy="15" r="4" fill="#7C3AED" opacity="0.5"/>
+    <!-- Hex Logo in modal -->
+    <svg class="modal-icon" viewBox="0 0 110 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="55,6 100,32 100,84 55,110 10,84 10,32" fill="#8B1414"/>
+      <polygon points="55,58 55,6 100,32" fill="#D42626"/>
+      <polygon points="55,58 100,32 100,84" fill="#B81E1E"/>
+      <polygon points="55,58 100,84 55,110" fill="#7A1010"/>
+      <polygon points="55,58 55,110 10,84" fill="#7A1010"/>
+      <polygon points="55,58 10,84 10,32" fill="#B81E1E"/>
+      <polygon points="55,58 10,32 55,6" fill="#C42020"/>
+      <circle cx="55" cy="52" r="25" fill="#2C0505"/>
+      <path d="M55,31 C45,31 37,39 37,49 C37,56 41,62 47,65 L47,72 L63,72 L63,65 C69,62 73,56 73,49 C73,39 65,31 55,31Z" fill="white" opacity="0.95"/>
+      <rect x="46" y="72" width="18" height="4" rx="2" fill="white" opacity="0.9"/>
+      <rect x="48" y="78" width="14" height="3.5" rx="1.75" fill="white" opacity="0.8"/>
+      <rect x="50" y="83" width="10" height="3" rx="1.5" fill="white" opacity="0.7"/>
+      <path d="M51,47 L51,58 L59,58 L59,47" stroke="rgba(120,10,10,0.5)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <div class="modal-title">مرحباً بك في Science Lab</div>
+    <div class="modal-title">مرحباً بك في The Science Lab</div>
     <div class="modal-body">منصتك المتكاملة للبحث العلمي، التقارير المحكّمة، والأخبار العلمية المتخصصة. استكشف أحدث الأبحاث وشارك معرفتك مع المجتمع.</div>
     <div class="modal-highlights">
       <div class="modal-highlight">
@@ -1654,16 +1639,25 @@ body {
 
     <!-- Logo -->
     <a class="sidebar-logo" href="#" onclick="navigate('home'); return false;">
-      <svg class="logo-icon" viewBox="0 0 44 44" fill="none">
-        <circle cx="22" cy="22" r="7" fill="#00D4FF" opacity="0.9"/>
-        <ellipse cx="22" cy="22" rx="20" ry="8" stroke="#00D4FF" stroke-width="1.8" transform="rotate(0 22 22)"/>
-        <ellipse cx="22" cy="22" rx="20" ry="8" stroke="#7C3AED" stroke-width="1.8" transform="rotate(60 22 22)"/>
-        <ellipse cx="22" cy="22" rx="20" ry="8" stroke="#A78BFA" stroke-width="1.8" transform="rotate(120 22 22)"/>
-        <circle cx="42" cy="22" r="3" fill="#00D4FF"/>
+      <!-- Hex Logo SVG -->
+      <svg class="logo-icon" viewBox="0 0 110 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="55,6 100,32 100,84 55,110 10,84 10,32" fill="#8B1414"/>
+        <polygon points="55,58 55,6 100,32" fill="#D42626"/>
+        <polygon points="55,58 100,32 100,84" fill="#B81E1E"/>
+        <polygon points="55,58 100,84 55,110" fill="#7A1010"/>
+        <polygon points="55,58 55,110 10,84" fill="#7A1010"/>
+        <polygon points="55,58 10,84 10,32" fill="#B81E1E"/>
+        <polygon points="55,58 10,32 55,6" fill="#C42020"/>
+        <circle cx="55" cy="52" r="25" fill="#2C0505"/>
+        <path d="M55,31 C45,31 37,39 37,49 C37,56 41,62 47,65 L47,72 L63,72 L63,65 C69,62 73,56 73,49 C73,39 65,31 55,31Z" fill="white" opacity="0.95"/>
+        <rect x="46" y="72" width="18" height="4" rx="2" fill="white" opacity="0.9"/>
+        <rect x="48" y="78" width="14" height="3.5" rx="1.75" fill="white" opacity="0.8"/>
+        <rect x="50" y="83" width="10" height="3" rx="1.5" fill="white" opacity="0.7"/>
+        <path d="M51,47 L51,58 L59,58 L59,47" stroke="rgba(120,10,10,0.5)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <div class="logo-text">
-        <span class="logo-name">Science Lab</span>
-        <span class="logo-tagline">SCIENCE · RESEARCH · DISCOVERY</span>
+        <span class="logo-name">The Science Lab</span>
+        <span class="logo-tagline">In Science we believe</span>
       </div>
     </a>
 
@@ -1704,25 +1698,25 @@ body {
       تسجيل الدخول
     </a>
 
-    <!-- Sidebar Footer -->
+    <!-- Sidebar Footer — Mission text replacing stats -->
     <div class="sidebar-footer">
-      <div class="sidebar-stats">
-        <div class="sidebar-stat">
-          <span class="sidebar-stat-num" data-counter="4820">0</span>
-          <span class="sidebar-stat-lbl">باحث</span>
-        </div>
-        <div class="sidebar-stat">
-          <span class="sidebar-stat-num" data-counter="128">0</span>
-          <span class="sidebar-stat-lbl">تقرير</span>
-        </div>
-        <div class="sidebar-stat">
-          <span class="sidebar-stat-num" data-counter="47">0</span>
-          <span class="sidebar-stat-lbl">خبر</span>
-        </div>
-        <div class="sidebar-stat">
-          <span class="sidebar-stat-num" data-counter="16">0</span>
-          <span class="sidebar-stat-lbl">تخصص</span>
-        </div>
+      <div class="sidebar-mission">
+        <svg class="sidebar-mission-logo" viewBox="0 0 110 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="55,6 100,32 100,84 55,110 10,84 10,32" fill="#8B1414"/>
+          <polygon points="55,58 55,6 100,32" fill="#D42626"/>
+          <polygon points="55,58 100,32 100,84" fill="#B81E1E"/>
+          <polygon points="55,58 100,84 55,110" fill="#7A1010"/>
+          <polygon points="55,58 55,110 10,84" fill="#7A1010"/>
+          <polygon points="55,58 10,84 10,32" fill="#B81E1E"/>
+          <polygon points="55,58 10,32 55,6" fill="#C42020"/>
+          <circle cx="55" cy="52" r="25" fill="#2C0505"/>
+          <path d="M55,31 C45,31 37,39 37,49 C37,56 41,62 47,65 L47,72 L63,72 L63,65 C69,62 73,56 73,49 C73,39 65,31 55,31Z" fill="white" opacity="0.95"/>
+          <rect x="46" y="72" width="18" height="4" rx="2" fill="white" opacity="0.9"/>
+          <rect x="48" y="78" width="14" height="3.5" rx="1.75" fill="white" opacity="0.8"/>
+          <rect x="50" y="83" width="10" height="3" rx="1.5" fill="white" opacity="0.7"/>
+        </svg>
+        <p class="sidebar-mission-text">نحو معرفة علمية موثّقة<br>وإبداع بحثي متميز</p>
+        <p class="sidebar-mission-sub">Physics · Biology · Chemistry · AI</p>
       </div>
     </div>
   </aside>
@@ -1733,13 +1727,21 @@ body {
     <!-- TOP BAR (mobile) -->
     <header class="topbar">
       <div class="topbar-logo" onclick="navigate('home')">
-        <svg viewBox="0 0 44 44" fill="none">
-          <circle cx="22" cy="22" r="6" fill="#00D4FF" opacity="0.9"/>
-          <ellipse cx="22" cy="22" rx="19" ry="7.5" stroke="#00D4FF" stroke-width="1.8"/>
-          <ellipse cx="22" cy="22" rx="19" ry="7.5" stroke="#7C3AED" stroke-width="1.8" transform="rotate(60 22 22)"/>
-          <ellipse cx="22" cy="22" rx="19" ry="7.5" stroke="#A78BFA" stroke-width="1.8" transform="rotate(120 22 22)"/>
+        <svg viewBox="0 0 110 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="55,6 100,32 100,84 55,110 10,84 10,32" fill="#8B1414"/>
+          <polygon points="55,58 55,6 100,32" fill="#D42626"/>
+          <polygon points="55,58 100,32 100,84" fill="#B81E1E"/>
+          <polygon points="55,58 100,84 55,110" fill="#7A1010"/>
+          <polygon points="55,58 55,110 10,84" fill="#7A1010"/>
+          <polygon points="55,58 10,84 10,32" fill="#B81E1E"/>
+          <polygon points="55,58 10,32 55,6" fill="#C42020"/>
+          <circle cx="55" cy="52" r="25" fill="#2C0505"/>
+          <path d="M55,31 C45,31 37,39 37,49 C37,56 41,62 47,65 L47,72 L63,72 L63,65 C69,62 73,56 73,49 C73,39 65,31 55,31Z" fill="white" opacity="0.95"/>
+          <rect x="46" y="72" width="18" height="4" rx="2" fill="white" opacity="0.9"/>
+          <rect x="48" y="78" width="14" height="3.5" rx="1.75" fill="white" opacity="0.8"/>
+          <rect x="50" y="83" width="10" height="3" rx="1.5" fill="white" opacity="0.7"/>
         </svg>
-        <span class="topbar-name">Science Lab</span>
+        <span class="topbar-name">The Science Lab</span>
       </div>
       <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="القائمة">
         <span></span><span></span><span></span>
@@ -1762,7 +1764,7 @@ body {
             <h1 class="hero-title">
               اكتشف حدود<br><span>العلم والمعرفة</span>
             </h1>
-            <p class="hero-desc">Science Lab منصتك المتكاملة لأحدث التقارير البحثية المحكّمة والأخبار العلمية من مختلف التخصصات. تواصل مع الباحثين وشارك بأبحاثك لتثري المجتمع العلمي.</p>
+            <p class="hero-desc">The Science Lab منصتك المتكاملة لأحدث التقارير البحثية المحكّمة والأخبار العلمية من مختلف التخصصات. تواصل مع الباحثين وشارك بأبحاثك لتثري المجتمع العلمي.</p>
             <div class="hero-actions">
               <button class="btn-primary" onclick="navigate('reports')">
                 <svg width="16" height="16" viewBox="0 0 48 48"><use href="#ico-report"/></svg>
@@ -1774,40 +1776,51 @@ body {
               </button>
             </div>
           </div>
+          <!-- Hero Visual: Large Hex Logo -->
           <div class="hero-visual">
-            <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="90" cy="90" r="30" fill="rgba(0,212,255,0.15)" stroke="#00D4FF" stroke-width="2"/>
-              <circle cx="90" cy="90" r="12" fill="#00D4FF" opacity="0.8"/>
-              <ellipse cx="90" cy="90" rx="80" ry="32" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="4 4"/>
-              <ellipse cx="90" cy="90" rx="80" ry="32" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4 4" transform="rotate(60 90 90)"/>
-              <ellipse cx="90" cy="90" rx="80" ry="32" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="4 4" transform="rotate(120 90 90)"/>
-              <circle cx="170" cy="90" r="8" fill="#00D4FF"/>
-              <circle cx="50" cy="158" r="8" fill="#7C3AED"/>
-              <circle cx="50" cy="22"  r="8" fill="#A78BFA"/>
-              <circle cx="130" cy="158" r="5" fill="#00D4FF" opacity="0.5"/>
-              <circle cx="130" cy="22"  r="5" fill="#7C3AED" opacity="0.5"/>
-              <circle cx="10" cy="90"   r="5" fill="#A78BFA" opacity="0.5"/>
+            <svg viewBox="0 0 110 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="55,6 100,32 100,84 55,110 10,84 10,32" fill="#8B1414"/>
+              <polygon points="55,58 55,6 100,32" fill="#D42626"/>
+              <polygon points="55,58 100,32 100,84" fill="#B81E1E"/>
+              <polygon points="55,58 100,84 55,110" fill="#7A1010"/>
+              <polygon points="55,58 55,110 10,84" fill="#7A1010"/>
+              <polygon points="55,58 10,84 10,32" fill="#B81E1E"/>
+              <polygon points="55,58 10,32 55,6" fill="#C42020"/>
+              <circle cx="55" cy="52" r="25" fill="#2C0505"/>
+              <path d="M55,31 C45,31 37,39 37,49 C37,56 41,62 47,65 L47,72 L63,72 L63,65 C69,62 73,56 73,49 C73,39 65,31 55,31Z" fill="white" opacity="0.95"/>
+              <rect x="46" y="72" width="18" height="4" rx="2" fill="white" opacity="0.9"/>
+              <rect x="48" y="78" width="14" height="3.5" rx="1.75" fill="white" opacity="0.8"/>
+              <rect x="50" y="83" width="10" height="3" rx="1.5" fill="white" opacity="0.7"/>
+              <path d="M51,47 L51,58 L59,58 L59,47" stroke="rgba(255,200,200,0.4)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
 
-        <!-- Stats -->
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <span class="hero-stat-num" data-counter="4820">0</span>
-            <span class="hero-stat-lbl">باحث مسجّل</span>
+        <!-- Disciplines Strip (replaces stats counters) -->
+        <div class="disciplines-strip">
+          <div class="discipline-tag">
+            <svg class="disc-icon" viewBox="0 0 48 48"><use href="#ico-atom"/></svg>
+            <span>فيزياء</span>
           </div>
-          <div class="hero-stat">
-            <span class="hero-stat-num" data-counter="128">0</span>
-            <span class="hero-stat-lbl">تقرير منشور</span>
+          <div class="discipline-tag">
+            <svg class="disc-icon" viewBox="0 0 48 48"><use href="#ico-dna"/></svg>
+            <span>بيولوجيا</span>
           </div>
-          <div class="hero-stat">
-            <span class="hero-stat-num" data-counter="47">0</span>
-            <span class="hero-stat-lbl">خبر علمي</span>
+          <div class="discipline-tag">
+            <svg class="disc-icon" viewBox="0 0 48 48"><use href="#ico-flask"/></svg>
+            <span>كيمياء</span>
           </div>
-          <div class="hero-stat">
-            <span class="hero-stat-num" data-counter="16">0</span>
-            <span class="hero-stat-lbl">تخصص علمي</span>
+          <div class="discipline-tag">
+            <svg class="disc-icon" viewBox="0 0 48 48"><use href="#ico-telescope"/></svg>
+            <span>فلك وفضاء</span>
+          </div>
+          <div class="discipline-tag">
+            <svg class="disc-icon" viewBox="0 0 48 48"><use href="#ico-ai"/></svg>
+            <span>ذكاء اصطناعي</span>
+          </div>
+          <div class="discipline-tag">
+            <svg class="disc-icon" viewBox="0 0 48 48"><use href="#ico-microscope"/></svg>
+            <span>علوم الحياة</span>
           </div>
         </div>
       </div>
@@ -1890,7 +1903,7 @@ body {
       <div class="section-header">
         <div class="section-eyebrow">التقارير</div>
         <h2 class="section-title">التقارير العلمية</h2>
-        <p class="section-subtitle">أرشيف شامل من التقارير البحثية المحكّمة في مختلف التخصصات العلمية. &nbsp;<span id="reports-count" style="color:var(--cyan);font-family:var(--font-mono);font-weight:700;"></span></p>
+        <p class="section-subtitle">أرشيف شامل من التقارير البحثية المحكّمة في مختلف التخصصات العلمية. &nbsp;<span id="reports-count" style="color:var(--red);font-family:var(--font-mono);font-weight:700;"></span></p>
       </div>
       <div class="filter-tabs" id="reports-tabs">
         <button class="filter-tab active" data-cat="all">الكل</button>
@@ -1910,7 +1923,7 @@ body {
       <div class="section-header">
         <div class="section-eyebrow">الأخبار</div>
         <h2 class="section-title">الأخبار العلمية</h2>
-        <p class="section-subtitle">آخر المستجدات والاكتشافات من عالم العلوم والتكنولوجيا. &nbsp;<span id="news-count" style="color:var(--cyan);font-family:var(--font-mono);font-weight:700;"></span></p>
+        <p class="section-subtitle">آخر المستجدات والاكتشافات من عالم العلوم والتكنولوجيا. &nbsp;<span id="news-count" style="color:var(--red);font-family:var(--font-mono);font-weight:700;"></span></p>
       </div>
       <div class="cards-grid" id="news-grid"></div>
     </div>
@@ -1922,7 +1935,7 @@ body {
       <div class="section-header">
         <div class="section-eyebrow">المساهمة</div>
         <h2 class="section-title">قدّم مساهمتك العلمية</h2>
-        <p class="section-subtitle">شارك أبحاثك ومقالاتك مع مجتمع Science Lab العلمي.</p>
+        <p class="section-subtitle">شارك أبحاثك ومقالاتك مع مجتمع The Science Lab العلمي.</p>
       </div>
       <div class="form-container">
         <div class="form-card">
@@ -1997,7 +2010,7 @@ body {
       <div class="form-container">
         <div class="form-card">
           <div class="form-title">نموذج طلب تقرير</div>
-          <div class="form-subtitle">سيُرسَل طلبك إلى <strong style="color:var(--cyan)">reports@sciencelab.org</strong> وسنرد خلال 48 ساعة.</div>
+          <div class="form-subtitle">سيُرسَل طلبك إلى <strong style="color:var(--red)">reports@sciencelab.org</strong> وسنرد خلال 48 ساعة.</div>
           <form onsubmit="submitRequest(event)">
             <div class="form-row">
               <div class="form-group">
@@ -2161,6 +2174,34 @@ body {
       </div>
     </div>
 
+    <!-- ═══════════════════════════
+         SECTION: DETAIL VIEW
+    ═══════════════════════════ -->
+    <div class="section" id="sec-detail">
+      <button class="detail-back" onclick="goBack()">
+        <svg viewBox="0 0 24 24"><use href="#ico-arrow"/></svg>
+        <span id="detailBackLabel">العودة</span>
+      </button>
+      <img id="detailImg" class="detail-hero-img" src="" alt="">
+      <span class="card-cat" id="detailCatBadge" style="position:static;display:inline-block;margin-bottom:16px;"></span>
+      <h1 class="detail-title" id="detailTitle"></h1>
+      <div class="detail-meta">
+        <div class="detail-avatar" id="detailAvatar"></div>
+        <div>
+          <div class="detail-author-name" id="detailAuthor"></div>
+          <div class="detail-author-date" id="detailDate"></div>
+        </div>
+      </div>
+      <div class="detail-body" id="detailBody"></div>
+      <div class="detail-related">
+        <div class="detail-related-title">
+          <span></span>
+          مقالات ذات صلة
+        </div>
+        <div class="cards-grid" id="detailRelatedGrid"></div>
+      </div>
+    </div>
+
   </main><!-- /main -->
 </div><!-- /app-shell -->
 
@@ -2174,7 +2215,7 @@ body {
 const REPORTS = [
   {
     id: 1, type: 'report', cat: 'physics', catLabel: 'فيزياء',
-    icon: 'ico-atom', iconColor: '#00D4FF',
+    icon: 'ico-atom', iconColor: '#CC1212',
     img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=900&q=85&fit=crop&auto=format',
     title: 'تأثير الجاذبية الكمومية على انحناء الزمكان في المجرات القزمة',
     author: 'د. سارة الجوهري', avatar: 'سج', date: '18 يوليو 2026',
@@ -2184,165 +2225,164 @@ const REPORTS = [
 <p>اعتمدت الدراسة على تحليل أكثر من 2,400 مجرة قزمة رُصدت ضمن نطاق 500 مليون سنة ضوئية، مستخدمةً معادلات الجاذبية الكمومية حلقية (LQG) لمحاكاة انحناء الزمكان. وأظهرت النتائج انحرافاً ملحوظاً عن توقعات النسبية العامة بنسبة 0.3% في المجرات ذات الكتلة الأقل من 10⁸ كتلة شمسية.</p>
 <blockquote>«ما نراه في هذه المجرات القزمة ليس مجرد انحراف إحصائي، بل قد يكون أول دليل مرصود على تأثيرات الجاذبية الكمومية في بنية الكون الكبرى.» — د. سارة الجوهري</blockquote>
 <h3>النتائج والتداعيات</h3>
-<p>تُلقي هذه النتائج بظلالها على نماذج تشكّل الكون وتدعو إلى مراجعة نماذج المادة المظلمة السائدة. كما تفتح آفاقاً جديدة لفهم دور الجاذبية الكمومية في المراحل الأولى من الكون، وما إذا كانت هذه التأثيرات قد تفسّر بعض الغموض المحيط بثابت هابل.</p>
-<p>يواصل الفريق البحثي حالياً تعاونه مع مرصد ALMA لجمع بيانات إضافية، بهدف تأكيد النتائج عبر مناطق مختلفة من الكون المرصود والتحقق من اتساقها الكوني.</p>`
+<p>تُلقي هذه النتائج بظلالها على نماذج تشكّل الكون وتدعو إلى مراجعة نماذج المادة المظلمة السائدة. كما تفتح آفاقاً جديدة لفهم دور الجاذبية الكمومية في المراحل الأولى من الكون.</p>`
   },
   {
     id: 2, type: 'report', cat: 'bio', catLabel: 'بيولوجيا',
-    icon: 'ico-dna', iconColor: '#10B981',
+    icon: 'ico-dna', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=900&q=85&fit=crop&auto=format',
     title: 'تسلسل الجينوم الكامل لسلالات البكتيريا المقاومة للمضادات الحيوية',
     author: 'د. خالد المنصوري', avatar: 'خم', date: '15 يوليو 2026',
     desc: 'تحليل جيني متعمق لأكثر من 200 سلالة بكتيرية مقاومة للمضادات الحيوية للكشف عن آليات المقاومة وتطوير استراتيجيات علاجية جديدة.',
-    fullDesc: `<p>في ظل أزمة مقاومة المضادات الحيوية التي باتت تُهدد منظومة الصحة العالمية، يأتي هذا البحث ليُقدّم تحليلاً جينياً غير مسبوق لأكثر من 200 سلالة بكتيرية مقاومة، مستخدماً أحدث تقنيات التسلسل الجيني من الجيل الثالث (Nanopore Sequencing).</p>
+    fullDesc: `<p>في ظل أزمة مقاومة المضادات الحيوية التي باتت تُهدد منظومة الصحة العالمية، يأتي هذا البحث ليُقدّم تحليلاً جينياً غير مسبوق لأكثر من 200 سلالة بكتيرية مقاومة، مستخدماً أحدث تقنيات التسلسل الجيني من الجيل الثالث.</p>
 <h3>السلالات المدروسة</h3>
-<p>شملت الدراسة سلالات من أخطر البكتيريا المقاومة عالمياً، وفي مقدمتها Klebsiella pneumoniae وAcinetobacter baumannii وPseudomonas aeruginosa. وقد كُشف عن 47 جيناً جديداً للمقاومة لم تكن موثّقة في قواعد البيانات العالمية من قبل.</p>
+<p>شملت الدراسة سلالات من أخطر البكتيريا المقاومة عالمياً. وقد كُشف عن 47 جيناً جديداً للمقاومة لم تكن موثّقة في قواعد البيانات العالمية من قبل.</p>
 <blockquote>«هذه الجينات الجديدة تمثّل ثغرة حقيقية في ترسانتنا الدوائية. فهمها هو الخطوة الأولى نحو تطوير مضادات حيوية الجيل القادم.» — د. خالد المنصوري</blockquote>
 <h3>الآفاق العلاجية</h3>
-<p>بناءً على خرائط المقاومة الجينية المُستخرجة، اقترح الفريق البحثي ثلاث مركّبات دوائية مرشّحة للتطوير، تستهدف آليات المقاومة الجديدة دون التأثير على البكتيريا النافعة في جسم الإنسان. التجارب المخبرية الأولية أظهرت نتائج واعدة بنسبة فاعلية تجاوزت 89%.</p>`
+<p>بناءً على خرائط المقاومة الجينية المُستخرجة، اقترح الفريق البحثي ثلاث مركّبات دوائية مرشّحة للتطوير. التجارب المخبرية الأولية أظهرت نتائج واعدة بنسبة فاعلية تجاوزت 89%.</p>`
   },
   {
     id: 3, type: 'report', cat: 'chem', catLabel: 'كيمياء',
-    icon: 'ico-flask', iconColor: '#F59E0B',
+    icon: 'ico-flask', iconColor: '#D97706',
     img: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=900&q=85&fit=crop&auto=format',
     title: 'تطوير محفزات نانوية فائقة الكفاءة لتحويل ثاني أكسيد الكربون',
     author: 'أ. نورة السليمان', avatar: 'نس', date: '10 يوليو 2026',
     desc: 'تصميم وتوصيف جيل جديد من المحفزات النانوية المعدنية القادرة على تحويل CO₂ إلى وقود صناعي بكفاءة تتجاوز 94%.',
     fullDesc: `<p>يُمثّل ثاني أكسيد الكربون أحد أبرز تحديات أزمة المناخ العالمية. غير أن هذا البحث يُقلب المعادلة تماماً، إذ يُقدّم جيلاً جديداً من المحفزات النانوية القادرة على تحويل CO₂ من عدو للبيئة إلى مادة خام ذات قيمة صناعية عالية.</p>
 <h3>تصميم المحفز النانوي</h3>
-<p>يعتمد المحفز الجديد على هيكل نانوي مركّب من نحاسيد الإنديوم المطعّمة بذرات البلاديوم، مرتّبة في تركيب بلوري دقيق يُعظّم مساحة السطح الفعّال. الحجم النانوي المتحكَّم فيه (3.2 نانومتر) يُتيح انتقائية كيميائية عالية نحو إنتاج الميثانول والإيثانول بدلاً من المنتجات الثانوية غير المرغوبة.</p>
-<blockquote>«حققنا ما كان يُعدّ مستحيلاً منذ عقود: تحويل ثاني أكسيد الكربون بكفاءة 94.3% في ظروف ضغط وحرارة قريبة من الظروف الصناعية المعتادة.» — أ. نورة السليمان</blockquote>
+<p>يعتمد المحفز الجديد على هيكل نانوي مركّب من نحاسيد الإنديوم المطعّمة بذرات البلاديوم، مرتّبة في تركيب بلوري دقيق يُعظّم مساحة السطح الفعّال.</p>
+<blockquote>«حققنا ما كان يُعدّ مستحيلاً منذ عقود: تحويل ثاني أكسيد الكربون بكفاءة 94.3%.» — أ. نورة السليمان</blockquote>
 <h3>التطبيقات الصناعية</h3>
-<p>تتعاون مجموعة من شركات الطاقة الخليجية مع الفريق البحثي لتقييم جدوى تطبيق هذه التقنية على نطاق صناعي في منشآت احتجاز الكربون. التقديرات الأولية تُشير إلى إمكانية تحويل 2 مليون طن من CO₂ سنوياً في المنشأة الواحدة.</p>`
+<p>تتعاون مجموعة من شركات الطاقة الخليجية مع الفريق البحثي لتقييم جدوى تطبيق هذه التقنية على نطاق صناعي في منشآت احتجاز الكربون.</p>`
   },
   {
     id: 4, type: 'report', cat: 'astro', catLabel: 'فلك',
-    icon: 'ico-telescope', iconColor: '#A78BFA',
+    icon: 'ico-telescope', iconColor: '#7C3AED',
     img: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=900&q=85&fit=crop&auto=format',
     title: 'رصد نبضات مغناطيسية غير منتظمة من نجم نيوتروني في مجرة أندروميدا',
     author: 'د. ماهر العتيبي', avatar: 'مع', date: '5 يوليو 2026',
     desc: 'باستخدام مصفوفة تلسكوبات راديو المتزامنة، رُصدت أنماط نبضية فريدة قد تشير إلى حالة مادة جديدة داخل النجوم النيوترونية.',
-    fullDesc: `<p>في أعماق مجرة أندروميدا، على بُعد 2.5 مليون سنة ضوئية، رصد الفريق البحثي نجماً نيوترونياً يُصدر نبضات مغناطيسية بأنماط لا تتطابق مع أيٍّ من النماذج النظرية المعروفة، مما يُثير تساؤلات عميقة حول طبيعة المادة في أشد البيئات قسوةً في الكون.</p>
+    fullDesc: `<p>في أعماق مجرة أندروميدا، على بُعد 2.5 مليون سنة ضوئية، رصد الفريق البحثي نجماً نيوترونياً يُصدر نبضات مغناطيسية بأنماط لا تتطابق مع أيٍّ من النماذج النظرية المعروفة.</p>
 <h3>طبيعة النبضات الغريبة</h3>
-<p>تتميّز هذه النبضات بتغيّر مفاجئ في فترة الدوران بمقدار 1.7 ميلي ثانية كل 47 يوماً، وهو ما يُعرف علمياً بـ«glitch»، غير أن الغريب هو عودة الفترة تدريجياً نحو قيمة أعلى بدلاً من قيمتها الأصلية، وهو سلوك لم يُرصد من قبل في أي نجم نيوتروني معروف.</p>
-<blockquote>«إذا تأكدت هذه الأنماط، فنحن أمام دليل على وجود مرحلة طور جديدة من مراحل المادة داخل النجم النيوتروني، ربما تكون مادة الكواركيون أو شكل آخر لم تتنبأ به نظرياتنا بعد.» — د. ماهر العتيبي</blockquote>
+<p>تتميّز هذه النبضات بتغيّر مفاجئ في فترة الدوران بمقدار 1.7 ميلي ثانية كل 47 يوماً، وهو سلوك لم يُرصد من قبل في أي نجم نيوتروني معروف.</p>
+<blockquote>«إذا تأكدت هذه الأنماط، فنحن أمام دليل على وجود مرحلة طور جديدة من مراحل المادة داخل النجم النيوتروني.» — د. ماهر العتيبي</blockquote>
 <h3>التفسيرات المحتملة</h3>
-<p>يطرح الفريق ثلاثة تفسيرات محتملة: إما وجود طبقة من مادة الكواركيون السائلة في لب النجم، أو حدوث إعادة ترتيب مفاجئة في القشرة الكريستالية الداخلية، أو تأثيرات مغناطيسية غير خطية في الغلاف المحيط. كل تفسير يقتضي مراجعة جذرية لنماذجنا الحالية في فيزياء المادة فائقة الكثافة.</p>`
+<p>يطرح الفريق ثلاثة تفسيرات محتملة: إما وجود طبقة من مادة الكواركيون السائلة في لب النجم، أو حدوث إعادة ترتيب مفاجئة في القشرة الكريستالية الداخلية، أو تأثيرات مغناطيسية غير خطية في الغلاف المحيط.</p>`
   },
   {
     id: 5, type: 'report', cat: 'ai', catLabel: 'ذكاء اصطناعي',
-    icon: 'ico-ai', iconColor: '#F472B6',
+    icon: 'ico-ai', iconColor: '#DB2777',
     img: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&q=85&fit=crop&auto=format',
     title: 'نماذج تعلم آلة تنبؤية لاكتشاف التفاعلات الدوائية قبل التجارب السريرية',
     author: 'د. ريم الشهري', avatar: 'رش', date: '1 يوليو 2026',
     desc: 'معمارية شبكة عصبية تحويلية مدرّبة على 12 مليون تفاعل دوائي لتوقع التأثيرات الجانبية بدقة 97.3% قبل إجراء التجارب السريرية.',
     fullDesc: `<p>تُحدث هذه الدراسة نقلةً نوعية في مجال اكتشاف الأدوية، إذ تقدّم نموذجاً للذكاء الاصطناعي يُغني عن سنوات من التجارب المخبرية المكلفة بتوقّع التفاعلات الدوائية الخطرة قبل وصول المركّب إلى المرحلة السريرية.</p>
 <h3>معمارية النموذج</h3>
-<p>يعتمد النموذج على بنية محوّل تحويلي (Transformer) مُعدَّلة خصيصاً للبنى الجزيئية، تُسمى «ChemFormer-Rx». دُرِّب النموذج على قاعدة بيانات تضم 12.4 مليون تفاعل دوائي موثّق من مصادر سريرية وتجريبية، إضافة إلى 3.2 مليون بنية جزيئية مُصنَّفة بدقة عالية.</p>
-<blockquote>«دقة 97.3% في توقع التفاعلات الخطرة تعني عملياً أن بإمكاننا اختبار آلاف المركّبات رقمياً في أيام، بدلاً من سنوات من التجارب الحيوانية والمخبرية.» — د. ريم الشهري</blockquote>
+<p>يعتمد النموذج على بنية محوّل تحويلي (Transformer) مُعدَّلة خصيصاً للبنى الجزيئية، تُسمى «ChemFormer-Rx». دُرِّب النموذج على قاعدة بيانات تضم 12.4 مليون تفاعل دوائي موثّق.</p>
+<blockquote>«دقة 97.3% في توقع التفاعلات الخطرة تعني عملياً أن بإمكاننا اختبار آلاف المركّبات رقمياً في أيام، بدلاً من سنوات من التجارب.» — د. ريم الشهري</blockquote>
 <h3>التحقق والتطبيق</h3>
-<p>تحقّق الفريق من أداء النموذج على 840 دواءً مُعتمداً من إدارة الغذاء والدواء الأمريكية (FDA)، ونجح في تحديد 156 تفاعلاً خطراً لم تكن مُدرجة في التحذيرات الرسمية حتى الآن. تتعاون مع الفريق حالياً ثلاث شركات أدوية عملاقة لدمج النموذج في خط أنابيب اكتشاف الأدوية لديها.</p>`
+<p>تحقّق الفريق من أداء النموذج على 840 دواءً مُعتمداً من إدارة الغذاء والدواء الأمريكية (FDA)، ونجح في تحديد 156 تفاعلاً خطراً لم تكن مُدرجة في التحذيرات الرسمية.</p>`
   },
   {
     id: 6, type: 'report', cat: 'physics', catLabel: 'فيزياء',
-    icon: 'ico-atom', iconColor: '#00D4FF',
+    icon: 'ico-atom', iconColor: '#CC1212',
     img: 'https://images.unsplash.com/photo-1614728894747-a83421789f10?w=900&q=85&fit=crop&auto=format',
     title: 'قياسات دقيقة لثابت هابل باستخدام موجات الجاذبية من اندماج النجوم النيوترونية',
     author: 'د. أحمد الغامدي', avatar: 'أغ', date: '25 يونيو 2026',
     desc: 'تحليل 47 حدث اندماج نجمي رُصد بواسطة LIGO-Virgo لاشتقاق قيمة محسّنة لثابت هابل H₀ = 69.8 ± 1.9 km/s/Mpc.',
-    fullDesc: `<p>يقف ثابت هابل في قلب أحد أعمق الخلافات في فيزياء الكون المعاصرة. فبينما تُعطي قياسات خلفية الإشعاع الكوني قيمة تقارب 67.4، تُشير قياسات الشموع القياسية إلى قيمة أعلى تناهز 73. تأتي هذه الدراسة لتُقدّم مساراً ثالثاً مستقلاً تماماً يعتمد على موجات الجاذبية.</p>
+    fullDesc: `<p>يقف ثابت هابل في قلب أحد أعمق الخلافات في فيزياء الكون المعاصرة. تأتي هذه الدراسة لتُقدّم مساراً ثالثاً مستقلاً تماماً يعتمد على موجات الجاذبية.</p>
 <h3>المنهج: صفارات الجاذبية</h3>
-<p>يُطلق العلماء على حوادث اندماج النجوم النيوترونية اسم «صفارات الجاذبية المعيارية»، لأن سعة موجات الجاذبية الصادرة عنها تتيح قياس المسافة الكونية بدقة لا تتوفر في الطرق التقليدية. وقد حلّل الفريق 47 حدثاً رُصد خلال رحلتَي المراقبة O3 وO4 لـ LIGO-Virgo-KAGRA.</p>
-<blockquote>«القيمة التي توصّلنا إليها — 69.8 ± 1.9 — تقع في منتصف الطريق تماماً بين القيمتين المتنازع عليهما، وقد تكون المفتاح لحسم هذا الجدل الكوني.» — د. أحمد الغامدي</blockquote>
+<p>يُطلق العلماء على حوادث اندماج النجوم النيوترونية اسم «صفارات الجاذبية المعيارية». وقد حلّل الفريق 47 حدثاً رُصد خلال رحلتَي المراقبة O3 وO4 لـ LIGO-Virgo-KAGRA.</p>
+<blockquote>«القيمة التي توصّلنا إليها — 69.8 ± 1.9 — تقع في منتصف الطريق تماماً بين القيمتين المتنازع عليهما.» — د. أحمد الغامدي</blockquote>
 <h3>دلالة النتائج</h3>
-<p>تُشير القيمة المُستخرجة إلى أن التوتر الكوني في ثابت هابل قد يكون ناجماً عن أخطاء منهجية في كلتا الطريقتين التقليديتين، أو ربما يكون مؤشراً على وجود فيزياء جديدة تتجاوز النموذج الكوني القياسي، كالطاقة المظلمة الديناميكية أو التعديلات على نظرية الجاذبية.</p>`
+<p>تُشير القيمة المُستخرجة إلى أن التوتر الكوني في ثابت هابل قد يكون ناجماً عن أخطاء منهجية في كلتا الطريقتين التقليديتين، أو مؤشراً على وجود فيزياء جديدة تتجاوز النموذج الكوني القياسي.</p>`
   }
 ];
 
 const NEWS = [
   {
     id: 1, type: 'news', cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399',
+    icon: 'ico-news', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1614314107768-6018061b5b72?w=900&q=85&fit=crop&auto=format',
     title: 'ناسا تعلن عن اكتشاف مياه سائلة تحت سطح القمر أوروبا بتأكيد غير مسبوق',
-    author: 'تحرير Science Lab', avatar: 'تح', date: '21 يوليو 2026',
+    author: 'تحرير The Science Lab', avatar: 'تح', date: '21 يوليو 2026',
     desc: 'أعلنت ناسا عن أدلة قاطعة على وجود محيط مائي سائل تحت جليد قمر المشتري أوروبا، مما يعزز احتمالية وجود حياة في المنظومة الشمسية.',
-    fullDesc: `<p>في خطوة وصفها علماء الفلك بـ«اللحظة الكوبرنيكية»، أعلنت وكالة ناسا الأمريكية اليوم عن أدلة قاطعة لا تقبل الجدل على وجود محيط مائي سائل ضخم تحت سطح القمر أوروبا، أحد أكبر أقمار المشتري، مما يُعيد رسم خريطة البحث عن الحياة خارج الأرض جذرياً.</p>
+    fullDesc: `<p>في خطوة وصفها علماء الفلك بـ«اللحظة الكوبرنيكية»، أعلنت وكالة ناسا الأمريكية اليوم عن أدلة قاطعة لا تقبل الجدل على وجود محيط مائي سائل ضخم تحت سطح القمر أوروبا.</p>
 <h3>طبيعة الدليل</h3>
-<p>اعتمدت ناسا على بيانات مسبار Europa Clipper الذي أتمّ 28 تحليقة قريبة من سطح القمر خلال الأشهر الستة الماضية. وقد رصدت أجهزة مطياف الكتلة الأيونية كميات كبيرة من جزيئات الماء والهيدروجين الجزيئي والأكسجين المُطلقة من شقوق سطح القمر، مع توقيع كيميائي يُشير بوضوح إلى عمليات أكسدة وأختزال حيوية محتملة.</p>
-<blockquote>«ليس الأمر مجرد احتمال بعيد — البيانات تُخبرنا بأن المحيط حقيقي وضخم وربما دافئ بما يكفي لاستضافة حياة ميكروبية.» — الدكتورة جنيفر هودجز، المديرة العلمية لبعثة Europa Clipper</blockquote>
+<p>اعتمدت ناسا على بيانات مسبار Europa Clipper الذي أتمّ 28 تحليقة قريبة من سطح القمر. وقد رصدت أجهزة مطياف الكتلة الأيونية كميات كبيرة من جزيئات الماء والهيدروجين الجزيئي والأكسجين.</p>
+<blockquote>«ليس الأمر مجرد احتمال بعيد — البيانات تُخبرنا بأن المحيط حقيقي وضخم وربما دافئ بما يكفي لاستضافة حياة ميكروبية.» — الدكتورة جنيفر هودجز</blockquote>
 <h3>الخطوات القادمة</h3>
-<p>أعلنت ناسا عزمها على تسريع بعثة Europa Lander المخطّطة، مع توجيه المسبار نحو مناطق النشاط الحراري المرصودة حديثاً. كما أكدت وكالة الفضاء الأوروبية (ESA) أن مسبارها JUICE سيُعدّل مساره لإجراء تحليقات تكميلية بمنهجية متنسّقة مع Europa Clipper.</p>`
+<p>أعلنت ناسا عزمها على تسريع بعثة Europa Lander المخطّطة، مع توجيه المسبار نحو مناطق النشاط الحراري المرصودة حديثاً.</p>`
   },
   {
     id: 2, type: 'news', cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399',
+    icon: 'ico-news', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=900&q=85&fit=crop&auto=format',
     title: 'اختراق تقني: خلايا شمسية بكفاءة 47% تحطم الرقم القياسي العالمي',
-    author: 'تحرير Science Lab', avatar: 'تح', date: '19 يوليو 2026',
+    author: 'تحرير The Science Lab', avatar: 'تح', date: '19 يوليو 2026',
     desc: 'حقق فريق بحثي سويسري-ياباني كفاءة 47.1% في تحويل الطاقة الشمسية باستخدام تقنية خلايا البيروفسكايت متعددة الطبقات.',
-    fullDesc: `<p>كسر فريق بحثي مشترك من المعهد الفيدرالي السويسري للتكنولوجيا (EPFL) وجامعة طوكيو الحاجز النفسي الذي ظلّ شبه مستحيل لعقدين: الوصول إلى كفاءة 47% في تحويل الطاقة الشمسية إلى كهرباء، مُحطِّمةً الرقم القياسي السابق البالغ 39.5%.</p>
+    fullDesc: `<p>كسر فريق بحثي مشترك من المعهد الفيدرالي السويسري للتكنولوجيا (EPFL) وجامعة طوكيو حاجز الـ47% في تحويل الطاقة الشمسية.</p>
 <h3>سر الاختراق: الطبقات الثلاث</h3>
-<p>يعتمد التصميم الجديد على ثلاث طبقات شبه موصلة متراصّة بدقة نانومترية: طبقة من البيروفسكايت عالي الكفاءة (CsFAPbIBr)، وطبقة من السيليكون المتشقّق (c-Si)، وطبقة مركّبة من كبريتيد الغاليوم والإنديوم (CIGS). تُغطي كل طبقة نطاقاً مختلفاً من الطيف الشمسي، مما يُعظّم استيعاب الضوء الكلي.</p>
-<blockquote>«عندما رأينا الرقم 47.1% على الشاشة، ظننا أن هناك خطأ في الجهاز. أعدنا القياس 11 مرة قبل أن نُصدّق.» — البروفيسور أكيرا تاناكا، جامعة طوكيو</blockquote>
+<p>يعتمد التصميم الجديد على ثلاث طبقات شبه موصلة متراصّة بدقة نانومترية، تُغطي كل طبقة نطاقاً مختلفاً من الطيف الشمسي.</p>
+<blockquote>«عندما رأينا الرقم 47.1% على الشاشة، ظننا أن هناك خطأ في الجهاز. أعدنا القياس 11 مرة قبل أن نُصدّق.» — البروفيسور أكيرا تاناكا</blockquote>
 <h3>التحديات أمام التسويق</h3>
-<p>رغم الإنجاز الباهر، لا تزال ثمة عقبات أمام التطبيق التجاري: تكلفة التصنيع مرتفعة حالياً بنحو 8 أضعاف الخلايا السيليكونية التقليدية، وعمر تشغيل البيروفسكايت لا يتجاوز 12 سنة. يعمل الفريق على حلّ هذين التحديين بالتوازي مع خطة للطرح التجاري خلال 5 سنوات.</p>`
+<p>رغم الإنجاز الباهر، لا تزال ثمة عقبات أمام التطبيق التجاري. يعمل الفريق على حلّ تحدي التكلفة وعمر التشغيل بالتوازي مع خطة للطرح التجاري خلال 5 سنوات.</p>`
   },
   {
     id: 3, type: 'news', cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399',
+    icon: 'ico-news', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=900&q=85&fit=crop&auto=format',
     title: 'اكتشاف آلية جديدة كلياً لمقاومة الإنسان للشيخوخة على المستوى الخلوي',
-    author: 'تحرير Science Lab', avatar: 'تح', date: '16 يوليو 2026',
+    author: 'تحرير The Science Lab', avatar: 'تح', date: '16 يوليو 2026',
     desc: 'كشف علماء جامعة هارفارد عن بروتين SIRT7 المعدّل يعيد برمجة الخلايا الشائخة ويطيل عمرها الوظيفي بنسبة 300% في نماذج الفئران.',
-    fullDesc: `<p>في اكتشاف قد يُعيد تعريف حدود الشيخوخة البشرية، كشف باحثون في مختبر David Sinclair بجامعة هارفارد عن بروتين معدَّل جينياً من عائلة Sirtuins يُعيد برمجة الخلايا الشائخة إلى حالتها الوظيفية بكفاءة لم تكن متاحة من قبل.</p>
+    fullDesc: `<p>في اكتشاف قد يُعيد تعريف حدود الشيخوخة البشرية، كشف باحثون في جامعة هارفارد عن بروتين معدَّل جينياً من عائلة Sirtuins يُعيد برمجة الخلايا الشائخة إلى حالتها الوظيفية.</p>
 <h3>آلية SIRT7-Δ</h3>
-<p>البروتين المُكتشف، المُسمّى SIRT7-Δ، يعمل على إعادة ضبط ما يُعرف بـ«الساعة الإيبيجينية» داخل الخلية — وهي نمط الميثيلة على الحمض النووي الذي يُحدّد «عمر» الخلية الوظيفي. بحقن جرعة واحدة من النقلات الجينية الحاملة لتعليمات تصنيع SIRT7-Δ في فئران مُعمَّرة (ما يعادل 70 عاماً بشرياً)، نجح الفريق في إعادة وظائف القلب والعضلات والدماغ إلى مستويات الفئران في منتصف العمر.</p>
-<blockquote>«لأول مرة في تاريخ أبحاث الشيخوخة، نُشاهد انعكاساً حقيقياً وقابلاً للقياس للشيخوخة الخلوية في نظام ثديي حي — وليس مجرد إبطاء لها.» — البروفيسور David Sinclair</blockquote>
+<p>البروتين المُكتشف يعمل على إعادة ضبط «الساعة الإيبيجينية» داخل الخلية. بحقن جرعة واحدة في فئران مُعمَّرة، نجح الفريق في إعادة وظائف القلب والعضلات والدماغ إلى مستويات الفئران في منتصف العمر.</p>
+<blockquote>«لأول مرة في تاريخ أبحاث الشيخوخة، نُشاهد انعكاساً حقيقياً وقابلاً للقياس للشيخوخة الخلوية في نظام ثديي حي.» — البروفيسور David Sinclair</blockquote>
 <h3>الطريق إلى التطبيق البشري</h3>
-<p>حصل الفريق على موافقة مبدئية من إدارة FDA لإجراء دراسة Phase 0 على بشر خلال عام 2027. في الوقت ذاته، تُجري ثلاث شركات ناشئة مرخّصة من هارفارد تجارب موازية لتطوير صيغ إعطاء أكثر عملية وأماناً للاستخدام البشري.</p>`
+<p>حصل الفريق على موافقة مبدئية من إدارة FDA لإجراء دراسة Phase 0 على بشر خلال عام 2027.</p>`
   },
   {
     id: 4, type: 'news', cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399',
+    icon: 'ico-news', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&q=85&fit=crop&auto=format',
     title: 'الكمبيوتر الكمومي يحل مسألة تشفير RSA-2048 في 8 ثوانٍ فقط',
-    author: 'تحرير Science Lab', avatar: 'تح', date: '12 يوليو 2026',
+    author: 'تحرير The Science Lab', avatar: 'تح', date: '12 يوليو 2026',
     desc: 'في منعطف تاريخي لأمن المعلومات، كسر معالج الكم من Google ذو 1000 كيوبت تشفير RSA-2048 مطلقاً سباق تطوير معايير تشفير ما بعد الكم.',
-    fullDesc: `<p>أعلنت Google Quantum AI في ورقة بحثية مُقدَّمة إلى مجلة Nature عن إنجاز وصفه خبراء أمن المعلومات بـ«يوم Q» — اليوم الذي طالما تخشاه مجتمعات التشفير العالمية: كسر خوارزمية RSA-2048 في زمن قياسي بالغ 8.3 ثوانٍ.</p>
+    fullDesc: `<p>أعلنت Google Quantum AI في ورقة بحثية مُقدَّمة إلى مجلة Nature عن إنجاز وصفه خبراء أمن المعلومات بـ«يوم Q»: كسر خوارزمية RSA-2048 في زمن قياسي بالغ 8.3 ثوانٍ.</p>
 <h3>الآلة وراء الإنجاز</h3>
-<p>نفّذت المهمة معالجة «Willow II» الكمومية التي تضم 1,024 كيوبت نوعياً (logical qubits) مُصحَّحة الخطأ، ما يُعادل فعلياً الملايين من الكيوبتات الفيزيائية الخام. استخدم المعالج خوارزمية Shor المُحسَّنة لتحليل عدد أولي بطول 617 رقماً — وهو جوهر تشفير RSA-2048 — في زمن كان يُحتاج فيه نظرياً إلى مليارات السنين بالحوسبة الكلاسيكية.</p>
-<blockquote>«هذا لا يعني أن الإنترنت في خطر فوري — معظم الأنظمة ليست عرضة للاختراق اليوم. لكنه تحذير صريح: الانتقال إلى تشفير ما بعد الكم أصبح ضرورة لا تأجيل فيها.» — بروس شناير، خبير أمن المعلومات</blockquote>
+<p>نفّذت المهمة معالجة «Willow II» الكمومية التي تضم 1,024 كيوبت نوعياً مُصحَّحة الخطأ. استخدم المعالج خوارزمية Shor المُحسَّنة لتحليل عدد أولي بطول 617 رقماً.</p>
+<blockquote>«هذا لا يعني أن الإنترنت في خطر فوري. لكنه تحذير صريح: الانتقال إلى تشفير ما بعد الكم أصبح ضرورة لا تأجيل فيها.» — بروس شناير</blockquote>
 <h3>الاستجابة العالمية</h3>
-<p>استنفرت الوكالات الحكومية ومؤسسات الأمن السيبراني حول العالم، وأعلن المعهد الوطني للمعايير والتكنولوجيا (NIST) تسريع تبني معايير التشفير الكمومي المقاوم (PQC) التي أقرّها عام 2024، مع إلزام الوكالات الفيدرالية الأمريكية بالانتقال الكامل بحلول 2028.</p>`
+<p>استنفرت الوكالات الحكومية ومؤسسات الأمن السيبراني حول العالم، وأعلن NIST تسريع تبني معايير التشفير الكمومي المقاوم (PQC).</p>`
   },
   {
     id: 5, type: 'news', cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399',
+    icon: 'ico-news', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1628863353691-0071c8c1874c?w=900&q=85&fit=crop&auto=format',
     title: 'مواد فائقة التوصيل عند درجة حرارة الغرفة تخرج من المختبر إلى التطبيق',
-    author: 'تحرير Science Lab', avatar: 'تح', date: '8 يوليو 2026',
+    author: 'تحرير The Science Lab', avatar: 'تح', date: '8 يوليو 2026',
     desc: 'نجح فريق كوري في إنتاج كميات صناعية من مادة LK-99 المحسّنة بفائقية التوصيل الكاملة عند 28°م، بداية ثورة حقيقية في الطاقة.',
-    fullDesc: `<p>بعد سنوات من الجدل العلمي والنتائج المتضاربة، أعلن فريق من معهد علوم المواد المتقدمة في سيئول عن إنتاج كميات صناعية قابلة للاستخدام من مادة LK-99 المُحسَّنة التي تُظهر فائقية توصيل كاملة عند 28 درجة مئوية وضغط الغرفة.</p>
-<h3>سر النجاح بعد ثلاث سنوات من الفشل</h3>
-<p>كانت المادة الأصلية المُعلن عنها عام 2023 تُعاني من شوائب تُلغي خاصية فائقة التوصيل في معظم العينات. نجح الفريق الكوري الجديد في تطوير بروتوكول تنقية بالتبخير التدريجي في فراغ عالٍ (High-Vacuum Fractional Deposition) يُحقق نقاوة 99.97%، وهو العتبة الحرجة التي أثبتت التجارب أنها ضرورية لظهور فائقية التوصيل الكاملة.</p>
+    fullDesc: `<p>بعد سنوات من الجدل العلمي، أعلن فريق من معهد علوم المواد المتقدمة في سيئول عن إنتاج كميات صناعية من مادة LK-99 المُحسَّنة التي تُظهر فائقية توصيل كاملة عند 28 درجة مئوية.</p>
+<h3>سر النجاح</h3>
+<p>نجح الفريق في تطوير بروتوكول تنقية بالتبخير التدريجي في فراغ عالٍ يُحقق نقاوة 99.97%، وهي العتبة الحرجة الضرورية لظهور فائقية التوصيل الكاملة.</p>
 <blockquote>«النقاوة كانت المشكلة دائماً. بمجرد تجاوز عتبة 99.95%، تنتقل المادة فجأة إلى حالة فائقة التوصيل كأنها تنتظر فقط الإذن.» — البروفيسورة جي-يون كيم</blockquote>
 <h3>التطبيقات والجدول الزمني</h3>
-<p>وقّعت شركة Samsung وLG للطاقة اتفاقيات شراكة بحثية مع الفريق. أبرز التطبيقات المتوقعة: خطوط نقل الكهرباء الخالية من الفاقد، ومحركات كهرومغناطيسية بكفاءة 100%، ومعالجات كمومية تعمل دون تبريد مكلف. الإنتاج التجاري المتوقع بحلول منتصف 2028.</p>`
+<p>وقّعت شركة Samsung وLG اتفاقيات شراكة بحثية مع الفريق. الإنتاج التجاري المتوقع بحلول منتصف 2028.</p>`
   },
   {
     id: 6, type: 'news', cat: 'news', catLabel: 'أخبار',
-    icon: 'ico-news', iconColor: '#34D399',
+    icon: 'ico-news', iconColor: '#059669',
     img: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=900&q=85&fit=crop&auto=format',
     title: 'علماء يرسمون أول خريطة كاملة لتوصيلات الدماغ البشري بدقة النانومتر',
-    author: 'تحرير Science Lab', avatar: 'تح', date: '4 يوليو 2026',
+    author: 'تحرير The Science Lab', avatar: 'تح', date: '4 يوليو 2026',
     desc: 'مشروع Human Connectome Project يُكمل أولى خرائط الدماغ الشاملة التي تربط 86 مليار خلية عصبية بدقة 1 نانومتر.',
-    fullDesc: `<p>أعلن مشروع Human Connectome Project، بتمويل مشترك من مؤسسة Gates وNIH وعشر جامعات دولية، عن اكتمال أول خريطة شاملة ثلاثية الأبعاد لتوصيلات الدماغ البشري كاملاً — بما في ذلك 86 مليار خلية عصبية و100 تريليون نقطة تشابك (Synapse) — بدقة وصلت إلى النانومتر الواحد.</p>
+    fullDesc: `<p>أعلن مشروع Human Connectome Project عن اكتمال أول خريطة شاملة ثلاثية الأبعاد لتوصيلات الدماغ البشري كاملاً — بما في ذلك 86 مليار خلية عصبية و100 تريليون نقطة تشابك — بدقة وصلت إلى النانومتر الواحد.</p>
 <h3>حجم العمل وتحديات البيانات</h3>
-<p>استغرق المشروع 11 سنة من العمل المتواصل. تم تقطيع دماغ واحد إلى 225 مليون شريحة رقيقة بسماكة 30 نانومتراً، ثم تصويرها بمجاهر إلكترونية من الجيل الجديد. المعالجة وإعادة البناء ثلاثي الأبعاد استلزمت نحو 1.4 إكسابايت من البيانات (1.4 مليون تيرابايت)، ولم يكن ذلك ممكناً قبل ظهور نماذج الذكاء الاصطناعي المتخصصة في التجزئة الخلوية.</p>
-<blockquote>«نحن نُقدّم للبشرية اليوم أكثر الخرائط تعقيداً في تاريخ العلم — خريطة الكون الداخلي للإنسان. ما يخبئه هذا الكون لا يزال يتجاوز خيالنا.» — الدكتور جيف ليكتمان، هارفارد</blockquote>
+<p>استغرق المشروع 11 سنة من العمل المتواصل. المعالجة وإعادة البناء ثلاثي الأبعاد استلزمت نحو 1.4 إكسابايت من البيانات.</p>
+<blockquote>«نحن نُقدّم للبشرية اليوم أكثر الخرائط تعقيداً في تاريخ العلم — خريطة الكون الداخلي للإنسان.» — الدكتور جيف ليكتمان، هارفارد</blockquote>
 <h3>الثمار العلمية والطبية</h3>
-<p>في الأشهر القليلة منذ نشر الخريطة، تمكّن باحثون من تحديد الدوائر العصبية المسؤولة بدقة عن الذاكرة العاملة وآليات الإدمان وبعض أنماط التوحّد — اكتشافات ظلّت غامضة عقوداً. تتوقع الجمعية الأمريكية لعلم الأعصاب أن تُفضي هذه الخريطة إلى جيل جديد من الأدوية العصبية خلال السنوات العشر القادمة.</p>`
+<p>تمكّن باحثون من تحديد الدوائر العصبية المسؤولة بدقة عن الذاكرة العاملة وآليات الإدمان وبعض أنماط التوحّد.</p>`
   }
 ];
 
@@ -2362,8 +2402,8 @@ function buildCard(item) {
            class="card-img"
            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
            loading="lazy">
-      <div class="card-img-placeholder" style="display:none;background:linear-gradient(135deg,#0B1C3A,#061226)">
-        <svg width="60" height="60" viewBox="0 0 48 48" style="opacity:0.45"><use href="#${item.icon}"/></svg>
+      <div class="card-img-placeholder" style="display:none;">
+        <svg width="56" height="56" viewBox="0 0 48 48" style="opacity:0.25"><use href="#${item.icon}"/></svg>
       </div>
       <span class="card-cat ${catClass}" style="position:absolute;top:12px;right:12px;">${item.catLabel}</span>
     </div>
@@ -2409,7 +2449,6 @@ function navigate(page) {
   if (sec) sec.classList.add('active');
   if (nav) nav.classList.add('active');
 
-  // Show real counts in section headers
   if (page === 'reports') {
     const el = document.getElementById('reports-count');
     if (el) el.textContent = REPORTS.length + ' تقرير';
@@ -2431,7 +2470,6 @@ function openDetail(id, type) {
   const item  = items.find(i => i.id === id);
   if (!item) return;
 
-  // remember which section to go back to
   const active = document.querySelector('.section.active');
   _prevSection = active ? active.id.replace('sec-', '') : 'home';
 
@@ -2460,11 +2498,9 @@ function openDetail(id, type) {
   }[_prevSection] || 'العودة';
   document.getElementById('detailBackLabel').textContent = backLabel;
 
-  // Build related (same type, exclude current)
   const related = items.filter(i => i.id !== id).slice(0, 3);
   renderGrid('detailRelatedGrid', related);
 
-  // Navigate without touching nav highlight
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('sec-detail').classList.add('active');
@@ -2507,22 +2543,6 @@ document.getElementById('reports-tabs').addEventListener('click', function(e) {
   const filtered = cat === 'all' ? REPORTS : REPORTS.filter(r => r.cat === cat);
   renderGrid('reports-grid', filtered);
 });
-
-/* ═══════════════════════════════════════════
-   COUNTER ANIMATION
-═══════════════════════════════════════════ */
-function animateCounters() {
-  document.querySelectorAll('[data-counter]').forEach(el => {
-    const target = parseInt(el.dataset.counter);
-    let current  = 0;
-    const step   = Math.ceil(target / 60);
-    const timer  = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = current.toLocaleString('ar-EG');
-      if (current >= target) clearInterval(timer);
-    }, 20);
-  });
-}
 
 /* ═══════════════════════════════════════════
    WELCOME COOKIE
@@ -2589,7 +2609,7 @@ function showToast(msg, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.innerHTML = `
-    <svg viewBox="0 0 48 48" width="20" height="20" style="color:var(--${type==='success'?'green':type==='error'?'red':'cyan'})">
+    <svg viewBox="0 0 48 48" width="20" height="20">
       <use href="${iconMap[type]}"/>
     </svg>
     <span>${msg}</span>`;
@@ -2603,59 +2623,15 @@ function showToast(msg, type = 'info') {
 }
 
 /* ═══════════════════════════════════════════
-   STARFIELD
-═══════════════════════════════════════════ */
-(function() {
-  const canvas = document.getElementById('starfield');
-  const ctx    = canvas.getContext('2d');
-  let W, H, stars = [];
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  function initStars(n) {
-    stars = [];
-    for (let i = 0; i < n; i++) {
-      stars.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: Math.random() * 1.2 + 0.2,
-        a: Math.random(),
-        da: (Math.random() - 0.5) * 0.005,
-        dx: (Math.random() - 0.5) * 0.05
-      });
-    }
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    stars.forEach(s => {
-      s.a  = Math.max(0.05, Math.min(1, s.a + s.da));
-      if (s.a <= 0.05 || s.a >= 1) s.da *= -1;
-      s.x += s.dx;
-      if (s.x < 0) s.x = W;
-      if (s.x > W) s.x = 0;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(180,210,255,${s.a})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  }
-
-  resize();
-  initStars(220);
-  draw();
-  window.addEventListener('resize', () => { resize(); initStars(220); });
-})();
-
-/* ═══════════════════════════════════════════
    BOOT
 ═══════════════════════════════════════════ */
 checkWelcome();
-animateCounters();
+
+// Hide loader bar after animation
+setTimeout(() => {
+  const bar = document.getElementById('page-loader-bar');
+  if (bar) bar.style.display = 'none';
+}, 1600);
 </script>
 </body>
 </html>
