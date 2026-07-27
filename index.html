@@ -332,15 +332,22 @@ body {
 .section {
   display: none;
   padding: 40px 48px 60px;
-  animation: fadeSlideIn 0.35s ease both;
   min-height: calc(100vh - var(--topbar-h));
 }
 
-.section.active { display: block; }
+.section.active {
+  display: block;
+  opacity: 1;
+  animation: fadeSlideIn 0.3s ease forwards;
+}
 
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section.active { animation: none; }
 }
 
 /* ═══════════════════════════════════════════
@@ -2428,7 +2435,7 @@ function renderGrid(containerId, items) {
 }
 
 /* ═══════════════════════════════════════════
-   INIT GRIDS
+   INIT GRIDS — called from DOMContentLoaded
 ═══════════════════════════════════════════ */
 function initGrids() {
   renderGrid('home-reports-grid', REPORTS.slice(0, 3));
@@ -2534,18 +2541,18 @@ function closeSidebar() {
 }
 
 /* ═══════════════════════════════════════════
-   REPORT FILTER TABS
+   REPORT FILTER TABS — called from DOMContentLoaded
 ═══════════════════════════════════════════ */
-function initReportTabs() {
-  const tabsEl = document.getElementById('reports-tabs');
+function initReportsTabs() {
+  var tabsEl = document.getElementById('reports-tabs');
   if (!tabsEl) return;
   tabsEl.addEventListener('click', function(e) {
-    const tab = e.target.closest('.filter-tab');
+    var tab = e.target.closest('.filter-tab');
     if (!tab) return;
-    this.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    this.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
-    const cat = tab.dataset.cat;
-    const filtered = cat === 'all' ? REPORTS : REPORTS.filter(r => r.cat === cat);
+    var cat = tab.dataset.cat;
+    var filtered = cat === 'all' ? REPORTS : REPORTS.filter(function(r) { return r.cat === cat; });
     renderGrid('reports-grid', filtered);
   });
 }
@@ -2633,12 +2640,12 @@ function showToast(msg, type = 'info') {
 ═══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
   initGrids();
-  initReportTabs();
+  initReportsTabs();
   checkWelcome();
 
   // Hide loader bar after animation
-  setTimeout(() => {
-    const bar = document.getElementById('page-loader-bar');
+  setTimeout(function() {
+    var bar = document.getElementById('page-loader-bar');
     if (bar) bar.style.display = 'none';
   }, 1600);
 });
