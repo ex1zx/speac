@@ -2175,22 +2175,22 @@ body {
   flex-shrink: 1;
   min-width: 0;
 }
-/* Scrollable rejected badge */
-.contrib-status-scrollable {
+/* Status badge wrapper inside card footer (my-contributions) */
+.mycontrib-status-wrap {
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
-  cursor: grab;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  max-width: 200px;
-  flex-shrink: 1;
+  cursor: grab;
 }
-.contrib-status-scrollable::-webkit-scrollbar { display: none; }
-.contrib-status-scrollable:active { cursor: grabbing; }
-.contrib-status-scrollable .contrib-status-inner {
+.mycontrib-status-wrap::-webkit-scrollbar { display: none; }
+.mycontrib-status-wrap:active { cursor: grabbing; }
+.mycontrib-status-wrap .contrib-status {
   display: inline-flex;
-  align-items: center;
-  gap: 7px;
   white-space: nowrap;
+  width: max-content;
+  max-width: none;
 }
 
 .contrib-status-dot {
@@ -4101,37 +4101,59 @@ function buildStatusBadge(item) {
 }
 
 function buildMyContribCard(item) {
-  const base = buildCard(item);
+  const catClass = {
+    physics:'cat-physics', bio:'cat-bio', chem:'cat-chem',
+    astro:'cat-astro', ai:'cat-ai', news:'cat-news'
+  }[item.cat] || 'cat-news';
 
-  // Inline badge placed in card footer (no absolute positioning)
-  let badge = '';
+  // Build status badge HTML
+  let statusHTML = '';
   if (item.status === 'pending') {
-    badge = '<div class="contrib-status contrib-status-pending" style="margin:0;">'
-          + '<span class="contrib-status-dot"></span>قيد المعالجة</div>';
+    statusHTML = '<div class="contrib-status contrib-status-pending">'
+               + '<span class="contrib-status-dot"></span>قيد المعالجة</div>';
   } else if (item.status === 'accepted') {
-    badge = '<div class="contrib-status contrib-status-accepted" style="margin:0;">'
-          + '<span class="contrib-status-dot"></span>تم القبول</div>';
+    statusHTML = '<div class="contrib-status contrib-status-accepted">'
+               + '<span class="contrib-status-dot"></span>تم القبول</div>';
   } else if (item.status === 'rejected') {
-    // Reason is inline inside the badge; badge is draggable/scrollable if text is long
-    const reasonText = item.rejectReason ? ' : ' + escHtml(item.rejectReason) : '';
-    badge = '<div class="contrib-status contrib-status-rejected contrib-status-scrollable" style="margin:0;" '
-          + 'onmousedown="_badgeDragStart(event)" ontouchstart="_badgeTouchStart(event)">'
-          + '<div class="contrib-status-inner">'
-          + '<span class="contrib-status-dot" style="flex-shrink:0;"></span>'
-          + 'مرفوض' + reasonText
-          + '</div></div>';
+    const reason = item.rejectReason ? ' : ' + escHtml(item.rejectReason) : '';
+    statusHTML = '<div class="contrib-status contrib-status-rejected">'
+               + '<span class="contrib-status-dot" style="flex-shrink:0;"></span>'
+               + '<span style="white-space:nowrap;">مرفوض' + reason + '</span>'
+               + '</div>';
   }
 
-  // Replace card-footer: badge on one side, read-more button on other
-  const newFooter = '<div class="card-footer" style="justify-content:space-between;align-items:center;gap:8px;overflow:hidden;">'
-    + badge
-    + '<button class="card-read-btn" onclick="event.stopPropagation();openDetail(' + item.id + ',\'' + item.type + '\')">قراءة المزيد</button>'
-    + '</div>';
+  const avatarHTML = item.authorImg
+    ? `<img src="${item.authorImg}" class="card-avatar" style="object-fit:cover;" onerror="this.style.display='none';this.nextSibling.style.display='flex';" loading="lazy"><div class="card-avatar" style="display:none">${item.avatar}</div>`
+    : `<div class="card-avatar">${item.avatar}</div>`;
 
-  return base.replace(
-    /<div class="card-footer" style="justify-content:flex-end;">\s*<button class="card-read-btn"[^>]*>قراءة المزيد<\/button>\s*<\/div>/,
-    newFooter
-  );
+  return `
+  <div class="card" onclick="openDetail(${item.id},'${item.type}')">
+    <div style="position:relative;overflow:hidden;">
+      <img src="${item.img}" alt="${item.title}"
+           class="card-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+           loading="lazy">
+      <div class="card-img-placeholder" style="display:none;">
+        <svg width="56" height="56" viewBox="0 0 48 48" style="opacity:0.25"><use href="#${item.icon}"/></svg>
+      </div>
+      <span class="card-cat ${catClass}" style="position:absolute;top:12px;right:12px;">${item.catLabel}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        ${avatarHTML}
+        <span class="card-author">${item.author}</span>
+        <span class="card-date">${item.date}</span>
+      </div>
+      <div class="card-title">${item.title}</div>
+      <div class="card-desc">${item.desc}</div>
+    </div>
+    <div class="card-footer" style="justify-content:space-between;align-items:center;gap:8px;">
+      <div class="mycontrib-status-wrap" onmousedown="_badgeDragStart(event)" ontouchstart="event.stopPropagation()">
+        ${statusHTML}
+      </div>
+      <button class="card-read-btn" style="flex-shrink:0;" onclick="event.stopPropagation();openDetail(${item.id},'${item.type}')">قراءة المزيد</button>
+    </div>
+  </div>`;
 }
 
 function renderMyContributions(type) {
