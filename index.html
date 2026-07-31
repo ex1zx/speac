@@ -2171,6 +2171,26 @@ body {
   margin-bottom: -10px;
   width: fit-content;
   border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+}
+/* Scrollable rejected badge */
+.contrib-status-scrollable {
+  overflow-x: auto;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  max-width: 200px;
+  flex-shrink: 1;
+}
+.contrib-status-scrollable::-webkit-scrollbar { display: none; }
+.contrib-status-scrollable:active { cursor: grabbing; }
+.contrib-status-scrollable .contrib-status-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
 }
 
 .contrib-status-dot {
@@ -2181,33 +2201,44 @@ body {
 }
 
 .contrib-status-pending {
-  background: rgba(217,119,6,0.1);
-  border-color: rgba(217,119,6,0.3);
-  color: #B45309;
+  background: #1a1a1a;
+  border-color: #000;
+  color: #fff;
 }
 .contrib-status-pending .contrib-status-dot {
-  background: #D97706;
+  background: #bbb;
   animation: pulse 2s ease-in-out infinite;
 }
 
 .contrib-status-accepted {
-  background: rgba(5,150,105,0.1);
-  border-color: rgba(5,150,105,0.3);
-  color: #047857;
+  background: #059669;
+  border-color: #047857;
+  color: #fff;
 }
-.contrib-status-accepted .contrib-status-dot { background: #059669; }
+.contrib-status-accepted .contrib-status-dot { background: rgba(255,255,255,0.8); }
 
 .contrib-status-rejected {
-  background: rgba(204,18,18,0.08);
-  border-color: rgba(204,18,18,0.25);
-  color: var(--red2);
+  background: #CC1212;
+  border-color: #A80E0E;
+  color: #fff;
 }
-.contrib-status-rejected .contrib-status-dot { background: var(--red); }
+.contrib-status-rejected .contrib-status-dot { background: rgba(255,255,255,0.8); }
 
 .contrib-reject-reason {
   font-weight: 500;
   opacity: 0.85;
   font-size: 0.73rem;
+}
+
+/* (legacy — no longer rendered) */
+
+/* Admin action buttons at bottom of detail page */
+.detail-admin-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 1100px) { .cards-grid-contrib { grid-template-columns: repeat(2, 1fr); } }
@@ -3256,6 +3287,10 @@ body {
 
     <!-- ═══════════════ SECTION: MY NEWS<!-- ═══════════════ SECTION: MY NEWS ═══════════════ -->
     <div class="section" id="sec-my-news">
+      <button class="detail-back" onclick="navigate('account')" style="margin-bottom:20px;">
+        <svg viewBox="0 0 24 24"><use href="#ico-arrow"/></svg>
+        <span>العودة إلى حسابي</span>
+      </button>
       <div class="section-header">
         <div class="section-eyebrow">مساهماتي</div>
         <h2 class="section-title">أخباري العلمية</h2>
@@ -3266,6 +3301,10 @@ body {
 
     <!-- ═══════════════ SECTION: MY REPORTS ═══════════════ -->
     <div class="section" id="sec-my-reports">
+      <button class="detail-back" onclick="navigate('account')" style="margin-bottom:20px;">
+        <svg viewBox="0 0 24 24"><use href="#ico-arrow"/></svg>
+        <span>العودة إلى حسابي</span>
+      </button>
       <div class="section-header">
         <div class="section-eyebrow">مساهماتي</div>
         <h2 class="section-title">تقاريري العلمية</h2>
@@ -3291,7 +3330,8 @@ body {
         </div>
       </div>
       <div class="detail-body" id="detailBody"></div>
-      <div class="detail-related">
+      <div id="detailAdminActions" class="detail-admin-actions" style="display:none;"></div>
+      <div class="detail-related" id="detailRelatedSection">
         <div class="detail-related-title">
           <span></span>
           مقالات ذات صلة
@@ -3785,12 +3825,20 @@ function openDetail(id, type) {
     news:       'العودة إلى الأخبار',
     home:       'العودة إلى الرئيسية',
     'my-reports': 'العودة إلى تقاريري',
-    'my-news':    'العودة إلى أخباري'
+    'my-news':    'العودة إلى أخباري',
+    'admin-contrib-reports': 'العودة إلى التقارير',
+    'admin-contrib-news':    'العودة إلى الأخبار'
   }[_prevSection] || 'العودة';
   document.getElementById('detailBackLabel').textContent = backLabel;
 
   const related = items.filter(i => i.id !== id).slice(0, 3);
   renderGrid('detailRelatedGrid', related);
+
+  // Reset admin panel for regular detail view
+  const adminActionsEl = document.getElementById('detailAdminActions');
+  if (adminActionsEl) { adminActionsEl.style.display = 'none'; adminActionsEl.innerHTML = ''; }
+  const relatedEl = document.getElementById('detailRelatedSection');
+  if (relatedEl) relatedEl.style.display = '';
 
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -4040,24 +4088,50 @@ function updatePassword(e) {
    MY CONTRIBUTIONS
 ═══════════════════════════════════════════ */
 function buildStatusBadge(item) {
+  // Used for admin overlay badges on image
   const base = 'style="position:absolute;top:10px;left:10px;z-index:3;margin:0;"';
   if (item.status === 'pending') {
     return '<div class="contrib-status contrib-status-pending" ' + base + '><span class="contrib-status-dot"></span>قيد المعالجة</div>';
   } else if (item.status === 'accepted') {
     return '<div class="contrib-status contrib-status-accepted" ' + base + '><span class="contrib-status-dot"></span>تم القبول والنشر</div>';
   } else if (item.status === 'rejected') {
-    return '<div class="contrib-status contrib-status-rejected" ' + base + '><span class="contrib-status-dot"></span>تم الرفض' +
-      (item.rejectReason ? '<br><span class="contrib-reject-reason">السبب: ' + item.rejectReason + '</span>' : '') + '</div>';
+    return '<div class="contrib-status contrib-status-rejected" ' + base + '><span class="contrib-status-dot"></span>مرفوض</div>';
   }
   return '';
 }
 
 function buildMyContribCard(item) {
-  const card = buildCard(item);
-  const badge = buildStatusBadge(item);
-  if (!badge) return card;
-  // Inject badge inside the image wrapper (before category badge)
-  return card.replace('<span class="card-cat', badge + '<span class="card-cat');
+  const base = buildCard(item);
+
+  // Inline badge placed in card footer (no absolute positioning)
+  let badge = '';
+  if (item.status === 'pending') {
+    badge = '<div class="contrib-status contrib-status-pending" style="margin:0;">'
+          + '<span class="contrib-status-dot"></span>قيد المعالجة</div>';
+  } else if (item.status === 'accepted') {
+    badge = '<div class="contrib-status contrib-status-accepted" style="margin:0;">'
+          + '<span class="contrib-status-dot"></span>تم القبول</div>';
+  } else if (item.status === 'rejected') {
+    // Reason is inline inside the badge; badge is draggable/scrollable if text is long
+    const reasonText = item.rejectReason ? ' : ' + escHtml(item.rejectReason) : '';
+    badge = '<div class="contrib-status contrib-status-rejected contrib-status-scrollable" style="margin:0;" '
+          + 'onmousedown="_badgeDragStart(event)" ontouchstart="_badgeTouchStart(event)">'
+          + '<div class="contrib-status-inner">'
+          + '<span class="contrib-status-dot" style="flex-shrink:0;"></span>'
+          + 'مرفوض' + reasonText
+          + '</div></div>';
+  }
+
+  // Replace card-footer: badge on one side, read-more button on other
+  const newFooter = '<div class="card-footer" style="justify-content:space-between;align-items:center;gap:8px;overflow:hidden;">'
+    + badge
+    + '<button class="card-read-btn" onclick="event.stopPropagation();openDetail(' + item.id + ',\'' + item.type + '\')">قراءة المزيد</button>'
+    + '</div>';
+
+  return base.replace(
+    /<div class="card-footer" style="justify-content:flex-end;">\s*<button class="card-read-btn"[^>]*>قراءة المزيد<\/button>\s*<\/div>/,
+    newFooter
+  );
 }
 
 function renderMyContributions(type) {
@@ -4574,69 +4648,79 @@ function openAdminContribDetail(id, type) {
   const item = list.find(i => i.id === id);
   if (!item) return;
 
-  const backBtn = document.getElementById('admin-contrib-detail-back-btn');
-  if (backBtn) {
-    backBtn.onclick = function() { navigate('admin-contrib-' + type); };
-    backBtn.querySelector('svg').nextSibling.textContent = type === 'news' ? ' العودة إلى الأخبار' : ' العودة إلى التقارير';
+  // Use the standard detail page
+  const catClass = {
+    physics:'cat-physics', bio:'cat-bio', chem:'cat-chem',
+    astro:'cat-astro', ai:'cat-ai', news:'cat-news'
+  }[item.cat] || 'cat-news';
+
+  document.getElementById('detailImg').src = item.img;
+  document.getElementById('detailImg').alt = item.title;
+  document.getElementById('detailTitle').textContent = item.title;
+
+  const detailAv = document.getElementById('detailAvatar');
+  if (item.avatarUrl) {
+    detailAv.innerHTML = '';
+    detailAv.style.backgroundImage = 'url(' + item.avatarUrl + ')';
+    detailAv.style.backgroundSize = 'cover';
+    detailAv.style.backgroundPosition = 'center';
+    detailAv.textContent = '';
+  } else {
+    detailAv.style.backgroundImage = '';
+    detailAv.textContent = item.avatar || '';
+  }
+  document.getElementById('detailAuthor').textContent = item.author || item.userName || '';
+  document.getElementById('detailDate').textContent = item.date;
+  document.getElementById('detailBody').innerHTML = item.fullDesc || '<p>' + escHtml(item.desc || '') + '</p>';
+
+  const badge = document.getElementById('detailCatBadge');
+  badge.textContent = item.catLabel;
+  badge.className = 'card-cat ' + catClass;
+  badge.style.cssText = 'position:static;display:inline-block;margin-bottom:16px;';
+
+  // Set back label
+  _prevSection = 'admin-contrib-' + type;
+  document.getElementById('detailBackLabel').textContent = type === 'news' ? 'العودة إلى الأخبار' : 'العودة إلى التقارير';
+
+  // Admin action buttons — only show when status is pending
+  const adminActionsEl = document.getElementById('detailAdminActions');
+  if (adminActionsEl) {
+    if (item.status === 'pending') {
+      adminActionsEl.style.display = 'flex';
+      adminActionsEl.innerHTML =
+        '<button class="admin-action-accept-btn" onclick="adminContribDetailAccept(' + item.id + ',\'' + type + '\')">'
+        + '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>'
+        + ' قبول ونشر</button>'
+        + '<button class="admin-action-reject-btn" onclick="adminContribDetailReject(' + item.id + ',\'' + type + '\')">'
+        + '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+        + ' رفض</button>';
+    } else {
+      adminActionsEl.style.display = 'none';
+      adminActionsEl.innerHTML = '';
+    }
   }
 
-  const statusLabel = item.status === 'accepted' ? 'تم القبول والنشر' : item.status === 'rejected' ? 'مرفوض' : 'قيد المعالجة';
-  const statusClass = item.status === 'accepted' ? 'accepted' : item.status === 'rejected' ? 'rejected' : 'pending';
+  // Hide related articles in admin view
+  const relatedEl = document.getElementById('detailRelatedSection');
+  if (relatedEl) relatedEl.style.display = 'none';
 
-  document.getElementById('admin-contrib-detail-content').innerHTML = `
-    <div class="admin-detail-box">
-      <h3>معلومات العضو</h3>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">اسم العضو</span>
-        <span class="admin-detail-value">${escHtml(item.userName || item.author || '—')}</span>
-      </div>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">البريد الإلكتروني</span>
-        <span class="admin-detail-value">${escHtml(item.userEmail || '—')}</span>
-      </div>
-    </div>
-    <div class="admin-detail-box">
-      <h3>تفاصيل المساهمة</h3>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">العنوان</span>
-        <span class="admin-detail-value">${escHtml(item.title)}</span>
-      </div>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">التصنيف</span>
-        <span class="admin-detail-value">${escHtml(item.catLabel || '—')}</span>
-      </div>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">تاريخ التقديم</span>
-        <span class="admin-detail-value">${escHtml(item.date || '—')}</span>
-      </div>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">الحالة</span>
-        <span class="admin-detail-value">
-          <span class="admin-contrib-status-badge ${statusClass}">${statusLabel}</span>
-          ${item.status === 'rejected' && item.rejectReason ? '<br><span style="font-size:0.8rem;color:var(--red);margin-top:4px;display:block;">السبب: ' + escHtml(item.rejectReason) + '</span>' : ''}
-        </span>
-      </div>
-      <div class="admin-detail-row">
-        <span class="admin-detail-label">الوصف</span>
-        <span class="admin-detail-value details-text">${escHtml(item.desc || '—')}</span>
-      </div>
-      ${item.fullDesc ? `<div class="admin-detail-row">
-        <span class="admin-detail-label">المحتوى الكامل</span>
-        <span class="admin-detail-value details-text">${item.fullDesc}</span>
-      </div>` : ''}
-    </div>
-    <div class="admin-contrib-detail-actions">
-      <button class="admin-action-accept-btn" onclick="adminConfirmAccept(${item.id},'${type}')">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        قبول ونشر
-      </button>
-      <button class="admin-action-reject-btn" onclick="adminConfirmReject(${item.id},'${type}')">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        رفض
-      </button>
-    </div>`;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-detail').classList.add('active');
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  navigate('admin-contrib-detail');
+// Admin accept/reject from the detail page
+function adminContribDetailAccept(id, type) {
+  _pendingAcceptId = id;
+  _pendingAcceptType = type;
+  openAdminModal('adminAcceptModal');
+}
+function adminContribDetailReject(id, type) {
+  _pendingRejectId = id;
+  _pendingRejectType = type;
+  openAdminModal('adminRejectModal');
 }
 
 /* ═══════════════════════════════════════════
@@ -4753,9 +4837,11 @@ function adminExecuteAccept(id, type) {
 
   showToast('تم قبول المساهمة ونشرها بنجاح.', 'success');
 
-  // Re-render
   const curSection = document.querySelector('.section.active');
-  if (curSection && curSection.id === 'sec-admin-contrib-detail') {
+  if (curSection && curSection.id === 'sec-detail') {
+    const el = document.getElementById('detailAdminActions');
+    if (el) { el.style.display = 'none'; el.innerHTML = ''; }
+  } else if (curSection && curSection.id === 'sec-admin-contrib-detail') {
     openAdminContribDetail(id, type);
   } else {
     renderAdminContributions(type);
@@ -4783,7 +4869,10 @@ function adminExecuteReject(id, type, reason) {
   showToast('تم رفض المساهمة.', 'info');
 
   const curSection = document.querySelector('.section.active');
-  if (curSection && curSection.id === 'sec-admin-contrib-detail') {
+  if (curSection && curSection.id === 'sec-detail') {
+    const el = document.getElementById('detailAdminActions');
+    if (el) { el.style.display = 'none'; el.innerHTML = ''; }
+  } else if (curSection && curSection.id === 'sec-admin-contrib-detail') {
     openAdminContribDetail(id, type);
   } else {
     renderAdminContributions(type);
@@ -4800,6 +4889,38 @@ function escHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+/* ═══════════════════════════════════════════
+   DRAG-TO-SCROLL — Scrollable rejected badge
+═══════════════════════════════════════════ */
+function _badgeDragStart(e) {
+  const el = e.currentTarget;
+  el._dragging = true;
+  el._startX   = e.pageX;
+  el._scrollLeft = el.scrollLeft;
+  el.style.cursor = 'grabbing';
+
+  function onMove(ev) {
+    if (!el._dragging) return;
+    ev.preventDefault();
+    const dx = ev.pageX - el._startX;
+    el.scrollLeft = el._scrollLeft - dx;
+  }
+  function onUp() {
+    el._dragging = false;
+    el.style.cursor = 'grab';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup',   onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup',   onUp);
+}
+
+function _badgeTouchStart(e) {
+  // Touch scroll is handled natively via overflow-x:auto + -webkit-overflow-scrolling:touch
+  // Nothing extra needed — but stop propagation so the card doesn't open
+  e.stopPropagation();
 }
 
 /* ═══════════════════════════════════════════
