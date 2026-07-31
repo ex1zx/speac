@@ -2212,6 +2212,251 @@ body {
 @media (max-width: 1100px) { .cards-grid-contrib { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px)  { .cards-grid-contrib { grid-template-columns: 1fr; } }
 
+/* ═══════════════════════════════════════════
+   ADMIN STYLES
+═══════════════════════════════════════════ */
+.admin-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.admin-req-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: box-shadow var(--transition), border-color var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.admin-req-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border2);
+}
+.admin-req-card-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--red-light);
+  color: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.admin-req-card-info { flex: 1; min-width: 0; }
+.admin-req-card-title {
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.admin-req-card-meta {
+  font-size: 0.78rem;
+  color: var(--text2);
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.admin-req-card-meta span { display: flex; align-items: center; gap: 4px; }
+.admin-req-card-arrow {
+  color: var(--text3);
+  flex-shrink: 0;
+}
+.admin-detail-page {
+  max-width: 740px;
+  margin: 0 auto;
+}
+.admin-detail-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+.admin-detail-box h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-bottom: 14px;
+}
+.admin-detail-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.admin-detail-row:last-child { border-bottom: none; }
+.admin-detail-label {
+  font-size: 0.82rem; color: var(--text3); width: 140px; flex-shrink: 0; padding-top: 1px;
+}
+.admin-detail-value {
+  font-size: 0.9rem; color: var(--text); font-weight: 600; flex: 1;
+}
+.admin-detail-value.details-text {
+  font-weight: 400; line-height: 1.65; color: var(--text2);
+}
+
+/* Admin contrib card with delete btn */
+.admin-contrib-card-wrap {
+  position: relative;
+}
+.admin-delete-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #CC1212;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  box-shadow: 0 2px 8px rgba(204,18,18,0.25);
+}
+.admin-delete-btn:hover {
+  background: #A80E0E;
+  transform: scale(1.08);
+}
+.admin-contrib-detail-actions {
+  display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
+}
+.admin-action-accept-btn {
+  flex: 1; min-width: 150px;
+  background: var(--green);
+  color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  padding: 13px 24px;
+  font-size: 0.95rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s;
+  font-family: var(--font);
+}
+.admin-action-accept-btn:hover { background: #047857; }
+.admin-action-reject-btn {
+  flex: 1; min-width: 150px;
+  background: var(--red);
+  color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  padding: 13px 24px;
+  font-size: 0.95rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s;
+  font-family: var(--font);
+}
+.admin-action-reject-btn:hover { background: var(--red2); }
+
+/* Admin confirm/reject modals */
+.admin-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s;
+}
+.admin-modal-overlay.show {
+  opacity: 1; pointer-events: all;
+}
+.admin-modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 460px; width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+.admin-modal-title {
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--text); margin-bottom: 10px;
+}
+.admin-modal-body {
+  font-size: 0.9rem; color: var(--text2);
+  line-height: 1.65; margin-bottom: 22px;
+}
+.admin-modal-warning {
+  background: var(--red-light);
+  border: 1px solid var(--red-light2);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  color: var(--red);
+  margin-bottom: 22px;
+  line-height: 1.55;
+}
+.admin-modal-btns {
+  display: flex; gap: 10px;
+}
+.admin-modal-btns .btn-cancel {
+  flex: 1; padding: 11px; border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); background: var(--bg2);
+  color: var(--text); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; font-family: var(--font);
+}
+.admin-modal-btns .btn-confirm-delete {
+  flex: 1; padding: 11px; border: none;
+  border-radius: var(--radius-sm); background: var(--red);
+  color: #fff; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; font-family: var(--font);
+}
+.admin-modal-btns .btn-confirm-accept {
+  flex: 1; padding: 11px; border: none;
+  border-radius: var(--radius-sm); background: var(--green);
+  color: #fff; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; font-family: var(--font);
+}
+.admin-modal-btns .btn-confirm-reject {
+  flex: 1; padding: 11px; border: none;
+  border-radius: var(--radius-sm); background: var(--red);
+  color: #fff; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; font-family: var(--font);
+}
+.admin-reject-reason-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg2);
+  resize: vertical;
+  min-height: 90px;
+  margin-bottom: 16px;
+}
+.admin-contrib-status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.78rem; font-weight: 700;
+  padding: 4px 11px; border-radius: 20px;
+  margin-top: 8px;
+}
+.admin-contrib-status-badge.pending  { background: #FEF3C7; color: #92400E; }
+.admin-contrib-status-badge.accepted { background: #D1FAE5; color: #065F46; }
+.admin-contrib-status-badge.rejected { background: #FEE2E2; color: #991B1B; }
+.admin-empty-state {
+  text-align: center; padding: 60px 20px; color: var(--text3);
+}
+.admin-empty-state svg { width: 52px; height: 52px; opacity: 0.3; margin-bottom: 14px; }
+.admin-empty-state-title { font-size: 1.05rem; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
+
+/* Back button for admin sub-pages */
+.back-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg2); border: 1px solid var(--border);
+  color: var(--text2); border-radius: var(--radius-sm);
+  padding: 9px 18px; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; font-family: var(--font);
+  transition: background var(--transition), border-color var(--transition);
+  margin-bottom: 24px;
+}
+.back-btn:hover { background: var(--bg3); border-color: var(--border2); color: var(--text); }
+
 </style>
 </head>
 <body>
@@ -2687,20 +2932,20 @@ body {
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">اسمك الكامل *</label>
-                <input type="text" class="form-input" placeholder="الاسم" required>
+                <input type="text" id="req-name" class="form-input" placeholder="الاسم" required>
               </div>
               <div class="form-group">
                 <label class="form-label">بريدك الإلكتروني *</label>
-                <input type="email" class="form-input" placeholder="email@example.com" required>
+                <input type="email" id="req-email" class="form-input" placeholder="email@example.com" required>
               </div>
             </div>
             <div class="form-group">
               <label class="form-label">موضوع التقرير المطلوب *</label>
-              <input type="text" class="form-input" placeholder="مثال: تأثير المجال المغناطيسي على نمو الخلايا..." required>
+              <input type="text" id="req-topic" class="form-input" placeholder="مثال: تأثير المجال المغناطيسي على نمو الخلايا..." required>
             </div>
             <div class="form-group">
               <label class="form-label">التخصص العلمي</label>
-              <select class="form-select">
+              <select id="req-field" class="form-select">
                 <option value="">اختر التخصص</option>
                 <option>فيزياء</option>
                 <option>بيولوجيا</option>
@@ -2713,7 +2958,7 @@ body {
             </div>
             <div class="form-group">
               <label class="form-label">الغرض من التقرير</label>
-              <select class="form-select">
+              <select id="req-purpose" class="form-select">
                 <option>بحث أكاديمي</option>
                 <option>رسالة ماجستير / دكتوراه</option>
                 <option>مشروع مؤسسي</option>
@@ -2723,7 +2968,7 @@ body {
             </div>
             <div class="form-group">
               <label class="form-label">تفاصيل إضافية</label>
-              <textarea class="form-textarea" placeholder="وضّح متطلباتك بالتفصيل..."></textarea>
+              <textarea id="req-details" class="form-textarea" placeholder="وضّح متطلباتك بالتفصيل..."></textarea>
             </div>
             <button type="submit" class="form-submit">
               <svg viewBox="0 0 48 48"><use href="#ico-request"/></svg>
@@ -2771,7 +3016,7 @@ body {
             <form onsubmit="submitAuth(event, 'login')">
               <div class="form-group">
                 <label class="form-label">البريد الإلكتروني</label>
-                <input type="email" id="login-email" class="form-input" placeholder="name@example.com" required>
+                <input type="text" id="login-email" class="form-input" placeholder="name@example.com" required>
               </div>
               <div class="form-group">
                 <label class="form-label">كلمة المرور</label>
@@ -2845,6 +3090,9 @@ body {
 
       <!-- Vertical Action Buttons (left) -->
       <div class="account-actions-list">
+
+        <!-- ── USER-ONLY ACTIONS ── -->
+        <div id="user-actions-group">
 
         <!-- Change Name -->
         <div class="account-action-item" id="action-name">
@@ -2940,7 +3188,44 @@ body {
           </div>
         </div>
 
-        <!-- Logout -->
+        </div><!-- end user-actions-group -->
+
+        <!-- ── ADMIN-ONLY ACTIONS ── -->
+        <div id="admin-actions-group" style="display:none;">
+
+        <!-- Admin: Report Requests -->
+        <div class="account-action-item">
+          <button class="account-action-btn" onclick="navigate('admin-requests')">
+            <svg viewBox="0 0 48 48" width="20" height="20"><use href="#ico-request"/></svg>
+            <span>إدارة طلبات تقارير الأعضاء</span>
+            <svg class="action-chevron" viewBox="0 0 24 24" style="opacity:0.4"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <!-- Admin: Member Contributions -->
+        <div class="account-action-item" id="action-admin-contrib">
+          <button class="account-action-btn" onclick="toggleAccountAction('admin-contrib')">
+            <svg viewBox="0 0 48 48" width="20" height="20"><use href="#ico-my-contrib"/></svg>
+            <span>إدارة مساهمات الأعضاء</span>
+            <svg class="action-chevron" viewBox="0 0 24 24"><use href="#ico-chevron-down"/></svg>
+          </button>
+          <div class="account-action-panel" id="panel-admin-contrib">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <a class="account-contrib-sub-btn" href="#" onclick="navigate('admin-contrib-news');return false;">
+                <svg viewBox="0 0 48 48" width="18" height="18"><use href="#ico-news"/></svg>
+                الأخبار العلمية
+              </a>
+              <a class="account-contrib-sub-btn" href="#" onclick="navigate('admin-contrib-reports');return false;">
+                <svg viewBox="0 0 48 48" width="18" height="18"><use href="#ico-report"/></svg>
+                التقارير العلمية
+              </a>
+            </div>
+          </div>
+        </div>
+
+        </div><!-- end admin-actions-group -->
+
+        <!-- Logout (shared) -->
         <div class="account-action-item">
           <button class="account-action-btn account-action-logout" onclick="logout()">
             <svg viewBox="0 0 48 48" width="20" height="20"><use href="#ico-logout"/></svg>
@@ -3029,6 +3314,99 @@ body {
       <div class="modal-highlight"><svg viewBox="0 0 48 48"><use href="#ico-user"/></svg> مجتمع بحثي</div>
     </div>
     <button class="modal-close-btn" onclick="closeWelcome()">ابدأ الاستكشاف</button>
+  </div>
+</div>
+
+<!-- ═══════════════ ADMIN SECTIONS ═══════════════ -->
+
+<!-- Admin: Report Requests List -->
+<div class="section" id="sec-admin-requests">
+  <div class="section-header">
+    <div class="section-eyebrow">الإدارة</div>
+    <h2 class="section-title">طلبات تقارير الأعضاء</h2>
+    <p class="section-subtitle">جميع الطلبات المقدّمة من الأعضاء مرتبةً من الأحدث إلى الأقدم.</p>
+  </div>
+  <div id="admin-requests-list"></div>
+</div>
+
+<!-- Admin: Request Detail -->
+<div class="section" id="sec-admin-request-detail">
+  <div class="section-header">
+    <button class="back-btn" onclick="navigate('admin-requests')">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      العودة إلى الطلبات
+    </button>
+  </div>
+  <div class="admin-detail-page" id="admin-request-detail-content"></div>
+</div>
+
+<!-- Admin: Member Contributions – News -->
+<div class="section" id="sec-admin-contrib-news">
+  <div class="section-header">
+    <div class="section-eyebrow">الإدارة — مساهمات الأعضاء</div>
+    <h2 class="section-title">الأخبار العلمية</h2>
+    <p class="section-subtitle">جميع الأخبار المقدّمة من الأعضاء مرتبةً من الأحدث إلى الأقدم.</p>
+  </div>
+  <div id="admin-contrib-news-grid"></div>
+</div>
+
+<!-- Admin: Member Contributions – Reports -->
+<div class="section" id="sec-admin-contrib-reports">
+  <div class="section-header">
+    <div class="section-eyebrow">الإدارة — مساهمات الأعضاء</div>
+    <h2 class="section-title">التقارير العلمية</h2>
+    <p class="section-subtitle">جميع التقارير المقدّمة من الأعضاء مرتبةً من الأحدث إلى الأقدم.</p>
+  </div>
+  <div id="admin-contrib-reports-grid"></div>
+</div>
+
+<!-- Admin: Contribution Detail -->
+<div class="section" id="sec-admin-contrib-detail">
+  <div class="section-header" id="admin-contrib-detail-back-header">
+    <button class="back-btn" id="admin-contrib-detail-back-btn" onclick="navigate('admin-contrib-reports')">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      العودة
+    </button>
+  </div>
+  <div id="admin-contrib-detail-content" style="max-width:740px;margin:0 auto;"></div>
+</div>
+
+<!-- Admin Modals -->
+<!-- Delete Confirm Modal -->
+<div class="admin-modal-overlay" id="adminDeleteModal">
+  <div class="admin-modal">
+    <div class="admin-modal-title">تأكيد الحذف</div>
+    <div class="admin-modal-body">هل أنت متأكد أنك تريد حذف هذه المساهمة؟</div>
+    <div class="admin-modal-warning">عند حذف هذا التقرير سيتم إزالته من قائمة المساهمات الخاصة بالعضو وأيضاً من التقارير المنشورة في حال تم قبوله مسبقاً.</div>
+    <div class="admin-modal-btns">
+      <button class="btn-cancel" onclick="closeAdminModal('adminDeleteModal')">إلغاء</button>
+      <button class="btn-confirm-delete" id="adminDeleteConfirmBtn">حذف</button>
+    </div>
+  </div>
+</div>
+
+<!-- Accept Confirm Modal -->
+<div class="admin-modal-overlay" id="adminAcceptModal">
+  <div class="admin-modal">
+    <div class="admin-modal-title">تأكيد القبول والنشر</div>
+    <div class="admin-modal-body">هل تريد قبول هذه المساهمة ونشرها؟ سيتم إضافتها إلى قسم التقارير أو الأخبار المنشورة.</div>
+    <div class="admin-modal-btns">
+      <button class="btn-cancel" onclick="closeAdminModal('adminAcceptModal')">إلغاء</button>
+      <button class="btn-confirm-accept" id="adminAcceptConfirmBtn">قبول ونشر</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="admin-modal-overlay" id="adminRejectModal">
+  <div class="admin-modal">
+    <div class="admin-modal-title">رفض المساهمة</div>
+    <div class="admin-modal-body">يرجى كتابة سبب الرفض ليتمكن العضو من الاطلاع عليه.</div>
+    <textarea class="admin-reject-reason-input" id="adminRejectReasonInput" placeholder="اكتب سبب الرفض..."></textarea>
+    <div class="admin-modal-btns">
+      <button class="btn-cancel" onclick="closeAdminModal('adminRejectModal')">إلغاء</button>
+      <button class="btn-confirm-reject" id="adminRejectConfirmBtn">إرسال الرفض</button>
+    </div>
   </div>
 </div>
 
@@ -3198,6 +3576,79 @@ let myContributions = {
 };
 
 /* ═══════════════════════════════════════════
+   ADMIN GLOBAL STATE
+═══════════════════════════════════════════ */
+let allReportRequests = [
+  {
+    id: 88001, name: 'أحمد الزهراني', email: 'ahmed@uni.sa',
+    title: 'تأثير الإشعاع الكوني على خلايا الدم في الفضاء',
+    field: 'فيزياء', purpose: 'بحث أكاديمي',
+    details: 'أحتاج تقريراً مفصلاً عن الدراسات الحديثة لتأثير الإشعاع الكوني على خلايا الدم البشرية خلال بعثات الفضاء الطويلة.',
+    timestamp: Date.now() - 3600000
+  },
+  {
+    id: 88002, name: 'سارة المطيري', email: 'sara@research.org',
+    title: 'تطبيقات الذكاء الاصطناعي في تشخيص سرطان الثدي',
+    field: 'ذكاء اصطناعي', purpose: 'رسالة ماجستير / دكتوراه',
+    details: 'أعمل على رسالة الدكتوراه وأحتاج مراجعة شاملة لأحدث الأبحاث في استخدام نماذج التعلم العميق لتشخيص صور الماموغرام.',
+    timestamp: Date.now() - 86400000
+  },
+  {
+    id: 88003, name: 'خالد العنزي', email: 'khalid@gov.sa',
+    title: 'تأثير تغير المناخ على الأمن الغذائي في منطقة الخليج',
+    field: 'علوم الأرض والبيئة', purpose: 'مشروع مؤسسي',
+    details: 'نحتاج تقريراً مؤسسياً يتناول بيانات التوقعات المناخية وأثرها على الإنتاج الزراعي في دول الخليج حتى 2050.',
+    timestamp: Date.now() - 172800000
+  }
+];
+
+let allContributions = {
+  news: [
+    {
+      id: 9001, type: 'news', cat: 'bio', catLabel: 'بيولوجيا',
+      icon: 'ico-news', iconColor: '#059669',
+      img: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=900&q=85&fit=crop&auto=format',
+      title: 'اكتشاف جديد في آلية عمل الخلايا الجذعية',
+      author: 'عضو تجريبي', avatar: 'عت', avatarUrl: null,
+      userEmail: 'test@example.com', userName: 'عضو تجريبي',
+      date: '28 يوليو 2026',
+      desc: 'دراسة تكشف عن آلية جديدة تتحكم في توجيه الخلايا الجذعية نحو أنسجة محددة.',
+      fullDesc: '<p>محتوى المقال...</p>',
+      status: 'accepted', rejectReason: '',
+      timestamp: Date.now() - 259200000
+    }
+  ],
+  reports: [
+    {
+      id: 9002, type: 'report', cat: 'physics', catLabel: 'فيزياء',
+      icon: 'ico-report', iconColor: '#CC1212',
+      img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=900&q=85&fit=crop&auto=format',
+      title: 'تقرير حول الطاقة الظلامية وتوسع الكون',
+      author: 'عضو تجريبي', avatar: 'عت', avatarUrl: null,
+      userEmail: 'test@example.com', userName: 'عضو تجريبي',
+      date: '25 يوليو 2026',
+      desc: 'تحليل شامل لأحدث البيانات المتعلقة بثابت هابل وتأثيره على نماذج الطاقة الظلامية.',
+      fullDesc: '<p>محتوى التقرير...</p>',
+      status: 'pending', rejectReason: '',
+      timestamp: Date.now() - 518400000
+    },
+    {
+      id: 9003, type: 'report', cat: 'chem', catLabel: 'كيمياء',
+      icon: 'ico-report', iconColor: '#D97706',
+      img: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=900&q=85&fit=crop&auto=format',
+      title: 'دراسة حول تركيب مركّبات عضوية جديدة',
+      author: 'عضو تجريبي', avatar: 'عت', avatarUrl: null,
+      userEmail: 'test@example.com', userName: 'عضو تجريبي',
+      date: '20 يوليو 2026',
+      desc: 'تقييم خصائص مجموعة من المركّبات العضوية المُركّبة مختبرياً لأول مرة.',
+      fullDesc: '<p>محتوى التقرير...</p>',
+      status: 'rejected', rejectReason: 'يحتاج إلى مراجعة المراجع العلمية وإضافة البيانات التجريبية',
+      timestamp: Date.now() - 950400000
+    }
+  ]
+};
+
+/* ═══════════════════════════════════════════
    CARD BUILDER
 ═══════════════════════════════════════════ */
 function buildCard(item) {
@@ -3273,6 +3724,9 @@ function navigate(page) {
   if (page === 'my-news') renderMyContributions('news');
   if (page === 'my-reports') renderMyContributions('reports');
   if (page === 'account') refreshAccountPage();
+  if (page === 'admin-requests') renderAdminRequests();
+  if (page === 'admin-contrib-news') renderAdminContributions('news');
+  if (page === 'admin-contrib-reports') renderAdminContributions('reports');
 
   closeSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3420,10 +3874,19 @@ function submitAuth(e, type) {
   if (type === 'login') {
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
+
+    // Admin login check
+    if (email === 'admin' && password === 'admin-password') {
+      setLoggedIn({ name: 'science lab team', email: 'admin', password: 'admin-password', isAdmin: true });
+      showToast('مرحباً بك في لوحة الإدارة!', 'success');
+      navigate('account');
+      return;
+    }
+
     // Simulate login: accept any valid email + password combo
     const namePart = email.split('@')[0];
     const displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-    setLoggedIn({ name: displayName, email: email, password: password });
+    setLoggedIn({ name: displayName, email: email, password: password, isAdmin: false });
     showToast('مرحباً بك يا ' + displayName + '!', 'success');
     navigate('account');
   } else {
@@ -3454,6 +3917,25 @@ function setLoggedIn(user) {
   document.getElementById('sidebarAvatar').textContent = initials;
   document.getElementById('sidebarName').textContent   = user.name;
   document.getElementById('sidebarEmail').textContent  = user.email;
+
+  // Show/hide admin vs user actions
+  const userGrp  = document.getElementById('user-actions-group');
+  const adminGrp = document.getElementById('admin-actions-group');
+  const avatarWrap = document.querySelector('.account-avatar-wrap');
+  const contribStat = document.getElementById('account-contrib-stats');
+  if (user.isAdmin) {
+    if (userGrp)  userGrp.style.display  = 'none';
+    if (adminGrp) adminGrp.style.display = '';
+    if (avatarWrap) avatarWrap.style.cursor = 'default';
+    if (avatarWrap) avatarWrap.onclick = null;
+    if (contribStat) contribStat.style.display = 'none';
+  } else {
+    if (userGrp)  userGrp.style.display  = '';
+    if (adminGrp) adminGrp.style.display = 'none';
+    if (avatarWrap) avatarWrap.style.cursor = 'pointer';
+    if (avatarWrap) avatarWrap.onclick = function(){ document.getElementById('avatarFileInput').click(); };
+    if (contribStat) contribStat.style.display = '';
+  }
 }
 
 function logout() {
@@ -3465,6 +3947,13 @@ function logout() {
   // Sidebar footer
   document.getElementById('sidebarMission').style.display  = '';
   document.getElementById('sidebarUserInfo').style.display = 'none';
+  // Reset groups visibility
+  const userGrp  = document.getElementById('user-actions-group');
+  const adminGrp = document.getElementById('admin-actions-group');
+  if (userGrp)  userGrp.style.display  = '';
+  if (adminGrp) adminGrp.style.display = 'none';
+  const contribStat = document.getElementById('account-contrib-stats');
+  if (contribStat) contribStat.style.display = '';
   showToast('تم تسجيل الخروج بنجاح.', 'info');
   navigate('home');
 }
@@ -3638,10 +4127,17 @@ function submitContribute(e) {
     rejectReason: ''
   };
 
+  // Add userEmail/userName for admin tracking
+  newItem.userEmail = currentUser.email;
+  newItem.userName  = currentUser.name;
+  newItem.timestamp = Date.now();
+
   if (type === 'news') {
     myContributions.news.unshift(newItem);
+    allContributions.news.unshift(newItem);
   } else {
     myContributions.reports.unshift(newItem);
+    allContributions.reports.unshift(newItem);
   }
 
   // Update account stats
@@ -3657,6 +4153,24 @@ function submitContribute(e) {
 
 function submitRequest(e) {
   e.preventDefault();
+  const name    = document.getElementById('req-name').value.trim();
+  const email   = document.getElementById('req-email').value.trim();
+  const topic   = document.getElementById('req-topic').value.trim();
+  const field   = document.getElementById('req-field').value;
+  const purpose = document.getElementById('req-purpose').value;
+  const details = document.getElementById('req-details').value.trim();
+
+  allReportRequests.unshift({
+    id: Date.now(),
+    name,
+    email,
+    title: topic,
+    field,
+    purpose,
+    details,
+    timestamp: Date.now()
+  });
+
   showToast('تم إرسال طلبك بنجاح!', 'success');
   e.target.reset();
 }
@@ -3910,6 +4424,379 @@ function toggleAccountAction(id) {
   // Close all
   document.querySelectorAll('.account-action-item').forEach(el => el.classList.remove('open'));
   if (!isOpen) item.classList.add('open');
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN — REPORT REQUESTS
+═══════════════════════════════════════════ */
+function renderAdminRequests() {
+  const el = document.getElementById('admin-requests-list');
+  if (!el) return;
+  const sorted = [...allReportRequests].sort((a, b) => b.timestamp - a.timestamp);
+  if (sorted.length === 0) {
+    el.innerHTML = `
+      <div class="admin-empty-state">
+        <svg viewBox="0 0 48 48"><use href="#ico-request"/></svg>
+        <div class="admin-empty-state-title">لا توجد طلبات حتى الآن</div>
+        <p style="font-size:0.85rem;">ستظهر هنا طلبات الأعضاء عند تقديمها.</p>
+      </div>`;
+    return;
+  }
+  el.innerHTML = `<div class="admin-cards-list">` +
+    sorted.map(req => {
+      const initials = req.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      const timeStr = new Date(req.timestamp).toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      return `
+      <div class="admin-req-card" onclick="openAdminRequestDetail(${req.id})">
+        <div class="admin-req-card-avatar">${initials}</div>
+        <div class="admin-req-card-info">
+          <div class="admin-req-card-title">${escHtml(req.title)}</div>
+          <div class="admin-req-card-meta">
+            <span>👤 ${escHtml(req.name)}</span>
+            <span>📧 ${escHtml(req.email)}</span>
+            <span>🕒 ${timeStr}</span>
+          </div>
+        </div>
+        <div class="admin-req-card-arrow">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+}
+
+function openAdminRequestDetail(id) {
+  const req = allReportRequests.find(r => r.id === id);
+  if (!req) return;
+  const timeStr = new Date(req.timestamp).toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  document.getElementById('admin-request-detail-content').innerHTML = `
+    <div class="admin-detail-box">
+      <h3>معلومات مقدّم الطلب</h3>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">الاسم الكامل</span>
+        <span class="admin-detail-value">${escHtml(req.name)}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">البريد الإلكتروني</span>
+        <span class="admin-detail-value">${escHtml(req.email)}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">تاريخ الطلب</span>
+        <span class="admin-detail-value">${timeStr}</span>
+      </div>
+    </div>
+    <div class="admin-detail-box">
+      <h3>تفاصيل التقرير المطلوب</h3>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">موضوع التقرير</span>
+        <span class="admin-detail-value">${escHtml(req.title)}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">التخصص العلمي</span>
+        <span class="admin-detail-value">${escHtml(req.field || '—')}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">الغرض</span>
+        <span class="admin-detail-value">${escHtml(req.purpose || '—')}</span>
+      </div>
+      ${req.details ? `
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">تفاصيل إضافية</span>
+        <span class="admin-detail-value details-text">${escHtml(req.details)}</span>
+      </div>` : ''}
+    </div>`;
+
+  navigate('admin-request-detail');
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN — MEMBER CONTRIBUTIONS
+═══════════════════════════════════════════ */
+let _adminCurrentContribType = 'reports'; // for back button
+
+function renderAdminContributions(type) {
+  _adminCurrentContribType = type;
+  const containerId = type === 'news' ? 'admin-contrib-news-grid' : 'admin-contrib-reports-grid';
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  const items = [...(type === 'news' ? allContributions.news : allContributions.reports)]
+    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+  if (items.length === 0) {
+    el.innerHTML = `
+      <div class="admin-empty-state">
+        <svg viewBox="0 0 48 48"><use href="#ico-${type === 'news' ? 'news' : 'report'}"/></svg>
+        <div class="admin-empty-state-title">لا توجد ${type === 'news' ? 'أخبار' : 'تقارير'} حتى الآن</div>
+        <p style="font-size:0.85rem;">ستظهر هنا مساهمات الأعضاء عند تقديمها.</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="cards-grid-contrib">` +
+    items.map(item => buildAdminContribCard(item, type)).join('') +
+    `</div>`;
+}
+
+function buildAdminContribCard(item, type) {
+  const statusBadge = buildStatusBadge(item);
+  const baseCard = buildCard(item).replace(
+    'onclick="openDetail(' + item.id + ',\'' + item.type + '\')"',
+    'onclick="openAdminContribDetail(' + item.id + ',\'' + type + '\')"'
+  ).replace(
+    'onclick="event.stopPropagation();openDetail(' + item.id + ',\'' + item.type + '\')"',
+    'onclick="event.stopPropagation();openAdminContribDetail(' + item.id + ',\'' + type + '\')"'
+  );
+
+  let cardWithBadge = baseCard;
+  if (statusBadge) {
+    cardWithBadge = baseCard.replace('<span class="card-cat', statusBadge + '<span class="card-cat');
+  }
+
+  const deleteBtn = `<button class="admin-delete-btn" title="حذف" onclick="event.stopPropagation();adminConfirmDelete(${item.id},'${type}')">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/>
+      <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+    </svg>
+  </button>`;
+
+  return `<div class="admin-contrib-card-wrap">${deleteBtn}${cardWithBadge}</div>`;
+}
+
+function openAdminContribDetail(id, type) {
+  _adminCurrentContribType = type;
+  const list = type === 'news' ? allContributions.news : allContributions.reports;
+  const item = list.find(i => i.id === id);
+  if (!item) return;
+
+  const backBtn = document.getElementById('admin-contrib-detail-back-btn');
+  if (backBtn) {
+    backBtn.onclick = function() { navigate('admin-contrib-' + type); };
+    backBtn.querySelector('svg').nextSibling.textContent = type === 'news' ? ' العودة إلى الأخبار' : ' العودة إلى التقارير';
+  }
+
+  const statusLabel = item.status === 'accepted' ? 'تم القبول والنشر' : item.status === 'rejected' ? 'مرفوض' : 'قيد المعالجة';
+  const statusClass = item.status === 'accepted' ? 'accepted' : item.status === 'rejected' ? 'rejected' : 'pending';
+
+  document.getElementById('admin-contrib-detail-content').innerHTML = `
+    <div class="admin-detail-box">
+      <h3>معلومات العضو</h3>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">اسم العضو</span>
+        <span class="admin-detail-value">${escHtml(item.userName || item.author || '—')}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">البريد الإلكتروني</span>
+        <span class="admin-detail-value">${escHtml(item.userEmail || '—')}</span>
+      </div>
+    </div>
+    <div class="admin-detail-box">
+      <h3>تفاصيل المساهمة</h3>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">العنوان</span>
+        <span class="admin-detail-value">${escHtml(item.title)}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">التصنيف</span>
+        <span class="admin-detail-value">${escHtml(item.catLabel || '—')}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">تاريخ التقديم</span>
+        <span class="admin-detail-value">${escHtml(item.date || '—')}</span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">الحالة</span>
+        <span class="admin-detail-value">
+          <span class="admin-contrib-status-badge ${statusClass}">${statusLabel}</span>
+          ${item.status === 'rejected' && item.rejectReason ? '<br><span style="font-size:0.8rem;color:var(--red);margin-top:4px;display:block;">السبب: ' + escHtml(item.rejectReason) + '</span>' : ''}
+        </span>
+      </div>
+      <div class="admin-detail-row">
+        <span class="admin-detail-label">الوصف</span>
+        <span class="admin-detail-value details-text">${escHtml(item.desc || '—')}</span>
+      </div>
+      ${item.fullDesc ? `<div class="admin-detail-row">
+        <span class="admin-detail-label">المحتوى الكامل</span>
+        <span class="admin-detail-value details-text">${item.fullDesc}</span>
+      </div>` : ''}
+    </div>
+    <div class="admin-contrib-detail-actions">
+      <button class="admin-action-accept-btn" onclick="adminConfirmAccept(${item.id},'${type}')">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        قبول ونشر
+      </button>
+      <button class="admin-action-reject-btn" onclick="adminConfirmReject(${item.id},'${type}')">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        رفض
+      </button>
+    </div>`;
+
+  navigate('admin-contrib-detail');
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN — MODALS
+═══════════════════════════════════════════ */
+let _pendingDeleteId = null, _pendingDeleteType = null;
+let _pendingAcceptId = null, _pendingAcceptType = null;
+let _pendingRejectId = null, _pendingRejectType = null;
+
+function openAdminModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+function closeAdminModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+function adminConfirmDelete(id, type) {
+  _pendingDeleteId = id;
+  _pendingDeleteType = type;
+  openAdminModal('adminDeleteModal');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('adminDeleteConfirmBtn').addEventListener('click', function() {
+    if (_pendingDeleteId == null) return;
+    adminExecuteDelete(_pendingDeleteId, _pendingDeleteType);
+    closeAdminModal('adminDeleteModal');
+    _pendingDeleteId = null; _pendingDeleteType = null;
+  });
+
+  document.getElementById('adminAcceptConfirmBtn').addEventListener('click', function() {
+    if (_pendingAcceptId == null) return;
+    adminExecuteAccept(_pendingAcceptId, _pendingAcceptType);
+    closeAdminModal('adminAcceptModal');
+    _pendingAcceptId = null; _pendingAcceptType = null;
+  });
+
+  document.getElementById('adminRejectConfirmBtn').addEventListener('click', function() {
+    if (_pendingRejectId == null) return;
+    const reason = document.getElementById('adminRejectReasonInput').value.trim();
+    adminExecuteReject(_pendingRejectId, _pendingRejectType, reason);
+    closeAdminModal('adminRejectModal');
+    document.getElementById('adminRejectReasonInput').value = '';
+    _pendingRejectId = null; _pendingRejectType = null;
+  });
+
+  // Close modals on overlay click
+  ['adminDeleteModal','adminAcceptModal','adminRejectModal'].forEach(function(mid) {
+    document.getElementById(mid).addEventListener('click', function(e) {
+      if (e.target === this) closeAdminModal(mid);
+    });
+  });
+});
+
+function adminConfirmAccept(id, type) {
+  _pendingAcceptId = id;
+  _pendingAcceptType = type;
+  openAdminModal('adminAcceptModal');
+}
+
+function adminConfirmReject(id, type) {
+  _pendingRejectId = id;
+  _pendingRejectType = type;
+  openAdminModal('adminRejectModal');
+}
+
+function adminExecuteDelete(id, type) {
+  const allList  = type === 'news' ? allContributions.news  : allContributions.reports;
+  const myList   = type === 'news' ? myContributions.news   : myContributions.reports;
+  const pubList  = type === 'news' ? NEWS : REPORTS;
+
+  // Remove from allContributions
+  const allIdx = allList.findIndex(i => i.id === id);
+  if (allIdx !== -1) allList.splice(allIdx, 1);
+
+  // Remove from myContributions
+  const myIdx = myList.findIndex(i => i.id === id);
+  if (myIdx !== -1) myList.splice(myIdx, 1);
+
+  // Remove from published lists if it was accepted
+  const pubIdx = pubList.findIndex(i => i.id === id);
+  if (pubIdx !== -1) pubList.splice(pubIdx, 1);
+
+  showToast('تم حذف المساهمة بنجاح.', 'success');
+
+  // Re-render
+  const curSection = document.querySelector('.section.active');
+  if (curSection && curSection.id === 'sec-admin-contrib-detail') {
+    navigate('admin-contrib-' + type);
+  } else {
+    renderAdminContributions(type);
+  }
+}
+
+function adminExecuteAccept(id, type) {
+  const allList = type === 'news' ? allContributions.news : allContributions.reports;
+  const myList  = type === 'news' ? myContributions.news  : myContributions.reports;
+  const pubList = type === 'news' ? NEWS : REPORTS;
+
+  const item = allList.find(i => i.id === id);
+  if (!item) return;
+
+  item.status = 'accepted';
+  item.rejectReason = '';
+
+  const myItem = myList.find(i => i.id === id);
+  if (myItem) { myItem.status = 'accepted'; myItem.rejectReason = ''; }
+
+  // Add to published list if not already there
+  if (!pubList.find(i => i.id === id)) {
+    pubList.unshift(Object.assign({}, item));
+    initGrids(); // re-render public grids
+  }
+
+  showToast('تم قبول المساهمة ونشرها بنجاح.', 'success');
+
+  // Re-render
+  const curSection = document.querySelector('.section.active');
+  if (curSection && curSection.id === 'sec-admin-contrib-detail') {
+    openAdminContribDetail(id, type);
+  } else {
+    renderAdminContributions(type);
+  }
+}
+
+function adminExecuteReject(id, type, reason) {
+  const allList = type === 'news' ? allContributions.news : allContributions.reports;
+  const myList  = type === 'news' ? myContributions.news  : myContributions.reports;
+  const pubList = type === 'news' ? NEWS : REPORTS;
+
+  const item = allList.find(i => i.id === id);
+  if (!item) return;
+
+  item.status = 'rejected';
+  item.rejectReason = reason;
+
+  const myItem = myList.find(i => i.id === id);
+  if (myItem) { myItem.status = 'rejected'; myItem.rejectReason = reason; }
+
+  // Remove from published list if it was previously accepted
+  const pubIdx = pubList.findIndex(i => i.id === id);
+  if (pubIdx !== -1) pubList.splice(pubIdx, 1);
+
+  showToast('تم رفض المساهمة.', 'info');
+
+  const curSection = document.querySelector('.section.active');
+  if (curSection && curSection.id === 'sec-admin-contrib-detail') {
+    openAdminContribDetail(id, type);
+  } else {
+    renderAdminContributions(type);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════ */
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /* ═══════════════════════════════════════════
