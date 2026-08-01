@@ -3366,6 +3366,10 @@ body {
 
 <!-- Admin: Member Contributions – News -->
 <div class="section" id="sec-admin-contrib-news">
+  <button class="detail-back" onclick="navigate('account')" style="margin-bottom:20px;">
+    <svg viewBox="0 0 24 24"><use href="#ico-arrow"/></svg>
+    <span>العودة إلى لوحة الإدارة</span>
+  </button>
   <div class="section-header">
     <div class="section-eyebrow">الإدارة — مساهمات الأعضاء</div>
     <h2 class="section-title">الأخبار العلمية</h2>
@@ -3376,6 +3380,10 @@ body {
 
 <!-- Admin: Member Contributions – Reports -->
 <div class="section" id="sec-admin-contrib-reports">
+  <button class="detail-back" onclick="navigate('account')" style="margin-bottom:20px;">
+    <svg viewBox="0 0 24 24"><use href="#ico-arrow"/></svg>
+    <span>العودة إلى لوحة الإدارة</span>
+  </button>
   <div class="section-header">
     <div class="section-eyebrow">الإدارة — مساهمات الأعضاء</div>
     <h2 class="section-title">التقارير العلمية</h2>
@@ -4640,19 +4648,30 @@ function renderAdminContributions(type) {
 }
 
 function buildAdminContribCard(item, type) {
-  const statusBadge = buildStatusBadge(item);
-  const baseCard = buildCard(item).replace(
-    'onclick="openDetail(' + item.id + ',\'' + item.type + '\')"',
-    'onclick="openAdminContribDetail(' + item.id + ',\'' + type + '\')"'
-  ).replace(
-    'onclick="event.stopPropagation();openDetail(' + item.id + ',\'' + item.type + '\')"',
-    'onclick="event.stopPropagation();openAdminContribDetail(' + item.id + ',\'' + type + '\')"'
-  );
+  const catClass = {
+    physics:'cat-physics', bio:'cat-bio', chem:'cat-chem',
+    astro:'cat-astro', ai:'cat-ai', news:'cat-news'
+  }[item.cat] || 'cat-news';
 
-  let cardWithBadge = baseCard;
-  if (statusBadge) {
-    cardWithBadge = baseCard.replace('<span class="card-cat', statusBadge + '<span class="card-cat');
+  // Same status badge as member cards — in the footer
+  let statusHTML = '';
+  if (item.status === 'pending') {
+    statusHTML = '<div class="contrib-status contrib-status-pending">'
+               + '<span class="contrib-status-dot"></span>قيد المعالجة</div>';
+  } else if (item.status === 'accepted') {
+    statusHTML = '<div class="contrib-status contrib-status-accepted">'
+               + '<span class="contrib-status-dot"></span>تم القبول</div>';
+  } else if (item.status === 'rejected') {
+    const reason = item.rejectReason ? ' : ' + escHtml(item.rejectReason) : '';
+    statusHTML = '<div class="contrib-status contrib-status-rejected">'
+               + '<span class="contrib-status-dot" style="flex-shrink:0;"></span>'
+               + '<span style="white-space:nowrap;">مرفوض' + reason + '</span>'
+               + '</div>';
   }
+
+  const avatarHTML = item.authorImg
+    ? `<img src="${item.authorImg}" class="card-avatar" style="object-fit:cover;" onerror="this.style.display='none';this.nextSibling.style.display='flex';" loading="lazy"><div class="card-avatar" style="display:none">${item.avatar}</div>`
+    : `<div class="card-avatar">${item.avatar}</div>`;
 
   const deleteBtn = `<button class="admin-delete-btn" title="حذف" onclick="event.stopPropagation();adminConfirmDelete(${item.id},'${type}')">
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -4661,7 +4680,36 @@ function buildAdminContribCard(item, type) {
     </svg>
   </button>`;
 
-  return `<div class="admin-contrib-card-wrap">${deleteBtn}${cardWithBadge}</div>`;
+  const card = `
+  <div class="card" onclick="openAdminContribDetail(${item.id},'${type}')">
+    <div style="position:relative;overflow:hidden;">
+      <img src="${item.img}" alt="${item.title}"
+           class="card-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+           loading="lazy">
+      <div class="card-img-placeholder" style="display:none;">
+        <svg width="56" height="56" viewBox="0 0 48 48" style="opacity:0.25"><use href="#${item.icon}"/></svg>
+      </div>
+      <span class="card-cat ${catClass}" style="position:absolute;top:12px;right:12px;">${item.catLabel}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        ${avatarHTML}
+        <span class="card-author">${item.author}</span>
+        <span class="card-date">${item.date}</span>
+      </div>
+      <div class="card-title">${item.title}</div>
+      <div class="card-desc">${item.desc}</div>
+    </div>
+    <div class="card-footer" style="justify-content:space-between;align-items:center;gap:8px;">
+      <div class="mycontrib-status-wrap" onmousedown="_badgeDragStart(event)" ontouchstart="event.stopPropagation()">
+        ${statusHTML}
+      </div>
+      <button class="card-read-btn" style="flex-shrink:0;" onclick="event.stopPropagation();openAdminContribDetail(${item.id},'${type}')">قراءة المزيد</button>
+    </div>
+  </div>`;
+
+  return `<div class="admin-contrib-card-wrap">${deleteBtn}${card}</div>`;
 }
 
 function openAdminContribDetail(id, type) {
