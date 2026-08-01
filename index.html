@@ -853,6 +853,8 @@ body {
   cursor: pointer;
   position: relative;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -903,7 +905,7 @@ body {
 .cat-ai       { color: #DB2777; border-color: rgba(219,39,119,0.3); }
 .cat-news     { color: #059669; border-color: rgba(5,150,105,0.3); }
 
-.card-body { padding: 16px; }
+.card-body { padding: 16px; flex: 1; min-height: 0; }
 
 .card-meta {
   display: flex;
@@ -965,8 +967,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px 14px;
+  padding: 0 16px;
   border-top: 1px solid var(--border);
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
+  overflow: hidden;
+  flex-shrink: 0;
+  gap: 8px;
 }
 
 .card-views {
@@ -2163,34 +2171,37 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 30px;
   font-size: 0.78rem;
   font-weight: 700;
   font-family: var(--font);
-  margin-bottom: -10px;
   width: fit-content;
   border: 1px solid;
   white-space: nowrap;
-  flex-shrink: 1;
-  min-width: 0;
+  flex-shrink: 0;
 }
-/* Status badge wrapper inside card footer (my-contributions) */
+/* Status badge wrapper inside card footer */
 .mycontrib-status-wrap {
   flex: 1;
   min-width: 0;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 .mycontrib-status-wrap::-webkit-scrollbar { display: none; }
 .mycontrib-status-wrap:active { cursor: grabbing; }
 .mycontrib-status-wrap .contrib-status {
   display: inline-flex;
   white-space: nowrap;
-  width: max-content;
+  flex-shrink: 0;
   max-width: none;
+  margin-bottom: 0;
 }
 
 .contrib-status-dot {
@@ -3729,7 +3740,7 @@ function buildCard(item) {
       <div class="card-title">${item.title}</div>
       <div class="card-desc">${item.desc}</div>
     </div>
-    <div class="card-footer" style="justify-content:flex-end;">
+    <div class="card-footer">
       <button class="card-read-btn" onclick="event.stopPropagation();openDetail(${item.id},'${item.type}')">قراءة المزيد</button>
     </div>
   </div>`;
@@ -4155,7 +4166,7 @@ function buildMyContribCard(item) {
       <div class="card-title">${item.title}</div>
       <div class="card-desc">${item.desc}</div>
     </div>
-    <div class="card-footer" style="justify-content:space-between;align-items:center;gap:8px;">
+    <div class="card-footer">
       <div class="mycontrib-status-wrap" onmousedown="_badgeDragStart(event)" ontouchstart="event.stopPropagation()">
         ${statusHTML}
       </div>
@@ -4701,7 +4712,7 @@ function buildAdminContribCard(item, type) {
       <div class="card-title">${item.title}</div>
       <div class="card-desc">${item.desc}</div>
     </div>
-    <div class="card-footer" style="justify-content:space-between;align-items:center;gap:8px;">
+    <div class="card-footer">
       <div class="mycontrib-status-wrap" onmousedown="_badgeDragStart(event)" ontouchstart="event.stopPropagation()">
         ${statusHTML}
       </div>
