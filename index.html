@@ -840,6 +840,7 @@ body {
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 400px;
   gap: 20px;
   margin-bottom: 48px;
 }
@@ -2163,6 +2164,7 @@ body {
 .cards-grid-contrib {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 400px;
   gap: 20px;
   margin-bottom: 48px;
 }
@@ -2345,6 +2347,10 @@ body {
 /* Admin contrib card with delete btn */
 .admin-contrib-card-wrap {
   position: relative;
+  height: 100%;
+}
+.admin-contrib-card-wrap .card {
+  height: 100%;
 }
 .admin-delete-btn {
   position: absolute;
@@ -3976,6 +3982,14 @@ function submitAuth(e, type) {
 ═══════════════════════════════════════════ */
 function setLoggedIn(user) {
   currentUser = user;
+  // Persist session
+  try {
+    localStorage.setItem('speac_session', JSON.stringify({
+      name: user.name, email: user.email,
+      isAdmin: user.isAdmin || false,
+      avatarUrl: user.avatarUrl || null
+    }));
+  } catch(e) {}
   // Show account nav, hide login nav
   document.getElementById('nav-auth').style.display    = 'none';
   document.getElementById('nav-account').style.display = '';
@@ -4011,6 +4025,7 @@ function setLoggedIn(user) {
 function logout() {
   currentUser = null;
   myContributions = { news: [], reports: [] };
+  try { localStorage.removeItem('speac_session'); } catch(e) {}
   // Restore login nav
   document.getElementById('nav-auth').style.display    = '';
   document.getElementById('nav-account').style.display = 'none';
@@ -5008,6 +5023,18 @@ function _badgeTouchStart(e) {
    BOOT
 ═══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
+  // Restore previous session automatically
+  try {
+    const saved = localStorage.getItem('speac_session');
+    if (saved) {
+      const u = JSON.parse(saved);
+      if (u && u.name && u.email) {
+        setLoggedIn(u);
+        navigate('account');
+      }
+    }
+  } catch(e) {}
+
   initGrids();
   initReportTabs();
   checkWelcome();
